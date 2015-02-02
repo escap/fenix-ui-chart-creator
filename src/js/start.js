@@ -2,15 +2,14 @@
 define([
         'require',
         'jquery',
-        'text!fx-c-c/html/base_template.html',
-        'text!fx-c-c/config/base_config.json',
+        'fx-c-c/templates/base_template',
         'fx-c-c/adapters/d3s_highcharts',
         'highcharts'
     ],
     function (RequireJS, $) {
 
         var defaultOptions = {
-            adapter_folder: ''
+            default: ''
         };
 
         function ChartCreator() {
@@ -26,27 +25,32 @@ define([
 
         ChartCreator.prototype.preloadResouces = function ( config ) {
 
-            var baseTemplate = this.templateUrl ? this.templateUrl : 'fx-c-c/html/base_template.html',
-                baseConfig = this.configUrl ?  this.configUrl : 'fx-c-c/config/base_config.json',
+            var baseTemplate = this.getTemplateUrl(),
                 adapter =  this.getAdapterUrl(),
                 self = this;
 
             RequireJS([
-                'text!' + baseTemplate,
-                'text!' + baseConfig,
+                 baseTemplate,
                 adapter
-            ], function (Template, Config, Adapter) {
+            ], function (Template, Adapter) {
 
-                config.template = Template;
-                config.config = JSON.parse(Config);
-                new Adapter().render(config);
+                self.template = new Template();
+                self.adapter = new Adapter();
 
+                //currently both of them are sync fns
+                self.template.render(config);
+                self.adapter.render(config);
             });
         };
 
         ChartCreator.prototype.getAdapterUrl = function () {
             //TODO add here adapter discovery logic
             return this.adapterUrl ? this.adapterUrl : 'fx-c-c/adapters/d3s_highcharts';
+        };
+
+        ChartCreator.prototype.getTemplateUrl = function () {
+            //TODO add here template discovery logic
+            return this.templateUrl ? this.templateUrl : 'fx-c-c/templates/base_template';
         };
 
         ChartCreator.prototype._validateInput = function () {

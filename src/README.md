@@ -1,5 +1,3 @@
-#sources directory
+#FENIX Chart Creator
+====================
 
-contains all source code and css
-
-fenix modules and third party libs
