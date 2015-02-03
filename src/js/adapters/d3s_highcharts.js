@@ -370,6 +370,8 @@ define([
                     break;
             }
 
+            // TODO code, customCode,  enumeration, date, month, year, time, text,label, number, percentage, bool
+
             return map;
         };
 
