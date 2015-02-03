@@ -223,7 +223,17 @@ define(function () {
                     fontWeight: '300',
                     fontSize: 12
                 }
+            },
+            type: 'datetime',
+            dateTimeLabelFormats: { // don't display the dummy year
+                //month: '%e. %b',
+                year: '%Y'
+            },
+            title: {
+                enabled: false,
+                text: 'null'
             }
+
             /*plotLines: [{ //linea custom possono essere anche più di una, è un array
              color: '#666666',
              width: 1,

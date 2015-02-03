@@ -2,27 +2,38 @@
 define([
         'jquery',
         'fx-c-c/config/adapters/d3s_highcharts',
-        'underscore'
+        'underscore',
+        'highcharts'
     ],
     function ($, baseConfig, _) {
 
         var defaultOptions = {
+
+            lang: 'EN',
+
             s: {
                 CONTENT: '[data-role="content"]'
             },
 
-            xAxisSubject : 'time',
-            yAxisSubject : 'um',
-            valueSubject : 'value',
-            seriesSubject : 'geo',
+            type: 'timeseries', //[custom, scatter, pie]
 
-            data: {
-                xAxis: {
-                    categories: []
-                }
-            },
-            aux : {
-                subject2index:{}
+            xAxisSubject: 'time',
+            yAxisSubject: 'um',
+            valueSubject: 'value',
+            seriesSubject: [],
+
+            data: {},
+
+            aux: {
+                ids: [],
+                subjects: [],
+                id2index: {},
+                index2id: {},
+                //contains id_column : {code : label}
+                code2label: {},
+                subject2id: {},
+                id2subject: {},
+                nameIndexes: []
             }
         };
 
@@ -36,10 +47,10 @@ define([
             if (this._validateInput() === true) {
                 this._initVariable();
                 this._prepareData();
-                if (this._validateConfiguration() === true) {
-                    this._onValidateConfigutionSuccess();
+                if (this._validateData() === true) {
+                    this._onValidateDataSuccess();
                 } else {
-                    this._onValidateConfigurationError();
+                    this._onValidateDataError();
                 }
             } else {
                 console.error(this.errors);
@@ -51,70 +62,205 @@ define([
 
             this.$columns.forEach(_.bind(function (column, index) {
 
-                this.aux.subject2index[column['subject'].toUpperCase()]  = index;
+                if (column.hasOwnProperty('id')) {
+                    this.aux.id2index[column['id']] = index;
+                    this.aux.index2id[index] = column['id'];
+                    this.aux.ids.push(column['id']);
 
-                if (column['subject'].toUpperCase() === this.xAxisSubject.toUpperCase()) {
-                    this._processXAxisColumn(column);
+                    if (!column.hasOwnProperty('subject')) {
+                        column['subject'] = column['id'];
+                    }
+
+                    if (column.hasOwnProperty('subject')) {
+                        this.aux.subject2id[column['subject']] = column['id'];
+                        this.aux.id2subject[column['id']] = column['subject'];
+
+                        this.aux.subjects.push(column['subject']);
+
+                        if (column.subject === this.yAxisSubject) {
+                            this.columnYAxisIndex = index;
+                        }
+
+                        if (column.subject === this.xAxisSubject) {
+                            this.columnXAxisIndex = index;
+                        }
+
+                        if (column.subject === this.valueSubject) {
+                            this.columnValueIndex = index;
+                        }
+                    }
                 }
 
-                if (column['subject'].toUpperCase() === this.yAxisSubject.toUpperCase()) {
-                    this._processYAxisColumn(column);
+                if (column.hasOwnProperty('values')) {
+                    this.aux.code2label[column['id']] = this._createCode2LabelMap(column);
                 }
 
-                if (column['subject'].toUpperCase() === this.seriesSubject.toUpperCase()) {
-                    this._processSeriesColumn(column);
-                }
+                this.aux.nameIndexes.push(index);
+
             }, this));
 
+            if (this.seriesSubject.length === 0) {
+
+                this.aux.nameIndexes = _.filter(this.aux.nameIndexes, function (index) {
+                    return (index !== this.columnXAxisIndex) && (index !== this.columnValueIndex);
+                }, this);
+            } else {
+
+                this.aux.nameIndexes = [];
+
+                _.each(this.seriesSubject, function (sub) {
+                    this.aux.nameIndexes.push(this.aux.id2index[this.aux.subject2id[sub]]);
+                }, this);
+            }
+
+            if (this.columnValueIndex) {
+                this._prepareDataForChartType();
+            }
         };
 
-        D3S_Highchart_Adapter.prototype._processXAxisColumn = function (column){
-            this.data.xAxis.categories = _.uniq(column.values.timeList);
+        D3S_Highchart_Adapter.prototype._prepareDataForChartType = function () {
+
+            var yColumn = this._getColumnBySubject(this.yAxisSubject);
+
+            switch (this.type) {
+                case 'pie':
+                    break;
+                case 'scatter':
+                    break;
+                case 'custom' :
+                    break;
+                default :
+                    //Time series
+                    this._processYAxisColumn(yColumn);
+                    this._processSeriesForTimeSeries();
+
+                    break;
+            }
         };
 
-        D3S_Highchart_Adapter.prototype._processYAxisColumn = function (column){
-            this.data.xAxis.categories = _.uniq(column.values.timeList);
+        D3S_Highchart_Adapter.prototype._processYAxisColumn = function (column) {
+
+            if (!column){
+                return;
+            }
+
+            this.data.yAxis = [];
+
+            if (column.dataType === "code") {
+                var values = _.values(this.aux.code2label[this._getColumnBySubject(this.yAxisSubject).id]);
+
+                _.each(values, function (v) {
+                    this.data.yAxis.push({title: {text: v}});
+                }, this);
+
+            } else {
+                console.warn("TODO yAxis is not coded. Method has to be implemented.");
+            }
         };
 
-        D3S_Highchart_Adapter.prototype._processSeriesColumn = function (column){
-            this.data.xAxis.categories = _.uniq(column.values.timeList);
+        D3S_Highchart_Adapter.prototype._processSeriesForTimeSeries = function () {
+
+            this.data.series = [];
+
+            this.model.data.sort(_.bind(function (a, b){
+
+                if (a[this.columnXAxisIndex] < b[this.columnXAxisIndex] ) {
+                    return -1;
+                }
+                if (a[this.columnXAxisIndex] > b[this.columnXAxisIndex] ) {
+                    return 1;
+                }
+                // a must be equal to b
+                return 0;
+            }, this));
+
+
+            this.$data.forEach(_.bind(function (row) {
+
+                var name = this._createSeriesName(row),
+                    serie = _.findWhere(this.data.series, {name: name}) || {name: name},
+                    yValue, yLabel, xValue, xLabel, value;
+
+                if (!serie.hasOwnProperty('yAxis')) {
+                    if (this.columnYAxisIndex) {
+                        yValue = row[this.columnYAxisIndex];
+                        yLabel = this.aux.code2label[this._getColumnBySubject(this.yAxisSubject).id][yValue];
+                        serie.yAxis = this._getYAxisIndex(yLabel);
+                    }
+                }
+
+                if (!serie.hasOwnProperty('data')) {
+                    serie.data = [];
+                }
+
+                xValue = row[this.columnXAxisIndex];
+                xLabel = this.aux.code2label[this._getColumnBySubject(this.xAxisSubject).id][xValue];
+                value = row[this.columnValueIndex];
+                //console.log(name, xLabel, value);
+                serie.data.push([xLabel, value]);
+
+                this.data.series.push(serie);
+
+            }, this));
+
+            //this.data.series = this.data.series.slice(0, 5)
         };
 
-        D3S_Highchart_Adapter.prototype._validateConfiguration = function () {
+        D3S_Highchart_Adapter.prototype._getYAxisIndex = function (label) {
+
+            var index = -1;
+
+            _.each(this.data.yAxis, function (yAxis, i) {
+                if (yAxis.title.text === label) { index = i }
+            }, this);
+
+            if (index < 0) {
+                console.error("Data contains an unknown yAxis value: " + label);
+            }
+
+            return index;
+        };
+
+        D3S_Highchart_Adapter.prototype._createSeriesName = function (row) {
+
+            var name = '';
+
+            _.each(this.aux.nameIndexes, function (index) {
+                var id = this.aux.index2id[index];
+                name = name.concat(this.aux.code2label[id][row[index]] + ' ');
+            }, this);
+
+            return name;
+        };
+
+        D3S_Highchart_Adapter.prototype._validateData = function () {
 
             this.errors = {};
-
 
             return (Object.keys(this.errors).length === 0);
         };
 
-        D3S_Highchart_Adapter.prototype._onValidateConfigutionSuccess = function () {
-
-            this._initBaseConfiguration();
-            //this._parseModel();
+        D3S_Highchart_Adapter.prototype._onValidateDataSuccess = function () {
+            this._createConfiguration();
+            this._renderChart();
         };
 
-        D3S_Highchart_Adapter.prototype.showConfigurationForm = function () {
+        D3S_Highchart_Adapter.prototype._showConfigurationForm = function () {
             alert("FORM");
         };
 
-        D3S_Highchart_Adapter.prototype._onValidateConfigurationError = function () {
-            this.showConfigurationForm();
+        D3S_Highchart_Adapter.prototype._onValidateDataError = function () {
+            this._showConfigurationForm();
 
         };
 
-        D3S_Highchart_Adapter.prototype._initBaseConfiguration = function () {
-            this.baseConfig = $.extend(true, baseConfig, this.options);
+        D3S_Highchart_Adapter.prototype._createConfiguration = function () {
+            this.config = $.extend(true, baseConfig, this.options, this.data);
         };
-
-        D3S_Highchart_Adapter.prototype._parseModel = function () {
-
-            this.$container.html(this.model);
-        };
-
 
         D3S_Highchart_Adapter.prototype._renderChart = function () {
-            this.$container.html(this.model);
+
+            this.$container.highcharts(this.config);
         };
 
         D3S_Highchart_Adapter.prototype._initVariable = function () {
@@ -125,9 +271,7 @@ define([
             this.$dsd = this.$metadata.dsd;
             this.$columns = this.$dsd.columns;
 
-            console.log(this.$columns.forEach)
-
-
+            this.$data = this.model.data;
         };
 
         D3S_Highchart_Adapter.prototype._validateInput = function () {
@@ -172,6 +316,16 @@ define([
                 this.errors['options'] = "'options' is not an object.";
             }
 
+            //Data
+            if (!this.model.hasOwnProperty("data")) {
+                this.errors['data'] = "Model does not container 'data' attribute.";
+            }
+
+            // seriesSubject
+            if (!Array.isArray(this.seriesSubject)) {
+                this.errors['seriesSubject'] = "SeriesSubject is not an Array element";
+            }
+
             return (Object.keys(this.errors).length === 0);
         };
 
@@ -183,8 +337,8 @@ define([
 
             if (obj.hasOwnProperty(attribute) && obj.title !== null) {
 
-                if (obj[attribute].hasOwnProperty('EN')) {
-                    label = obj[attribute]['EN'];
+                if (obj[attribute].hasOwnProperty(this.lang)) {
+                    label = obj[attribute][this.lang];
                 } else {
 
                     keys = Object.keys(obj[attribute]);
@@ -198,17 +352,55 @@ define([
             return label;
         };
 
-        D3S_Highchart_Adapter.prototype._createMapCode = function (values) {
+        D3S_Highchart_Adapter.prototype._createCode2LabelMap = function (column) {
 
-            var map = {};
-            for (var i = 0; i < values.length; i++) {
-                //TODO throw error if the code is not well-formed
-                map[values[i].code] = this._getLabel(values[i], 'label');
+            var map = {},
+                values;
+
+            switch (column.dataType) {
+                case 'code' :
+                    values = _.each(column.values.codes[0].codes, function (v) {
+                        map[v.code] = this._getLabel(v, 'label');
+                    }, this);
+                    break;
+                case 'year' :
+                    values = _.each(column.values.timeList, function (v) {
+                        map[v] = Date.UTC(v, 0);
+                    }, this);
+                    break;
             }
 
             return map;
         };
 
+        D3S_Highchart_Adapter.prototype._getColumnBySubject = function (subject) {
+
+            var id = this.aux.subject2id[subject],
+                index;
+
+            if (!id) {
+                return;
+            }
+
+            index = this.aux.id2index[id];
+
+            if (!index) {
+                return;
+            }
+
+            return this.$columns.length > index ? this.$columns[index] : null;
+        };
+
+        D3S_Highchart_Adapter.prototype._getColumnIndexBySubject = function (subject) {
+
+            _.each(this.$columns, function (column, i) {
+                if (column.subject === subject) {
+                    return i;
+                }
+            }, this);
+
+            return -1;
+        };
 
         return D3S_Highchart_Adapter;
     });
