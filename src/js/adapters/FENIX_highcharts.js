@@ -1,7 +1,7 @@
 /*global define*/
 define([
         'jquery',
-        'fx-c-c/config/adapters/d3s_highcharts',
+        'fx-c-c/config/adapters/FENIX_highcharts',
         'underscore',
         'highcharts'
     ],
@@ -37,11 +37,11 @@ define([
             }
         };
 
-        function D3S_Highchart_Adapter() {
+        function FENIX_Highchart_Adapter() {
             $.extend(true, this, defaultOptions);
         }
 
-        D3S_Highchart_Adapter.prototype.render = function (config) {
+        FENIX_Highchart_Adapter.prototype.render = function (config) {
             $.extend(true, this, config);
 
             if (this._validateInput() === true) {
@@ -58,7 +58,7 @@ define([
             }
         };
 
-        D3S_Highchart_Adapter.prototype._prepareData = function () {
+        FENIX_Highchart_Adapter.prototype._prepareData = function () {
 
             this.$columns.forEach(_.bind(function (column, index) {
 
@@ -118,7 +118,7 @@ define([
             }
         };
 
-        D3S_Highchart_Adapter.prototype._prepareDataForChartType = function () {
+        FENIX_Highchart_Adapter.prototype._prepareDataForChartType = function () {
 
             var yColumn = this._getColumnBySubject(this.yAxisSubject);
 
@@ -138,7 +138,7 @@ define([
             }
         };
 
-        D3S_Highchart_Adapter.prototype._processYAxisColumn = function (column) {
+        FENIX_Highchart_Adapter.prototype._processYAxisColumn = function (column) {
 
             if (!column){
                 return;
@@ -158,7 +158,7 @@ define([
             }
         };
 
-        D3S_Highchart_Adapter.prototype._processSeriesForTimeSeries = function () {
+        FENIX_Highchart_Adapter.prototype._processSeriesForTimeSeries = function () {
 
             this.data.series = [];
 
@@ -206,7 +206,7 @@ define([
             //this.data.series = this.data.series.slice(0, 5)
         };
 
-        D3S_Highchart_Adapter.prototype._getYAxisIndex = function (label) {
+        FENIX_Highchart_Adapter.prototype._getYAxisIndex = function (label) {
 
             var index = -1;
 
@@ -221,7 +221,7 @@ define([
             return index;
         };
 
-        D3S_Highchart_Adapter.prototype._createSeriesName = function (row) {
+        FENIX_Highchart_Adapter.prototype._createSeriesName = function (row) {
 
             var name = '';
 
@@ -233,37 +233,37 @@ define([
             return name;
         };
 
-        D3S_Highchart_Adapter.prototype._validateData = function () {
+        FENIX_Highchart_Adapter.prototype._validateData = function () {
 
             this.errors = {};
 
             return (Object.keys(this.errors).length === 0);
         };
 
-        D3S_Highchart_Adapter.prototype._onValidateDataSuccess = function () {
+        FENIX_Highchart_Adapter.prototype._onValidateDataSuccess = function () {
             this._createConfiguration();
             this._renderChart();
         };
 
-        D3S_Highchart_Adapter.prototype._showConfigurationForm = function () {
+        FENIX_Highchart_Adapter.prototype._showConfigurationForm = function () {
             alert("FORM");
         };
 
-        D3S_Highchart_Adapter.prototype._onValidateDataError = function () {
+        FENIX_Highchart_Adapter.prototype._onValidateDataError = function () {
             this._showConfigurationForm();
 
         };
 
-        D3S_Highchart_Adapter.prototype._createConfiguration = function () {
+        FENIX_Highchart_Adapter.prototype._createConfiguration = function () {
             this.config = $.extend(true, baseConfig, this.options, this.data);
         };
 
-        D3S_Highchart_Adapter.prototype._renderChart = function () {
+        FENIX_Highchart_Adapter.prototype._renderChart = function () {
 
             this.$container.highcharts(this.config);
         };
 
-        D3S_Highchart_Adapter.prototype._initVariable = function () {
+        FENIX_Highchart_Adapter.prototype._initVariable = function () {
 
             this.$container = $(this.container).find(this.s.CONTENT);
 
@@ -274,7 +274,7 @@ define([
             this.$data = this.model.data;
         };
 
-        D3S_Highchart_Adapter.prototype._validateInput = function () {
+        FENIX_Highchart_Adapter.prototype._validateInput = function () {
 
             this.errors = {};
 
@@ -330,7 +330,7 @@ define([
         };
 
         //Utils
-        D3S_Highchart_Adapter.prototype._getLabel = function (obj, attribute) {
+        FENIX_Highchart_Adapter.prototype._getLabel = function (obj, attribute) {
 
             var label,
                 keys;
@@ -352,7 +352,7 @@ define([
             return label;
         };
 
-        D3S_Highchart_Adapter.prototype._createCode2LabelMap = function (column) {
+        FENIX_Highchart_Adapter.prototype._createCode2LabelMap = function (column) {
 
             var map = {},
                 values;
@@ -375,7 +375,7 @@ define([
             return map;
         };
 
-        D3S_Highchart_Adapter.prototype._getColumnBySubject = function (subject) {
+        FENIX_Highchart_Adapter.prototype._getColumnBySubject = function (subject) {
 
             var id = this.aux.subject2id[subject],
                 index;
@@ -393,7 +393,7 @@ define([
             return this.$columns.length > index ? this.$columns[index] : null;
         };
 
-        D3S_Highchart_Adapter.prototype._getColumnIndexBySubject = function (subject) {
+        FENIX_Highchart_Adapter.prototype._getColumnIndexBySubject = function (subject) {
 
             _.each(this.$columns, function (column, i) {
                 if (column.subject === subject) {
@@ -404,5 +404,5 @@ define([
             return -1;
         };
 
-        return D3S_Highchart_Adapter;
+        return FENIX_Highchart_Adapter;
     });

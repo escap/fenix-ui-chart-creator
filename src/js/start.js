@@ -3,7 +3,7 @@ define([
         'require',
         'jquery',
         'fx-c-c/templates/base_template',
-        'fx-c-c/adapters/d3s_highcharts',
+        'fx-c-c/adapters/FENIX_highcharts',
         'highcharts'
     ],
     function (RequireJS, $) {
@@ -45,7 +45,7 @@ define([
 
         ChartCreator.prototype.getAdapterUrl = function () {
             //TODO add here adapter discovery logic
-            return this.adapterUrl ? this.adapterUrl : 'fx-c-c/adapters/d3s_highcharts';
+            return this.adapterUrl ? this.adapterUrl : 'fx-c-c/adapters/FENIX_highcharts';
         };
 
         ChartCreator.prototype.getTemplateUrl = function () {
