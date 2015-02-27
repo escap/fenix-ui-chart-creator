@@ -3,7 +3,8 @@ define([
         'jquery',
         'fx-c-c/config/adapters/FENIX_highcharts',
         'underscore',
-        'highcharts'
+        'highcharts',
+        'amplify'
     ],
     function ($, baseConfig, _) {
 
@@ -35,7 +36,11 @@ define([
                 id2subject: {},
                 nameIndexes: []
             }
-        };
+        },
+            e={
+                DESTROY: 'fx.component.chart.destroy',
+                READY : 'fx.component.chart.ready'
+            };
 
         function FENIX_Highchart_Adapter() {
             $.extend(true, this, defaultOptions);
@@ -256,6 +261,10 @@ define([
 
         FENIX_Highchart_Adapter.prototype._createConfiguration = function () {
             this.config = $.extend(true, baseConfig, this.options, this.data);
+
+            this.config.chart.events.load = function () {
+                amplify.publish(e.READY, this);
+            }
         };
 
         FENIX_Highchart_Adapter.prototype._renderChart = function () {

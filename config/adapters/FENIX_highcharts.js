@@ -5,6 +5,8 @@ define(function () {
 
         //Line chart
         chart: {
+            events: {},
+
             type: 'area', //Tipo di grafico:  area, areaspline, boxplot, bubble, column, line, pie, scatter, spline
 
             alignTicks: false,
@@ -25,6 +27,9 @@ define(function () {
             },
             zoomType: 'xy', //Attiva lo zoom e stabilisce in quale dimensione
             //selectionMarkerFill: 'rgba(0,0,0,0.25)',//Colore di fonfo della selezione per lo zoom (trasparente per far vedere sotto)
+
+
+
             resetZoomButton: {
                 position: {
                     align: 'right', //Allineamento zoom orizzontale
@@ -277,6 +282,7 @@ define(function () {
             backgroundColor: 'rgba(255, 255, 255, 0.95)',
             borderWidth: 1,
             shadow: false
-        }
+        },
+
     };
 });
