@@ -246,6 +246,7 @@ define([
         };
 
         FENIX_Highchart_Adapter.prototype._onValidateDataSuccess = function () {
+            this.$chartRendered = true;
             this._createConfiguration();
             this._renderChart();
         };
@@ -412,6 +413,14 @@ define([
 
             return -1;
         };
+
+        FENIX_Highchart_Adapter.prototype.reflow = function (){
+
+         if(typeof this.$container!== 'undefined' && this.$chartRendered ) {
+                this.$container.highcharts().reflow();
+                return true;
+         }
+        }
 
         return FENIX_Highchart_Adapter;
     });
