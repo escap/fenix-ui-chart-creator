@@ -208,6 +208,13 @@ define([
 
             }, this));
 
+           //removing duplicated series
+            var cleanedupSeries = _.uniq( _.collect(this.data.series, function( x ){
+                return x;
+            }));
+
+            this.data.series = cleanedupSeries;
+
             //this.data.series = this.data.series.slice(0, 5)
         };
 
