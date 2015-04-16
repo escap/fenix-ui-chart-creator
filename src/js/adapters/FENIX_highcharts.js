@@ -10,36 +10,36 @@ define([
 
         var defaultOptions = {
 
-            lang: 'EN',
+                lang: 'EN',
 
-            s: {
-                CONTENT: '[data-role="content"]'
+                s: {
+                    CONTENT: '[data-role="content"]'
+                },
+
+                type: 'timeseries', //[custom, scatter, pie]
+
+                xAxisSubject: 'time',
+                yAxisSubject: 'um',
+                valueSubject: 'value',
+                seriesSubject: [],
+
+                data: {},
+
+                aux: {
+                    ids: [],
+                    subjects: [],
+                    id2index: {},
+                    index2id: {},
+                    //contains id_column : {code : label}
+                    code2label: {},
+                    subject2id: {},
+                    id2subject: {},
+                    nameIndexes: []
+                }
             },
-
-            type: 'timeseries', //[custom, scatter, pie]
-
-            xAxisSubject: 'time',
-            yAxisSubject: 'um',
-            valueSubject: 'value',
-            seriesSubject: [],
-
-            data: {},
-
-            aux: {
-                ids: [],
-                subjects: [],
-                id2index: {},
-                index2id: {},
-                //contains id_column : {code : label}
-                code2label: {},
-                subject2id: {},
-                id2subject: {},
-                nameIndexes: []
-            }
-        },
-            e={
+            e = {
                 DESTROY: 'fx.component.chart.destroy',
-                READY : 'fx.component.chart.ready'
+                READY: 'fx.component.chart.ready'
             };
 
         function FENIX_Highchart_Adapter() {
@@ -145,7 +145,7 @@ define([
 
         FENIX_Highchart_Adapter.prototype._processYAxisColumn = function (column) {
 
-            if (!column){
+            if (!column) {
                 return;
             }
 
@@ -167,12 +167,12 @@ define([
 
             this.data.series = [];
 
-            this.model.data.sort(_.bind(function (a, b){
+            this.model.data.sort(_.bind(function (a, b) {
 
-                if (a[this.columnXAxisIndex] < b[this.columnXAxisIndex] ) {
+                if (a[this.columnXAxisIndex] < b[this.columnXAxisIndex]) {
                     return -1;
                 }
-                if (a[this.columnXAxisIndex] > b[this.columnXAxisIndex] ) {
+                if (a[this.columnXAxisIndex] > b[this.columnXAxisIndex]) {
                     return 1;
                 }
                 // a must be equal to b
@@ -182,8 +182,10 @@ define([
 
             this.$data.forEach(_.bind(function (row) {
 
-                var name = this._createSeriesName(row),
-                    serie = _.findWhere(this.data.series, {name: name}) || {name: name},
+                // unique key for series
+                var name = this._createSeriesName(row);
+
+                var serie = _.findWhere(this.data.series, {name: name }) || {name: name},
                     yValue, yLabel, xValue, xLabel, value;
 
                 if (!serie.hasOwnProperty('yAxis')) {
@@ -201,21 +203,22 @@ define([
                 xValue = row[this.columnXAxisIndex];
                 xLabel = this.aux.code2label[this._getColumnBySubject(this.xAxisSubject).id][xValue];
                 value = row[this.columnValueIndex];
-                //console.log(name, xLabel, value);
                 serie.data.push([xLabel, value]);
 
-                this.data.series.push(serie);
+                var added = false;
+                for(var i=0; i < this.data.series.length; i++) {
+                    if ( serie.name == this.data.series[i].name ) {
+                        this.data.series[i] = serie;
+                        added = true;
+                        break;
+                    }
+                }
+                if ( !added ) {
+                    this.data.series.push(serie);
+                }
 
             }, this));
 
-           //removing duplicated series
-            var cleanedupSeries = _.uniq( _.collect(this.data.series, function( x ){
-                return x;
-            }));
-
-            this.data.series = cleanedupSeries;
-
-            //this.data.series = this.data.series.slice(0, 5)
         };
 
         FENIX_Highchart_Adapter.prototype._getYAxisIndex = function (label) {
@@ -223,7 +226,9 @@ define([
             var index = -1;
 
             _.each(this.data.yAxis, function (yAxis, i) {
-                if (yAxis.title.text === label) { index = i }
+                if (yAxis.title.text === label) {
+                    index = i
+                }
             }, this);
 
             if (index < 0) {
@@ -397,13 +402,13 @@ define([
             var id = this.aux.subject2id[subject],
                 index;
 
-            if (!id) {
+            if (typeof id === 'undefined') {
                 return;
             }
 
             index = this.aux.id2index[id];
 
-            if (!index) {
+            if (typeof index === 'undefined') {
                 return;
             }
 
@@ -421,12 +426,12 @@ define([
             return -1;
         };
 
-        FENIX_Highchart_Adapter.prototype.reflow = function (){
+        FENIX_Highchart_Adapter.prototype.reflow = function () {
 
-         if(typeof this.$container!== 'undefined' && this.$chartRendered ) {
+            if (typeof this.$container !== 'undefined' && this.$chartRendered) {
                 this.$container.highcharts().reflow();
                 return true;
-         }
+            }
         }
 
         return FENIX_Highchart_Adapter;

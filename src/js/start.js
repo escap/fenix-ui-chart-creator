@@ -19,11 +19,11 @@ define([
         ChartCreator.prototype.render = function (config) {
 
             if (this._validateInput(config)) {
-                this.preloadResouces(config);
+                this.preloadResources(config);
             }
         };
 
-        ChartCreator.prototype.preloadResouces = function ( config ) {
+        ChartCreator.prototype.preloadResources = function ( config ) {
 
             var baseTemplate = this.getTemplateUrl(),
                 adapter =  this.getAdapterUrl(),
