@@ -8,6 +8,8 @@ define([
     ],
     function (RequireJS, $) {
 
+        'use strict';
+
         var defaultOptions = {
             default: ''
         };
