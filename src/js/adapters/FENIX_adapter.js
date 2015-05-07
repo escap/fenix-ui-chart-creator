@@ -271,7 +271,6 @@ define([
 
         FENIX_Highchart_Adapter.prototype._onValidateDataError = function () {
             this._showConfigurationForm();
-
         };
 
         FENIX_Highchart_Adapter.prototype._createConfiguration = function () {

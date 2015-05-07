@@ -5,16 +5,17 @@ requirejs(['./paths'], function (paths) {
 
     requirejs(['fx-c-c/start', 'amplify'], function (ChartCreator) {
 
-        var chartCreator = new ChartCreator();
         amplify.subscribe('fx.component.chart.ready', function () {
             console.log('created!')
-        })
+        });
 
-        $.get("http://faostat3.fao.org/d3s2/v2/msd/resources/uid/UAE_CropProduction10?dsd=true&full=true&order=time", function (model) {
+        $.getJSON("tests/resources/AFO_ProductionCapacities.json", function (model) {
 
-            chartCreator.render({
+            console.log(model)
+
+            ChartCreator.render({
                 container: '.content',
-                model: model
+                model: ""
             });
         })
     });

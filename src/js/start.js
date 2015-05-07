@@ -59,5 +59,5 @@ define([
             return true;
         };
 
-        return ChartCreator;
+        return new ChartCreator();
     });
