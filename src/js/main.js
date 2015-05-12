@@ -9,14 +9,42 @@ requirejs(['./paths'], function (paths) {
             console.log('created!')
         });
 
-        $.getJSON("tests/resources/AFO_ProductionCapacities.json", function (model) {
+        $.getJSON("tests/resources/GHG_test_data.json", function (model) {
 
-            console.log(model)
+           var creator = new ChartCreator();
 
-            ChartCreator.render({
-                container: '.content',
-                model: ""
+            creator.init({
+                model: model,
+                adapter: {
+                    filters: ['DomainCode', 'TableType', 'ItemCode']
+                },
+                template: {},
+                creator: {}
             });
+
+            creator.render({
+                container: "#monChart2Test",
+                series: [
+                    {
+                        filters: {
+                            'DomainCode': 'QC',
+                            'TableType': 'Emissions',
+                            'ItemCode': '27'
+                        },
+                        type: 'line'
+                    },
+                    {
+                        filters: {
+                            'DomainCode': 'QC',
+                            'TableType': 'Emissions',
+                            'ItemCode': '39'
+                        },
+                        type: 'column'
+                    }
+                ]
+            });
+
+
         })
     });
 });
