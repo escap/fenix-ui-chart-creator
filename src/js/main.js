@@ -36,13 +36,13 @@ requirejs(['./paths'], function (paths) {
                                 'TableType': 'activity',
                                 'GUNFCode': '1712'
                             },
-                            type: 'line'
+                            type: 'column'
                         },
                         {
                             filters: {
                                 'DomainCode': 'GAS',
                                 'TableType': 'activity',
-                                'GUNFCode': '1755'
+                                'GUNFCode': '5057'
                             },
                             type: 'column'
                         },
@@ -52,7 +52,37 @@ requirejs(['./paths'], function (paths) {
                                 'TableType': 'activity',
                                 'GUNFCode': '5057'
                             },
+                            type: 'column'
+                        }
+                    ]
+                });
+
+                chartOne = creator.render({
+                    container: "#monChart2TestOld",
+                    series: [
+                        {
+                            filters: {
+                                'DomainCode': 'GAS',
+                                'TableType': 'activity',
+                                'GUNFCode': '1712'
+                            },
                             type: 'scatter'
+                        },
+                        {
+                            filters: {
+                                'DomainCode': 'GAS',
+                                'TableType': 'activity',
+                                'GUNFCode': '5057'
+                            },
+                            type: 'line'
+                        },
+                        {
+                            filters: {
+                                'DomainCode': 'GAS',
+                                'TableType': 'activity',
+                                'GUNFCode': '5057'
+                            },
+                            type: 'column'
                         }
                     ]
                 });
