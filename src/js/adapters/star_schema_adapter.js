@@ -4,7 +4,7 @@ define([
         'underscore',
         'amplify'
     ],
-    function ($, baseConfig, _) {
+    function ($, _) {
 
         'use strict';
 
@@ -44,14 +44,18 @@ define([
 
         function Star_Schema_Adapter() {
             $.extend(true, this, defaultOptions);
+            this.CONFIG = {
+                charts_data: {}
+            };
+
+            return this;
         }
 
         Star_Schema_Adapter.prototype.prepareData = function (config) {
-            $.extend(true, this, config);
 
+            $.extend(true, this.CONFIG, config);
 
             if (this._validateInput() === true) {
-                this._initVariable();
                 this._prepareData();
                 if (this._validateData() === true) {
                     this._onValidateDataSuccess();
@@ -60,195 +64,53 @@ define([
                 }
             } else {
                 console.error(this.errors);
-                throw new Error("FENIX Chart creator has not a valid configuration");
+                throw new Error("Star schema adapter has not a valid configuration");
+            }
+        };
+
+        Star_Schema_Adapter.prototype._validateInput = function () {
+
+            this.errors = {};
+
+            /*
+             if (!this.hasOwnProperty("container")) {
+             this.errors.container = "'container' attribute not present.";
+             }*/
+
+            return (Object.keys(this.errors).length === 0);
+        };
+
+        Star_Schema_Adapter.prototype.create_tree_item = function (father, filters, row) {
+
+            if (filters.length > 1) {
+
+                if (father[row[filters[0]]] == null) {
+                    father[row[filters[0]]] = {};
+                }
+
+                var tmp = father[row[filters[0]]];
+
+                filters.splice(0, 1);
+
+                this.create_tree_item(tmp, filters, row);
+            } else {
+
+                if (!Array.isArray(father[row[filters[0]]])) {
+                    father[row[filters[0]]] = []
+                }
+
+                father[row[filters[0]]].push(row);
             }
         };
 
         Star_Schema_Adapter.prototype._prepareData = function () {
 
-            this.$columns.forEach(_.bind(function (column, index) {
-
-                if (column.hasOwnProperty('id')) {
-                    this.aux.id2index[column.id] = index;
-                    this.aux.index2id[index] = column.id;
-                    this.aux.ids.push(column.id);
-
-                    if (!column.hasOwnProperty('subject')) {
-                        column.subject = column.id;
-                    }
-
-                    if (column.hasOwnProperty('subject')) {
-                        this.aux.subject2id[column.subject] = column.id;
-                        this.aux.id2subject[column.id] = column.subject;
-
-                        this.aux.subjects.push(column.subject);
-
-                        if (column.subject === this.yAxisSubject) {
-                            this.columnYAxisIndex = index;
-                        }
-
-                        if (column.subject === this.xAxisSubject) {
-                            this.columnXAxisIndex = index;
-                        }
-
-                        if (column.subject === this.valueSubject) {
-                            this.columnValueIndex = index;
-                        }
-                    }
-                }
-
-                if (column.hasOwnProperty('values')) {
-                    this.aux.code2label[column.id] = this._createCode2LabelMap(column);
-                }
-
-                this.aux.nameIndexes.push(index);
-
-            }, this));
-
-            if (this.seriesSubject.length === 0) {
-
-                this.aux.nameIndexes = _.filter(this.aux.nameIndexes, function (index) {
-                    return (index !== this.columnXAxisIndex) && (index !== this.columnValueIndex);
-                }, this);
-            } else {
-
-                this.aux.nameIndexes = [];
-
-                _.each(this.seriesSubject, function (sub) {
-                    this.aux.nameIndexes.push(this.aux.id2index[this.aux.subject2id[sub]]);
-                }, this);
+            for (var i = 0; i < this.CONFIG.model.length; i++) {
+                var row = this.CONFIG.model[i];
+                var f = this.CONFIG.filters.slice();
+                this.create_tree_item(this.CONFIG.charts_data, f, row)
             }
 
-            if (this.columnValueIndex) {
-                this._prepareDataForChartType();
-            }
-        };
-
-        Star_Schema_Adapter.prototype._prepareDataForChartType = function () {
-
-            var yColumn = this._getColumnBySubject(this.yAxisSubject);
-
-            switch (this.type) {
-                case 'pie':
-                    break;
-                case 'scatter':
-                    break;
-                case 'custom' :
-                    break;
-                default :
-                    //Time series
-                    this._processYAxisColumn(yColumn);
-                    this._processSeriesForTimeSeries();
-
-                    break;
-            }
-        };
-
-        Star_Schema_Adapter.prototype._processYAxisColumn = function (column) {
-
-            if (!column) {
-                return;
-            }
-
-            this.data.yAxis = [];
-
-            if (column.dataType === "code") {
-                var values = _.values(this.aux.code2label[this._getColumnBySubject(this.yAxisSubject).id]);
-
-                _.each(values, function (v) {
-                    this.data.yAxis.push({title: {text: v}});
-                }, this);
-
-            } else {
-                console.warn("TODO yAxis is not coded. Method has to be implemented.");
-            }
-        };
-
-        Star_Schema_Adapter.prototype._processSeriesForTimeSeries = function () {
-
-            this.data.series = [];
-
-            this.model.data.sort(_.bind(function (a, b) {
-
-                if (a[this.columnXAxisIndex] < b[this.columnXAxisIndex]) {
-                    return -1;
-                }
-                if (a[this.columnXAxisIndex] > b[this.columnXAxisIndex]) {
-                    return 1;
-                }
-                // a must be equal to b
-                return 0;
-            }, this));
-
-
-            this.$data.forEach(_.bind(function (row) {
-
-                // unique key for series
-                var name = this._createSeriesName(row);
-
-                var serie = _.findWhere(this.data.series, {name: name}) || {name: name},
-                    yValue, yLabel, xValue, xLabel, value;
-
-                if (!serie.hasOwnProperty('yAxis')) {
-                    if (this.columnYAxisIndex) {
-                        yValue = row[this.columnYAxisIndex];
-                        yLabel = this.aux.code2label[this._getColumnBySubject(this.yAxisSubject).id][yValue];
-                        serie.yAxis = this._getYAxisIndex(yLabel);
-                    }
-                }
-
-                if (!serie.hasOwnProperty('data')) {
-                    serie.data = [];
-                }
-
-                xValue = row[this.columnXAxisIndex];
-                xLabel = this.aux.code2label[this._getColumnBySubject(this.xAxisSubject).id][xValue];
-                value = row[this.columnValueIndex];
-                serie.data.push([xLabel, value]);
-
-                var added = false;
-                for (var i = 0; i < this.data.series.length; i++) {
-                    if (serie.name === this.data.series[i].name) {
-                        this.data.series[i] = serie;
-                        added = true;
-                        break;
-                    }
-                }
-                if (!added) {
-                    this.data.series.push(serie);
-                }
-
-            }, this));
-
-        };
-
-        Star_Schema_Adapter.prototype._getYAxisIndex = function (label) {
-
-            var index = -1;
-
-            _.each(this.data.yAxis, function (yAxis, i) {
-                if (yAxis.title.text === label) {
-                    index = i;
-                }
-            }, this);
-
-            if (index < 0) {
-                console.error("Data contains an unknown yAxis value: " + label);
-            }
-
-            return index;
-        };
-
-        Star_Schema_Adapter.prototype._createSeriesName = function (row) {
-
-            var name = '';
-
-            _.each(this.aux.nameIndexes, function (index) {
-                var id = this.aux.index2id[index];
-                name = name.concat(this.aux.code2label[id][row[index]] + ' ');
-            }, this);
-
-            return name;
         };
 
         Star_Schema_Adapter.prototype._validateData = function () {
@@ -259,180 +121,62 @@ define([
         };
 
         Star_Schema_Adapter.prototype._onValidateDataSuccess = function () {
-            this.$chartRendered = true;
-            this._createConfiguration();
-            this._renderChart();
-        };
 
-        Star_Schema_Adapter.prototype._showConfigurationForm = function () {
-            window.alert("FORM");
         };
 
         Star_Schema_Adapter.prototype._onValidateDataError = function () {
-            this._showConfigurationForm();
+
         };
 
-        Star_Schema_Adapter.prototype._createConfiguration = function () {
-            this.config = $.extend(true, this.options, this.data, baseConfig);
 
-            this.config.chart.events.load = function () {
-                amplify.publish(e.READY, this);
-            };
+        Star_Schema_Adapter.prototype.get_series = function( config ) {
+
+            var series = this.CONFIG.charts_data;
+            _.each(this.CONFIG.filters, _.bind(function ( f ) {
+
+
+                //Controlla che esiste
+                series = series[config.filters[f]];
+
+            },this));
+
+            return series;
         };
 
-        Star_Schema_Adapter.prototype._renderChart = function () {
+        Star_Schema_Adapter.prototype.getData = function (config) {
 
-            this.$container.highcharts(this.config);
+             var series = this.get_series(config.series[0]),
+                 prepared_series = this.prepare_series(series);
+
+
+
+            return prepared_series;
+
+
         };
 
-        Star_Schema_Adapter.prototype._initVariable = function () {
+        Star_Schema_Adapter.prototype.prepare_series = function (d) {
 
-            this.$container = $(this.container).find(this.s.CONTENT);
+            var s = [],
+                x_dimension = this.CONFIG.x_dimension,
+                y_dimension = this.CONFIG.y_dimension;
 
-            this.$metadata = this.model.metadata;
-            this.$dsd = this.$metadata.dsd;
-            this.$columns = this.$dsd.columns;
 
-            this.$data = this.model.data;
+            //TODO ordinamento della series
+
+            for (var i = d.length - 1; i >= 0; i--) {
+                var x = isNaN(parseInt(d[i][x_dimension])) ? null : parseInt(d[i][x_dimension]);
+                var y = isNaN(parseFloat(d[i][y_dimension])) ? null : parseFloat(d[i][y_dimension]);
+                s.push([x, y]);
+            }
+
+            return s;
+
         };
 
-        Star_Schema_Adapter.prototype._validateInput = function () {
 
-            this.errors = {};
 
-            //Container
-            if (!this.hasOwnProperty("container")) {
-                this.errors.container = "'container' attribute not present.";
-            }
 
-            if ($(this.container).find(this.s.CONTENT) === 0) {
-                this.errors.container = "'container' is not a valid HTML element.";
-            }
-
-            //Model
-            if (!this.hasOwnProperty("model")) {
-                this.errors.model = "'model' attribute not present.";
-            }
-
-            if (typeof this.model !== 'object') {
-                this.errors.model = "'model' is not an object.";
-            }
-
-            //Metadata
-            if (!this.model.hasOwnProperty("metadata")) {
-                this.errors.metadata = "Model does not container 'metadata' attribute.";
-            }
-
-            //DSD
-            if (!this.model.metadata.hasOwnProperty("dsd")) {
-                this.errors.dsd = "Metadata does not container 'dsd' attribute.";
-            }
-
-            //Columns
-            if (!Array.isArray(this.model.metadata.dsd.columns)) {
-                this.errors.columns = "DSD does not container a valid 'columns' attribute.";
-            }
-
-            //Option
-            if (this.options && typeof this.options !== 'object') {
-                this.errors.options = "'options' is not an object.";
-            }
-
-            //Data
-            if (!this.model.hasOwnProperty("data")) {
-                this.errors.data = "Model does not container 'data' attribute.";
-            }
-
-            // seriesSubject
-            if (!Array.isArray(this.seriesSubject)) {
-                this.errors.seriesSubject = "SeriesSubject is not an Array element";
-            }
-
-            return (Object.keys(this.errors).length === 0);
-        };
-
-        //Utils
-        Star_Schema_Adapter.prototype._getLabel = function (obj, attribute) {
-
-            var label,
-                keys;
-
-            if (obj.hasOwnProperty(attribute) && obj.title !== null) {
-
-                if (obj[attribute].hasOwnProperty(this.lang)) {
-                    label = obj[attribute][this.lang];
-                } else {
-
-                    keys = Object.keys(obj[attribute]);
-
-                    if (keys.length > 0) {
-                        label = obj[attribute][keys[0]];
-                    }
-                }
-            }
-
-            return label;
-        };
-
-        Star_Schema_Adapter.prototype._createCode2LabelMap = function (column) {
-
-            var map = {},
-                values;
-
-            switch (column.dataType) {
-                case 'code' :
-                    values = _.each(column.values.codes[0].codes, function (v) {
-                        map[v.code] = this._getLabel(v, 'label');
-                    }, this);
-                    break;
-                case 'year' :
-                    values = _.each(column.values.timeList, function (v) {
-                        map[v] = Date.UTC(v, 0);
-                    }, this);
-                    break;
-            }
-
-            // TODO code, customCode,  enumeration, date, month, year, time, text,label, number, percentage, bool
-
-            return map;
-        };
-
-        Star_Schema_Adapter.prototype._getColumnBySubject = function (subject) {
-
-            var id = this.aux.subject2id[subject],
-                index;
-
-            if (typeof id === 'undefined') {
-                return;
-            }
-
-            index = this.aux.id2index[id];
-
-            if (typeof index === 'undefined') {
-                return;
-            }
-
-            return this.$columns.length > index ? this.$columns[index] : null;
-        };
-
-        Star_Schema_Adapter.prototype._getColumnIndexBySubject = function (subject) {
-
-            _.each(this.$columns, function (column, i) {
-                if (column.subject === subject) {
-                    return i;
-                }
-            }, this);
-
-            return -1;
-        };
-
-        Star_Schema_Adapter.prototype.reflow = function () {
-
-            if (typeof this.$container !== 'undefined' && this.$chartRendered) {
-                this.$container.highcharts().reflow();
-                return true;
-            }
-        };
 
         return Star_Schema_Adapter;
     });

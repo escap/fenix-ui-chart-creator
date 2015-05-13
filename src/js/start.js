@@ -24,31 +24,31 @@ define([
                 this.preloadResources(config);
             }
 
-           /* if (config.render) {
-                this.render(config.render);
-            }*/
+            /* if (config.render) {
+             this.render(config.render);
+             }*/
         };
 
-        ChartCreator.prototype.render = function( config ) {
+        ChartCreator.prototype.render = function (config) {
 
             var data;
 
-            this.template.render(config);
+            //this.template.render(config);
 
             data = this.adapter.getData(config);
 
-            this.creator.createChart($.extend(true, {}, config, data));
+            this.creator.createChart(data);
         };
 
-        ChartCreator.prototype.preloadResources = function ( config ) {
+        ChartCreator.prototype.preloadResources = function (config) {
 
             var baseTemplate = this.getTemplateUrl(),
-                adapter =  this.getAdapterUrl(),
+                adapter = this.getAdapterUrl(),
                 creator = this.getCreatorUrl(),
                 self = this;
 
             RequireJS([
-                 baseTemplate,
+                baseTemplate,
                 adapter,
                 creator
             ], function (Template, Adapter, Creator) {
@@ -57,7 +57,10 @@ define([
                 self.adapter = new Adapter();
                 self.creator = new Creator();
 
-                self.adapter.prepareData(config);
+                self.adapter.prepareData($.extend(true, {model: config.model}, config.adapter));
+
+
+                console.log(" ready ")
 
             });
         };

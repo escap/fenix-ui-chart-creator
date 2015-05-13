@@ -44,11 +44,87 @@ define([
                 READY: 'fx.component.chart.ready'
             };
 
-        function FENIX_Highchart_Adapter() {
+        function HightchartCreator() {
             $.extend(true, this, defaultOptions);
         }
 
-        FENIX_Highchart_Adapter.prototype.render = function (config) {
+        HightchartCreator.prototype.createChart = function (s) {
+
+            var hg = {
+                chart: {
+                    type: 'scatter',
+                    zoomType: 'xy'
+                },
+                title: {
+                    text: 'Height Versus Weight of 507 Individuals by Gender'
+                },
+                subtitle: {
+                    text: 'Source: Heinz  2003'
+                },
+                xAxis: {
+                    title: {
+                        enabled: true,
+                        text: 'Height (cm)'
+                    },
+                    startOnTick: true,
+                    endOnTick: true,
+                    showLastLabel: true
+                },
+                yAxis: {
+                    title: {
+                        text: 'Weight (kg)'
+                    }
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'left',
+                    verticalAlign: 'top',
+                    x: 100,
+                    y: 70,
+                    floating: true,
+                    //backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF',
+                    borderWidth: 1
+                },
+                plotOptions: {
+                    scatter: {
+                        marker: {
+                            radius: 5,
+                            states: {
+                                hover: {
+                                    enabled: true,
+                                    lineColor: 'rgb(100,100,100)'
+                                }
+                            }
+                        },
+                        states: {
+                            hover: {
+                                marker: {
+                                    enabled: false
+                                }
+                            }
+                        },
+                        tooltip: {
+                            headerFormat: '<b>{series.name}</b><br>',
+                            pointFormat: '{point.x} cm, {point.y} kg'
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Female',
+                    color: 'rgba(223, 83, 83, .5)'
+                }]
+            };
+
+            hg.series[0].data = s;
+
+            console.log(hg)
+
+            $('#monChart2Test').highcharts(hg)
+
+        };
+
+
+        HightchartCreator.prototype.render = function (config) {
             $.extend(true, this, config);
 
             if (this._validateInput() === true) {
@@ -65,7 +141,7 @@ define([
             }
         };
 
-        FENIX_Highchart_Adapter.prototype._prepareData = function () {
+        HightchartCreator.prototype._prepareData = function () {
 
             this.$columns.forEach(_.bind(function (column, index) {
 
@@ -125,7 +201,7 @@ define([
             }
         };
 
-        FENIX_Highchart_Adapter.prototype._prepareDataForChartType = function () {
+        HightchartCreator.prototype._prepareDataForChartType = function () {
 
             var yColumn = this._getColumnBySubject(this.yAxisSubject);
 
@@ -145,7 +221,7 @@ define([
             }
         };
 
-        FENIX_Highchart_Adapter.prototype._processYAxisColumn = function (column) {
+        HightchartCreator.prototype._processYAxisColumn = function (column) {
 
             if (!column) {
                 return;
@@ -165,7 +241,7 @@ define([
             }
         };
 
-        FENIX_Highchart_Adapter.prototype._processSeriesForTimeSeries = function () {
+        HightchartCreator.prototype._processSeriesForTimeSeries = function () {
 
             this.data.series = [];
 
@@ -223,7 +299,7 @@ define([
 
         };
 
-        FENIX_Highchart_Adapter.prototype._getYAxisIndex = function (label) {
+        HightchartCreator.prototype._getYAxisIndex = function (label) {
 
             var index = -1;
 
@@ -240,7 +316,7 @@ define([
             return index;
         };
 
-        FENIX_Highchart_Adapter.prototype._createSeriesName = function (row) {
+        HightchartCreator.prototype._createSeriesName = function (row) {
 
             var name = '';
 
@@ -252,28 +328,28 @@ define([
             return name;
         };
 
-        FENIX_Highchart_Adapter.prototype._validateData = function () {
+        HightchartCreator.prototype._validateData = function () {
 
             this.errors = {};
 
             return (Object.keys(this.errors).length === 0);
         };
 
-        FENIX_Highchart_Adapter.prototype._onValidateDataSuccess = function () {
+        HightchartCreator.prototype._onValidateDataSuccess = function () {
             this.$chartRendered = true;
             this._createConfiguration();
             this._renderChart();
         };
 
-        FENIX_Highchart_Adapter.prototype._showConfigurationForm = function () {
+        HightchartCreator.prototype._showConfigurationForm = function () {
             window.alert("FORM");
         };
 
-        FENIX_Highchart_Adapter.prototype._onValidateDataError = function () {
+        HightchartCreator.prototype._onValidateDataError = function () {
             this._showConfigurationForm();
         };
 
-        FENIX_Highchart_Adapter.prototype._createConfiguration = function () {
+        HightchartCreator.prototype._createConfiguration = function () {
             this.config = $.extend(true, this.options, this.data, baseConfig);
 
             this.config.chart.events.load = function () {
@@ -281,12 +357,12 @@ define([
             };
         };
 
-        FENIX_Highchart_Adapter.prototype._renderChart = function () {
+        HightchartCreator.prototype._renderChart = function () {
 
             this.$container.highcharts(this.config);
         };
 
-        FENIX_Highchart_Adapter.prototype._initVariable = function () {
+        HightchartCreator.prototype._initVariable = function () {
 
             this.$container = $(this.container).find(this.s.CONTENT);
 
@@ -297,7 +373,7 @@ define([
             this.$data = this.model.data;
         };
 
-        FENIX_Highchart_Adapter.prototype._validateInput = function () {
+        HightchartCreator.prototype._validateInput = function () {
 
             this.errors = {};
 
@@ -353,7 +429,7 @@ define([
         };
 
         //Utils
-        FENIX_Highchart_Adapter.prototype._getLabel = function (obj, attribute) {
+        HightchartCreator.prototype._getLabel = function (obj, attribute) {
 
             var label,
                 keys;
@@ -375,7 +451,7 @@ define([
             return label;
         };
 
-        FENIX_Highchart_Adapter.prototype._createCode2LabelMap = function (column) {
+        HightchartCreator.prototype._createCode2LabelMap = function (column) {
 
             var map = {},
                 values;
@@ -398,7 +474,7 @@ define([
             return map;
         };
 
-        FENIX_Highchart_Adapter.prototype._getColumnBySubject = function (subject) {
+        HightchartCreator.prototype._getColumnBySubject = function (subject) {
 
             var id = this.aux.subject2id[subject],
                 index;
@@ -416,7 +492,7 @@ define([
             return this.$columns.length > index ? this.$columns[index] : null;
         };
 
-        FENIX_Highchart_Adapter.prototype._getColumnIndexBySubject = function (subject) {
+        HightchartCreator.prototype._getColumnIndexBySubject = function (subject) {
 
             _.each(this.$columns, function (column, i) {
                 if (column.subject === subject) {
@@ -427,7 +503,7 @@ define([
             return -1;
         };
 
-        FENIX_Highchart_Adapter.prototype.reflow = function () {
+        HightchartCreator.prototype.reflow = function () {
 
             if (typeof this.$container !== 'undefined' && this.$chartRendered) {
                 this.$container.highcharts().reflow();
@@ -435,5 +511,5 @@ define([
             }
         };
 
-        return FENIX_Highchart_Adapter;
+        return HightchartCreator;
     });

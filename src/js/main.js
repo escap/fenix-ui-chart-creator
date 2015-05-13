@@ -11,38 +11,38 @@ requirejs(['./paths'], function (paths) {
 
         $.getJSON("tests/resources/GHG_test_data.json", function (model) {
 
-           var creator = new ChartCreator();
+            var creator = new ChartCreator(),
+                chartOne;
 
             creator.init({
                 model: model,
                 adapter: {
-                    filters: ['DomainCode', 'TableType', 'ItemCode']
+                    filters: ['DomainCode', 'TableType', 'GUNFCode'],
+                    x_dimension: 'Year',
+                    y_dimension: 'GValue'
                 },
                 template: {},
                 creator: {}
             });
 
-            creator.render({
-                container: "#monChart2Test",
-                series: [
-                    {
-                        filters: {
-                            'DomainCode': 'QC',
-                            'TableType': 'Emissions',
-                            'ItemCode': '27'
-                        },
-                        type: 'line'
-                    },
-                    {
-                        filters: {
-                            'DomainCode': 'QC',
-                            'TableType': 'Emissions',
-                            'ItemCode': '39'
-                        },
-                        type: 'column'
-                    }
-                ]
-            });
+            window.setTimeout(function () {
+
+                chartOne = creator.render({
+                    container: "#monChart2Test",
+                    series: [
+                        {
+                            filters: {
+                                'DomainCode': 'GAS',
+                                'TableType': 'activity',
+                                'GUNFCode': '1712'
+                            },
+                            type: 'line'
+                        }
+                    ]
+                });
+
+
+            }, 1000)
 
 
         })
