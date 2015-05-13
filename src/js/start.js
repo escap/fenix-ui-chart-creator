@@ -2,8 +2,9 @@
 define([
         'require',
         'jquery',
+        'fx-c-c/adapters/star_schema_adapter',
         'fx-c-c/templates/base_template',
-        'fx-c-c/adapters/FENIX_adapter',
+        'fx-c-c/creators/highcharts_creator',
         'highcharts'
     ],
     function (RequireJS, $) {
@@ -31,13 +32,17 @@ define([
 
         ChartCreator.prototype.render = function (config) {
 
-            var data;
+            var series = [];
 
-            //this.template.render(config);
+            this.template.render(config);
 
-            data = this.adapter.getData(config);
+            for (var i =0 ; i < config.series.length; i++ ) {
+                series.push(this.adapter.getData(config.series[i]))
+            }
 
-            this.creator.createChart(data);
+            config.chart_series = series;
+
+            this.creator.render(config);
         };
 
         ChartCreator.prototype.preloadResources = function (config) {
@@ -53,12 +58,11 @@ define([
                 creator
             ], function (Template, Adapter, Creator) {
 
-                self.template = new Template();
-                self.adapter = new Adapter();
-                self.creator = new Creator();
+                self.template = new Template($.extend(true, {model: config.model}, config.template));
+                self.adapter = new Adapter($.extend(true, {model: config.model}, config.adapter));
+                self.creator = new Creator($.extend(true, {model: config.model}, config.creator));
 
                 self.adapter.prepareData($.extend(true, {model: config.model}, config.adapter));
-
 
                 console.log(" ready ")
 
@@ -77,7 +81,7 @@ define([
 
         ChartCreator.prototype.getCreatorUrl = function () {
             //TODO add here template discovery logic
-            return this.creatorUrl ? this.creatorUrl : 'fx-c-c/creators/highchart_creator';
+            return this.creatorUrl ? this.creatorUrl : 'fx-c-c/creators/highcharts_creator';
         };
 
         ChartCreator.prototype._validateInput = function () {

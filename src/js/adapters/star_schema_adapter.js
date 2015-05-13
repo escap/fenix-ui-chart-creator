@@ -44,6 +44,7 @@ define([
 
         function Star_Schema_Adapter() {
             $.extend(true, this, defaultOptions);
+
             this.CONFIG = {
                 charts_data: {}
             };
@@ -111,6 +112,8 @@ define([
                 this.create_tree_item(this.CONFIG.charts_data, f, row)
             }
 
+            console.log(this.CONFIG.charts_data)
+
         };
 
         Star_Schema_Adapter.prototype._validateData = function () {
@@ -128,31 +131,22 @@ define([
 
         };
 
-
-        Star_Schema_Adapter.prototype.get_series = function( config ) {
+        Star_Schema_Adapter.prototype.get_series = function (config) {
 
             var series = this.CONFIG.charts_data;
-            _.each(this.CONFIG.filters, _.bind(function ( f ) {
-
+            _.each(this.CONFIG.filters, _.bind(function (f) {
 
                 //Controlla che esiste
                 series = series[config.filters[f]];
 
-            },this));
+            }, this));
 
             return series;
         };
 
-        Star_Schema_Adapter.prototype.getData = function (config) {
+        Star_Schema_Adapter.prototype.getData = function (s) {
 
-             var series = this.get_series(config.series[0]),
-                 prepared_series = this.prepare_series(series);
-
-
-
-            return prepared_series;
-
-
+            return this.prepare_series(this.get_series(s));
         };
 
         Star_Schema_Adapter.prototype.prepare_series = function (d) {
@@ -161,9 +155,7 @@ define([
                 x_dimension = this.CONFIG.x_dimension,
                 y_dimension = this.CONFIG.y_dimension;
 
-
             //TODO ordinamento della series
-
             for (var i = d.length - 1; i >= 0; i--) {
                 var x = isNaN(parseInt(d[i][x_dimension])) ? null : parseInt(d[i][x_dimension]);
                 var y = isNaN(parseFloat(d[i][y_dimension])) ? null : parseFloat(d[i][y_dimension]);
@@ -173,10 +165,6 @@ define([
             return s;
 
         };
-
-
-
-
 
         return Star_Schema_Adapter;
     });

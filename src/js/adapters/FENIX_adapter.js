@@ -1,7 +1,6 @@
 /*global define, amplify, console*/
 define([
         'jquery',
-        'fx-c-c/config/adapters/FENIX_highcharts',
         'underscore',
         'highcharts',
         'amplify'

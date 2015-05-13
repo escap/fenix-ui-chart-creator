@@ -37,6 +37,22 @@ requirejs(['./paths'], function (paths) {
                                 'GUNFCode': '1712'
                             },
                             type: 'line'
+                        },
+                        {
+                            filters: {
+                                'DomainCode': 'GAS',
+                                'TableType': 'activity',
+                                'GUNFCode': '1755'
+                            },
+                            type: 'column'
+                        },
+                        {
+                            filters: {
+                                'DomainCode': 'GAS',
+                                'TableType': 'activity',
+                                'GUNFCode': '5057'
+                            },
+                            type: 'scatter'
                         }
                     ]
                 });

@@ -12,6 +12,7 @@ define([
         }
 
         Base_template.prototype.render = function (config) {
+
             $.extend(true, this, config);
 
             if (this._validateInput() === true) {
@@ -37,15 +38,6 @@ define([
 
             if (!this.hasOwnProperty("container")) {
                 this.errors['container'] = "'container' attribute not present";
-            }
-
-            //Model
-            if (!this.hasOwnProperty("model")) {
-                this.errors['model'] = "'model' attribute not present.";
-            }
-
-            if (typeof this.model !== 'object') {
-                this.errors['model'] = "'model' is not an object.";
             }
 
             return (Object.keys(this.errors).length === 0);
