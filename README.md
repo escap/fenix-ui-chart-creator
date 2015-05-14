@@ -1,3 +1,5 @@
+[![Stories in Progress](https://badge.waffle.io/FENIX-Platform/fenix-ui-chart-creator.svg?label=in%20Progress&title=In%20Progress)](http://waffle.io/FENIX-Platform/fenix-ui-chart-creator)
+
 # FENIX Chart Creator
 
 ## Configuration
