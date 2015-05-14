@@ -85,7 +85,9 @@ define([
 
             if (filters.length > 1) {
 
-                if (father[row[filters[0]]] == null) {
+
+                if (father[row[filters[0]]] === null || father[row[filters[0]]] === undefined) {
+
                     father[row[filters[0]]] = {};
                 }
 
@@ -97,7 +99,7 @@ define([
             } else {
 
                 if (!Array.isArray(father[row[filters[0]]])) {
-                    father[row[filters[0]]] = []
+                    father[row[filters[0]]] = [];
                 }
 
                 father[row[filters[0]]].push(row);
@@ -106,13 +108,13 @@ define([
 
         Star_Schema_Adapter.prototype._prepareData = function () {
 
+
             for (var i = 0; i < this.CONFIG.model.length; i++) {
                 var row = this.CONFIG.model[i];
                 var f = this.CONFIG.filters.slice();
-                this.create_tree_item(this.CONFIG.charts_data, f, row)
-            }
 
-            console.log(this.CONFIG.charts_data)
+                this.create_tree_item(this.CONFIG.charts_data, f, row);
+            }
 
         };
 
@@ -134,6 +136,7 @@ define([
         Star_Schema_Adapter.prototype.get_series = function (config) {
 
             var series = this.CONFIG.charts_data;
+
             _.each(this.CONFIG.filters, _.bind(function (f) {
 
                 //Controlla che esiste

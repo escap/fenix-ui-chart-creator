@@ -17,11 +17,13 @@ define([
 
         function ChartCreator() {
             $.extend(true, this, defaultOptions);
+            return this;
         }
 
         ChartCreator.prototype.init = function (config) {
 
             if (this._validateInput(config)) {
+
                 this.preloadResources(config);
             }
 
@@ -64,7 +66,9 @@ define([
 
                 self.adapter.prepareData($.extend(true, {model: config.model}, config.adapter));
 
-                console.log(" ready ")
+                if (typeof config.onReady === 'function'){
+                    config.onReady();
+                }
 
             });
         };
