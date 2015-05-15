@@ -34,17 +34,26 @@ define([
 
         ChartCreator.prototype.render = function (config) {
 
-            var series = [];
+            var series = [],
+                template = new this.templateFactory($.extend(true, {model: config.model}, config.template)),
+                creator = new this.creatorFactory($.extend(true, {model: config.model}, config.creator));
 
-            this.template.render(config);
+            template.render(config);
 
-            for (var i =0 ; i < config.series.length; i++ ) {
+            for (var i = 0; i < config.series.length; i++) {
                 series.push(this.adapter.getData(config.series[i]));
             }
 
             config.chart_series = series;
 
-            this.creator.render(config);
+            creator.render(config);
+
+            return {
+                destroy: function () {
+                    creator.destroy();
+                    template.destroy();
+                }
+            };
         };
 
         ChartCreator.prototype.preloadResources = function (config) {
@@ -60,13 +69,14 @@ define([
                 creator
             ], function (Template, Adapter, Creator) {
 
-                self.template = new Template($.extend(true, {model: config.model}, config.template));
+                self.templateFactory = Template;
+                self.creatorFactory = Creator;
+
                 self.adapter = new Adapter($.extend(true, {model: config.model}, config.adapter));
-                self.creator = new Creator($.extend(true, {model: config.model}, config.creator));
 
                 self.adapter.prepareData($.extend(true, {model: config.model}, config.adapter));
 
-                if (typeof config.onReady === 'function'){
+                if (typeof config.onReady === 'function') {
                     config.onReady();
                 }
 

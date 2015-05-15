@@ -148,8 +148,8 @@ define([
         };
 
         Star_Schema_Adapter.prototype.getData = function (s) {
-
-            return this.prepare_series(this.get_series(s));
+            var series = this.get_series(s);
+            return this.prepare_series( series ? series : []) ;
         };
 
         Star_Schema_Adapter.prototype.prepare_series = function (d) {

@@ -1,14 +1,17 @@
-/*global define*/
+/*global define,console*/
 define([
         'jquery',
         'text!fx-c-c/html/templates/base_template.html'
     ],
     function ($, template) {
 
+        'use strict';
+
         var defaultOptions = {};
 
         function Base_template() {
             $.extend(true, this, defaultOptions);
+            return this;
         }
 
         Base_template.prototype.render = function (config) {
@@ -22,6 +25,8 @@ define([
                 console.error(this.errors);
                 throw new Error("FENIX Chart creator has not a valid configuration");
             }
+
+            return this;
         };
 
         Base_template.prototype._injectTemplate = function () {
@@ -37,10 +42,14 @@ define([
             this.errors = {};
 
             if (!this.hasOwnProperty("container")) {
-                this.errors['container'] = "'container' attribute not present";
+                this.errors.container = "'container' attribute not present";
             }
 
             return (Object.keys(this.errors).length === 0);
+        };
+
+        Base_template.prototype.destroy = function () {
+
         };
 
         return Base_template;
