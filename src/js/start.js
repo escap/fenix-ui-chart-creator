@@ -39,7 +39,7 @@ define([
             this.template.render(config);
 
             for (var i =0 ; i < config.series.length; i++ ) {
-                series.push(this.adapter.getData(config.series[i]))
+                series.push(this.adapter.getData(config.series[i]));
             }
 
             config.chart_series = series;
