@@ -162,7 +162,8 @@ define([
             for (var i = d.length - 1; i >= 0; i--) {
                 var x = isNaN(parseInt(d[i][x_dimension])) ? null : parseInt(d[i][x_dimension]);
                 var y = isNaN(parseFloat(d[i][y_dimension])) ? null : parseFloat(d[i][y_dimension]);
-                s.push([x, y]);
+                //s.push([x, y]);
+                s.push([d[i][x_dimension], y]);
             }
 
             return s;
