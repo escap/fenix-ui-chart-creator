@@ -232,14 +232,17 @@ define(function () {
                 }
             },
             //type: 'datetime',
-            dateTimeLabelFormats: { // don't display the dummy year
+/*            dateTimeLabelFormats: { // don't display the dummy year
                 //month: '%e. %b',
                 year: '%Y'
-            },
+            },*/
             title: {
                 enabled: false,
                 text: 'null'
-            }
+            },
+            //,categories : ["guido", "dani"]
+            type: "category",
+            showEmpty : false
 
             /*plotLines: [{ //linea custom possono essere anche più di una, è un array
              color: '#666666',

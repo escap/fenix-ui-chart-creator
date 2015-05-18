@@ -108,7 +108,6 @@ define([
 
         Star_Schema_Adapter.prototype._prepareData = function () {
 
-
             for (var i = 0; i < this.CONFIG.model.length; i++) {
                 var row = this.CONFIG.model[i];
                 var f = this.CONFIG.filters.slice();
@@ -138,7 +137,6 @@ define([
             var series = this.CONFIG.charts_data;
 
             _.each(this.CONFIG.filters, _.bind(function (f) {
-
                 //Controlla che esiste
                 series = series[config.filters[f]];
 
@@ -149,21 +147,28 @@ define([
 
         Star_Schema_Adapter.prototype.getData = function (s) {
             var series = this.get_series(s);
-            return this.prepare_series( series ? series : []) ;
+            return this.prepare_series(series ? series : []);
         };
 
         Star_Schema_Adapter.prototype.prepare_series = function (d) {
 
             var s = [],
                 x_dimension = this.CONFIG.x_dimension,
-                y_dimension = this.CONFIG.y_dimension;
+                x_dimension_label = this.CONFIG.x_dimension_label,
+                value = this.CONFIG.value;
 
             //TODO ordinamento della series
             for (var i = d.length - 1; i >= 0; i--) {
                 var x = isNaN(parseInt(d[i][x_dimension])) ? null : parseInt(d[i][x_dimension]);
-                var y = isNaN(parseFloat(d[i][y_dimension])) ? null : parseFloat(d[i][y_dimension]);
+                var y = isNaN(parseFloat(d[i][value])) ? null : parseFloat(d[i][value]);
                 //s.push([x, y]);
-                s.push([d[i][x_dimension], y]);
+                //s.push([d[i][x_dimension] + "-label", y]);
+                s.push({
+                    'x': String(d[i][x_dimension]),
+                    //'x': "Algeria",
+                    'y': y,
+                    'name': d[i][x_dimension_label]
+                });
             }
 
             return s;

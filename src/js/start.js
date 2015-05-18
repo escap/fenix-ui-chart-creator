@@ -41,7 +41,7 @@ define([
             template.render(config);
 
             for (var i = 0; i < config.series.length; i++) {
-                series.push(this.adapter.getData(config.series[i]));
+                series.push($.extend(true, this.adapter.getData(config.series[i]), config.series[i].creator));
             }
 
             config.chart_series = series;
@@ -49,10 +49,14 @@ define([
             creator.render(config);
 
             return {
-                destroy: function () {
+                destroy: $.proxy(function () {
+
+                    //$.proxy(creator.destroy, creator)();
+                    // $.proxy(template.destroy, template)();
                     creator.destroy();
                     template.destroy();
-                }
+
+                }, this)
             };
         };
 

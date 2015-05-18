@@ -2,11 +2,9 @@
 define([
         'jquery',
         'fx-c-c/config/creators/highcharts_template',
-        'underscore',
-        'highcharts',
         'amplify'
     ],
-    function ($, baseConfig, _, Highcharts) {
+    function ($, baseConfig) {
 
         'use strict';
 
@@ -16,9 +14,7 @@ define([
 
                 s: {
                     CONTENT: '[data-role="content"]'
-                },
-
-                type: 'timeseries' //[custom, scatter, pie]
+                }
 
             },
             e = {
@@ -29,21 +25,21 @@ define([
         function HightchartCreator(o) {
 
             $.extend(true, this, o, defaultOptions);
-            this.hightchart_template =baseConfig;
+            this.hightchart_template = baseConfig;
 
             return this;
         }
 
-        HightchartCreator.prototype._validateInput = function (config) {
+        HightchartCreator.prototype._validateInput = function () {
 
             this.errors = {};
 
             //Container
-            if (!config.hasOwnProperty("container")) {
+            if (!this.hasOwnProperty("container")) {
                 this.errors.container = "'container' attribute not present.";
             }
 
-            if ($(config.container).find(this.s.CONTENT) === 0) {
+            if ($(this.container).find(this.s.CONTENT) === 0) {
                 this.errors.container = "'container' is not a valid HTML element.";
             }
 
@@ -52,8 +48,14 @@ define([
 
         HightchartCreator.prototype.render = function (config) {
 
-            if (this._validateInput(config) === true) {
-                this._createChart(config);
+            $.extend(true, this, config);
+
+            if (this._validateInput() === true) {
+
+                //Init chart container
+                this.$container = $(this.container).find(this.s.CONTENT);
+
+                this._createChart();
 
             } else {
                 console.error(this.errors);
@@ -62,24 +64,24 @@ define([
         };
 
 
-        HightchartCreator.prototype._createChart = function (config) {
+        HightchartCreator.prototype._createChart = function () {
 
             var series = [],
                 conf = this.hightchart_template;
 
-            for (var i = 0 ; i < config.chart_series.length; i++ ) {
-                var s = {
-                    data : config.chart_series[i],
-                    name: "test",
-                    type : config.series[i].type
-                };
+            for (var i = 0; i < this.chart_series.length; i++) {
+
+                var s = $.extend(true, {
+                    data: this.chart_series[i],
+                    type: this.series[i].type
+                }, this.chart_series[i]);
 
                 series.push(s);
             }
 
             conf.series = series;
 
-            $(config.container).find(this.s.CONTENT).highcharts(conf) ;
+            this.$container.highcharts(conf);
 
         };
 
@@ -88,10 +90,6 @@ define([
             this.$chartRendered = true;
             this._createConfiguration();
             this._renderChart();
-        };
-
-        HightchartCreator.prototype._showConfigurationForm = function () {
-            window.alert("FORM");
         };
 
         HightchartCreator.prototype._onValidateDataError = function () {
@@ -106,12 +104,6 @@ define([
             };
         };
 
-        HightchartCreator.prototype._renderChart = function () {
-
-            this.$container.highcharts(this.config);
-        };
-
-
         HightchartCreator.prototype.reflow = function () {
 
             if (typeof this.$container !== 'undefined' && this.$chartRendered) {
@@ -121,8 +113,7 @@ define([
         };
 
         HightchartCreator.prototype.destroy = function () {
-            //TODO destroy highchart
-            console.warn("destory HightchartCreator to be implemented")
+            this.$container.highcharts().destroy();
         };
 
         return HightchartCreator;
