@@ -80,11 +80,11 @@ define([
             }
 
             conf.series = series;
+            conf.xAxis.categories = this.chart_categories;
 
             this.$container.highcharts(conf);
 
         };
-
 
         HightchartCreator.prototype._onValidateDataSuccess = function () {
             this.$chartRendered = true;

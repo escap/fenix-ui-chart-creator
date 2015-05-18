@@ -27,9 +27,6 @@ define([
                 this.preloadResources(config);
             }
 
-            /* if (config.render) {
-             this.render(config.render);
-             }*/
         };
 
         ChartCreator.prototype.render = function (config) {
@@ -45,14 +42,13 @@ define([
             }
 
             config.chart_series = series;
+            config.chart_categories = this.adapter.get('categories');
 
             creator.render(config);
 
             return {
                 destroy: $.proxy(function () {
 
-                    //$.proxy(creator.destroy, creator)();
-                    // $.proxy(template.destroy, template)();
                     creator.destroy();
                     template.destroy();
 

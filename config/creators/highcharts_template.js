@@ -239,10 +239,10 @@ define(function () {
             title: {
                 enabled: false,
                 text: 'null'
-            },
+            }
             //,categories : ["guido", "dani"]
-            type: "category",
-            showEmpty : false
+            //type: "category"
+
 
             /*plotLines: [{ //linea custom possono essere anche più di una, è un array
              color: '#666666',

@@ -49,6 +49,10 @@ define([
                 charts_data: {}
             };
 
+            this.info = {
+                categories : []
+            };
+
             return this;
         }
 
@@ -155,24 +159,34 @@ define([
             var s = [],
                 x_dimension = this.CONFIG.x_dimension,
                 x_dimension_label = this.CONFIG.x_dimension_label,
-                value = this.CONFIG.value;
+                value = this.CONFIG.value,
+                categories = [];
 
             //TODO ordinamento della series
             for (var i = d.length - 1; i >= 0; i--) {
-                var x = isNaN(parseInt(d[i][x_dimension])) ? null : parseInt(d[i][x_dimension]);
+                //var x = isNaN(parseInt(d[i][x_dimension])) ? null : parseInt(d[i][x_dimension]);
                 var y = isNaN(parseFloat(d[i][value])) ? null : parseFloat(d[i][value]);
                 //s.push([x, y]);
-                //s.push([d[i][x_dimension] + "-label", y]);
-                s.push({
+                s.push([d[i][x_dimension_label], y]);
+               /* s.push({
                     'x': String(d[i][x_dimension]),
                     //'x': "Algeria",
                     'y': y,
                     'name': d[i][x_dimension_label]
-                });
+                });*/
+
+                this.info.categories.push( d[i][x_dimension_label]);
+
+                this.info.categories = _.uniq(this.info.categories);
             }
 
             return s;
 
+        };
+
+        Star_Schema_Adapter.prototype.get = function ( key ) {
+
+            return this.info[key];
         };
 
         return Star_Schema_Adapter;
