@@ -67,7 +67,7 @@ requirejs(['./paths'], function (paths) {
                     ]
                 });
 
-/*                chartOne = creator.render({
+                chartOne = creator.render({
                     container: "#monChart2TestOld",
                     series: [
                         {
@@ -95,7 +95,7 @@ requirejs(['./paths'], function (paths) {
                             type: 'column'
                         }
                     ]
-                });*/
+                });
 
 
             }, 1000)
