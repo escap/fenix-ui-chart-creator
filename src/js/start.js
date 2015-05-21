@@ -32,13 +32,21 @@ define([
         ChartCreator.prototype.render = function (config) {
 
             var series = [],
-                template = new this.templateFactory($.extend(true, {model: config.model}, config.template)),
-                creator = new this.creatorFactory($.extend(true, {model: config.model}, config.creator));
+                template = new this.templateFactory($.extend(true, {}, {model: config.model}, config.template)),
+                creator = new this.creatorFactory($.extend(true, {}, {model: config.model}, config.creator));
 
             template.render(config);
 
+
             for (var i = 0; i < config.series.length; i++) {
-                series.push($.extend(true, this.adapter.getData(config.series[i]), config.series[i].creator));
+
+                var retrieved = this.adapter.getData(config.series[i]);
+
+                //Remove empty
+                if (retrieved.length > 0) {
+                    series.push($.extend(true, this.adapter.getData(config.series[i]), config.series[i].creator));
+                }
+
             }
 
             config.chart_series = series;
