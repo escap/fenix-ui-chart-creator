@@ -42,7 +42,7 @@ requirejs(['./paths'], function (paths) {
                             value: 'GValue',
                             type: 'column',
                             color: 'maroon',
-                            name: 'stocazzo2'
+                            name: 's1'
                         },
                         {
                             filters: {
@@ -50,7 +50,7 @@ requirejs(['./paths'], function (paths) {
                                 'TableType': 'activity',
                                 'GUNFCode': '5057'
                             },
-                            name: 'stocazzo3',
+                            name: 's2',
                             value: 'GValue',
                             type: 'line'
                         },
@@ -61,7 +61,7 @@ requirejs(['./paths'], function (paths) {
                                 'GUNFCode': '1712'
                             },
                             value: 'PerDiff',
-                            name: 'stocazzo',
+                            name: 's3',
                             type: 'scatter'
                         }
                     ]
@@ -76,23 +76,26 @@ requirejs(['./paths'], function (paths) {
                                 'TableType': 'activity',
                                 'GUNFCode': '1712'
                             },
-                            type: 'scatter'
-                        },
-                        {
-                            filters: {
-                                'DomainCode': 'GAS',
-                                'TableType': 'activity',
-                                'GUNFCode': '5057'
-                            },
                             type: 'line'
                         },
                         {
                             filters: {
                                 'DomainCode': 'GAS',
                                 'TableType': 'activity',
+                                'GUNFCode': '1712'
+                            },
+                            value: 'GValue',
+                            type: 'line',
+                            color: 'color',
+                            name: 's2c'
+                        },
+                        {
+                            filters: {
+                                'DomainCode': 'GAS',
+                                'TableType': 'activity',
                                 'GUNFCode': '5057'
                             },
-                            type: 'column'
+                            type: 'scatter'
                         }
                     ]
                 });

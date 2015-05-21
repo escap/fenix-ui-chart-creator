@@ -111,15 +111,16 @@ define([
         };
 
         Star_Schema_Adapter.prototype.prepareChart = function(seriesConfig) {
-            var chartObj = $.extend({}, this.chartObj),
+            var chartObj = $.extend(true, {}, this.chartObj),
                 x_dimension = this.CONFIG.x_dimension,
                 y_dimension = this.CONFIG.y_dimension,
                 value = this.CONFIG.value;
 
+            console.log(chartObj);
+
             // get all data of the series
             var data = [];
             seriesConfig.forEach(_.bind(function(serie) {
-                console.log(serie);
                 data.push(this.filterSerie(serie));
             }, this));
 
