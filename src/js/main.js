@@ -19,7 +19,8 @@ requirejs(['./paths'], function (paths) {
                 adapter: {
                     filters: ['DomainCode', 'TableType', 'GUNFCode'],
                     x_dimension: 'Year',
-                    y_dimension: 'GValue'
+                    y_dimension: 'GUNFItemNameE',
+                    value: 'GValue'
                 },
                 template: {},
                 creator: {}
@@ -29,35 +30,44 @@ requirejs(['./paths'], function (paths) {
 
                 chartOne = creator.render({
                     container: "#monChart2Test",
+                    creator: {
+                    },
                     series: [
+                        {
+                            filters: {
+                                'DomainCode': 'GAS',
+                                'TableType': 'activity',
+                                'GUNFCode': '5057'
+                            },
+                            value: 'GValue',
+                            type: 'column',
+                            color: 'maroon',
+                            name: 'stocazzo2'
+                        },
+                        {
+                            filters: {
+                                'DomainCode': 'GAS',
+                                'TableType': 'activity',
+                                'GUNFCode': '5057'
+                            },
+                            name: 'stocazzo3',
+                            value: 'GValue',
+                            type: 'line'
+                        },
                         {
                             filters: {
                                 'DomainCode': 'GAS',
                                 'TableType': 'activity',
                                 'GUNFCode': '1712'
                             },
-                            type: 'column'
-                        },
-                        {
-                            filters: {
-                                'DomainCode': 'GAS',
-                                'TableType': 'activity',
-                                'GUNFCode': '5057'
-                            },
-                            type: 'column'
-                        },
-                        {
-                            filters: {
-                                'DomainCode': 'GAS',
-                                'TableType': 'activity',
-                                'GUNFCode': '5057'
-                            },
-                            type: 'column'
+                            value: 'PerDiff',
+                            name: 'stocazzo',
+                            type: 'scatter'
                         }
                     ]
                 });
 
-                chartOne = creator.render({
+/*                chartOne = creator.render({
                     container: "#monChart2TestOld",
                     series: [
                         {
@@ -85,7 +95,7 @@ requirejs(['./paths'], function (paths) {
                             type: 'column'
                         }
                     ]
-                });
+                });*/
 
 
             }, 1000)

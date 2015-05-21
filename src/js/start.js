@@ -3,6 +3,7 @@ define([
         'require',
         'jquery',
         'fx-c-c/adapters/star_schema_adapter',
+        'fx-c-c/adapters/FENIX_adapter',
         'fx-c-c/templates/base_template',
         'fx-c-c/creators/highcharts_creator',
         'highcharts'
@@ -30,19 +31,50 @@ define([
         };
 
         ChartCreator.prototype.render = function (config) {
+            console.log("render");
 
-            var series = [],
-                template = new this.templateFactory($.extend(true, {model: config.model}, config.template)),
+            var template = new this.templateFactory($.extend(true, {model: config.model}, config.template)),
                 creator = new this.creatorFactory($.extend(true, {model: config.model}, config.creator));
 
+            // render template
             template.render(config);
 
-            for (var i = 0; i < config.series.length; i++) {
-                series.push($.extend(true, this.adapter.getData(config.series[i]), config.series[i].creator));
-            }
+            console.log(config);
 
-            config.chart_series = series;
-            config.chart_categories = this.adapter.get('categories');
+            var chartObj = this.adapter.prepareChart(config.series);
+
+
+            console.log("-----------------------------");
+
+            config.chartObj = $.extend(true, {}, chartObj, creator.chartObj);
+            console.log(config);
+
+            creator.render(config);
+
+            return {
+                destroy: $.proxy(function () {
+
+                    creator.destroy();
+                    template.destroy();
+
+                }, this)
+            };
+        };
+
+        ChartCreator.prototype.renderFENIX = function (config) {
+
+            console.log('renderFENIX');
+
+            var template = new this.templateFactory($.extend(true, {model: config.model}, config.template)),
+                creator = new this.creatorFactory($.extend(true, {model: config.model}, config.creator));
+
+            // render template
+            template.render(config);
+
+            console.log(creator);
+
+            config.chartObj = $.extend(true, {}, this.adapter.chartObj, creator.chartObj);
+            console.log(config);
 
             creator.render(config);
 
@@ -58,8 +90,10 @@ define([
 
         ChartCreator.prototype.preloadResources = function (config) {
 
+            console.log("preloadResources");
+
             var baseTemplate = this.getTemplateUrl(),
-                adapter = this.getAdapterUrl(),
+                adapter = this.getAdapterUrl(config.model),
                 creator = this.getCreatorUrl(),
                 self = this;
 
@@ -83,8 +117,12 @@ define([
             });
         };
 
-        ChartCreator.prototype.getAdapterUrl = function () {
+        ChartCreator.prototype.getAdapterUrl = function (model) {
             //TODO add here adapter discovery logic
+            // TODO: quick check. to be modified
+            if (model.data && model.metadata) {
+                return this.adapterUrl ? this.adapterUrl : 'fx-c-c/adapters/FENIX_adapter';
+            }
             return this.adapterUrl ? this.adapterUrl : 'fx-c-c/adapters/star_schema_adapter';
         };
 

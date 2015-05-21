@@ -27,8 +27,6 @@ define([
             $.extend(true, this, o, defaultOptions);
             this.hightchart_template = baseConfig;
 
-            console.log(this);
-
             return this;
         }
 
@@ -67,12 +65,25 @@ define([
 
 
         HightchartCreator.prototype._createChart = function () {
-            console.log('_createChart');
-            console.log(this.chartObj);
-            this.config = $.extend(true, {}, baseConfig, this.chartObj);
-            console.log(this.config);
-            console.log(this.$container);
-            this.$container.highcharts( this.config);
+
+            var series = [],
+                conf = this.hightchart_template;
+
+            for (var i = 0; i < this.chart_series.length; i++) {
+
+                var s = $.extend(true, {
+                    data: this.chart_series[i],
+                    type: this.series[i].type
+                }, this.chart_series[i]);
+
+                series.push(s);
+            }
+
+            conf.series = series;
+            conf.xAxis.categories = this.chart_categories;
+
+            this.$container.highcharts(conf);
+
         };
 
         HightchartCreator.prototype._onValidateDataSuccess = function () {
@@ -86,7 +97,7 @@ define([
         };
 
         HightchartCreator.prototype._createConfiguration = function () {
-            this.config = $.extend(true, baseConfig, this.chartObj);
+            this.config = $.extend(true, this.options, this.data, baseConfig);
 
             this.config.chart.events.load = function () {
                 amplify.publish(e.READY, this);

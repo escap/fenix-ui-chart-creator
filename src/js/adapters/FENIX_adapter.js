@@ -5,7 +5,7 @@ define([
         'highcharts',
         'amplify'
     ],
-    function ($, baseConfig, _) {
+    function ($, _) {
 
         'use strict';
 
@@ -13,30 +13,41 @@ define([
 
                 lang: 'EN',
 
-                s: {
-                    CONTENT: '[data-role="content"]'
+                format: 'standard',  //[custom, scatter, pie] TODO: probably not needed and not used yet
+
+                // Chart (Highchart Definition)
+                chartObj: {
+                    chart: {
+                        //type: 'spline'
+                    },
+                    xAxis: {
+
+                    },
+                    //yAxis: [],
+                    series: []
                 },
 
-                type: 'timeseries', //[custom, scatter, pie]
 
-                xAxisSubject: 'time',
-                yAxisSubject: 'um',
-                valueSubject: 'value',
-                seriesSubject: [],
-
-                data: {},
+                // filter to create the series
+                // this could be either subject or id
+                filters: {
+                    xAxis: 'time',
+                    yAxis: 'mu',
+                    value: 'value',
+                    series: [],
+                    addYAxisToSerieName: true //TODO
+                    // N.B. for now the yAxis is added to the serie name to avoid conflicts
+                },
 
                 aux: {
-                    ids: [],
-                    subjects: [],
-                    id2index: {},
-                    index2id: {},
-                    //contains id_column : {code : label}
-                    code2label: {},
-                    subject2id: {},
-                    id2subject: {},
-                    nameIndexes: []
-                }
+                    // variables used to process the model
+                    x:{},
+                    y: {},
+                    value: {},
+                    series: []
+                },
+
+                debugging: false
             },
             e = {
                 DESTROY: 'fx.component.chart.destroy',
@@ -47,13 +58,14 @@ define([
             $.extend(true, this, defaultOptions);
         }
 
-        FENIX_Highchart_Adapter.prototype.render = function (config) {
+        FENIX_Highchart_Adapter.prototype.prepareData = function (config) {
             $.extend(true, this, config);
 
             if (this._validateInput() === true) {
                 this._initVariable();
                 this._prepareData();
                 if (this._validateData() === true) {
+
                     this._onValidateDataSuccess();
                 } else {
                     this._onValidateDataError();
@@ -66,67 +78,127 @@ define([
 
         FENIX_Highchart_Adapter.prototype._prepareData = function () {
 
-            this.$columns.forEach(_.bind(function (column, index) {
+            var xAxis = this.filters.xAxis,
+                yAxis = this.filters.yAxis,
+                value = this.filters.value,
+                series = this.filters.series,
+                columns = this.$columns,
+                addYAxisToSerieName = this.filters.addYAxisToSerieName;
 
+            // parsing columns to get
+            columns.forEach(_.bind(function (column, index) {
+
+                // TODO: this should be already checked and validated
                 if (column.hasOwnProperty('id')) {
-                    this.aux.id2index[column.id] = index;
-                    this.aux.index2id[index] = column.id;
-                    this.aux.ids.push(column.id);
+                    //if (column.hasOwnProperty('subject')) {
 
-                    if (!column.hasOwnProperty('subject')) {
-                        column.subject = column.id;
+                    if (column.subject === xAxis || column.id === xAxis) {
+                        this.aux.x = this._getColumnStructure(columns, column, index);
                     }
 
-                    if (column.hasOwnProperty('subject')) {
-                        this.aux.subject2id[column.subject] = column.id;
-                        this.aux.id2subject[column.id] = column.subject;
+                    else if (column.subject === yAxis || column.id === yAxis) {
+                        this.aux.y = this._getColumnStructure(columns, column, index);
+                    }
 
-                        this.aux.subjects.push(column.subject);
+                    else if (column.subject === value || column.id === value) {
+                        this.aux.value = this._getColumnStructure(columns, column, index);
+                    }
 
-                        if (column.subject === this.yAxisSubject) {
-                            this.columnYAxisIndex = index;
-                        }
+                    if (series.length > 0){
+                        series.forEach(_.bind(function (serie) {
+                            if (column.subject === serie || column.id === serie) {
+                                this.aux.series.push(this._getColumnStructure(columns, column, index));
+                            }
+                        }, this));
 
-                        if (column.subject === this.xAxisSubject) {
-                            this.columnXAxisIndex = index;
-                        }
-
-                        if (column.subject === this.valueSubject) {
-                            this.columnValueIndex = index;
-                        }
+                        // TODO: check the series index to map dinamically
                     }
                 }
-
-                if (column.hasOwnProperty('values')) {
-                    this.aux.code2label[column.id] = this._createCode2LabelMap(column);
-                }
-
-                this.aux.nameIndexes.push(index);
 
             }, this));
 
-            if (this.seriesSubject.length === 0) {
+            // get series columns
+            if (this.aux.series.length <= 0) {
+                columns.forEach(_.bind(function (column, index) {
 
-                this.aux.nameIndexes = _.filter(this.aux.nameIndexes, function (index) {
-                    return (index !== this.columnXAxisIndex) && (index !== this.columnValueIndex);
-                }, this);
-            } else {
+                    if (column.hasOwnProperty('id')) {
+                        // TODO: issue with the y axis and inconsistent series
+                        // TODO i.e. series with the same name but with different yAxis
+                        // if (index != this.aux.x.index && index != this.aux.y.index && index != this.aux.value.index) {
+                        if (index != this.aux.x.index && index != this.aux.value.index) {
+                            if (column.dataType != 'code') {
+                                // check if serie already in series (skip coded columns!)
+                                this.aux.series.push(this._getColumnStructure(this.$columns, column, index));
+                            }
+                        }
+                    }
 
-                this.aux.nameIndexes = [];
 
-                _.each(this.seriesSubject, function (sub) {
-                    this.aux.nameIndexes.push(this.aux.id2index[this.aux.subject2id[sub]]);
-                }, this);
+                }, this));
             }
 
-            if (this.columnValueIndex) {
-                this._prepareDataForChartType();
+            this._printAuxColumns();
+
+            // create chart
+            this._prepareDataForChartType();
+        };
+
+        /**
+         * Get column structure
+         * @param columns
+         * @param column
+         * @param index
+         * @returns {*}
+         * @private
+         */
+        FENIX_Highchart_Adapter.prototype._getColumnStructure = function (columns, column, index) {
+            if (column.hasOwnProperty('dataType')) {
+                switch (column.dataType) {
+                    case 'code':
+                        return this._getColumnLabel(columns, column, index);
+                        break;
+                    // TODO: add checks for particular cases if needed
+                    default :
+                        return {
+                            column: column,
+                            index: index,
+                            id: column.id
+                        }
+                }
+            }
+        };
+
+        /**
+         * Get all columns and the coded column with its index
+         * @param columns
+         * @param column
+         * @param index
+         * @return the column containing the labels and its index
+         */
+        FENIX_Highchart_Adapter.prototype._getColumnLabel = function (columns, column, columnCodeIndex) {
+
+            var columnCode = columns[columnCodeIndex],
+                columnLabelID = columnCode.id + "_" + this.lang;
+
+            for (var index in columns) {
+                if (columns[index].hasOwnProperty('id')) {
+                    if (columnLabelID == columns[index].id) {
+                        return {
+                            column: column,
+                            index: index,
+                            columnCode: columnCode,
+                            columnCodeIndex: columnCodeIndex,
+                            id: column.id
+                        }
+                    }
+                }
             }
         };
 
         FENIX_Highchart_Adapter.prototype._prepareDataForChartType = function () {
-
-            var yColumn = this._getColumnBySubject(this.yAxisSubject);
+            var data = this.model.data,
+                y = this.aux.y,
+                xSubject = this.aux.x.column.subject;
 
             switch (this.type) {
                 case 'pie':
@@ -137,97 +209,246 @@ define([
                     break;
                 default :
                     //Time series
-                    this._processYAxisColumn(yColumn);
-                    this._processSeriesForTimeSeries();
+                    if (y.index) {
+                        this._processYAxisColumn(data, y.index);
+                    }
+                    this._processSeries(xSubject === 'time');
 
                     break;
             }
         };
 
-        FENIX_Highchart_Adapter.prototype._processYAxisColumn = function (column) {
+        /**
+         * creates the yAxis TODO: probably to check
+         * @param data
+         * @param columnIndex
+         * @private
+         */
+        FENIX_Highchart_Adapter.prototype._processYAxisColumn = function (data, columnIndex) {
+            var yAxisNames = [];
 
-            if (!column) {
-                return;
-            }
+            // TODO it can be done faster the unique array
+            data.forEach(function(value) {
+                yAxisNames.push(value[columnIndex]);
+            });
+            yAxisNames = _.uniq(yAxisNames);
 
-            this.data.yAxis = [];
+            // creating yAxis objects
+            // TODO; probably it should merge the yAxis template somehow. PROBLEM: how to merge multiple axes properties from the baseConfig?
+            yAxisNames.forEach(_.bind(function (v) {
 
-            if (column.dataType === "code") {
-                var values = _.values(this.aux.code2label[this._getColumnBySubject(this.yAxisSubject).id]);
+                // TODO: probably move it from here
+                if (!this.chartObj.yAxis)
+                    this.chartObj.yAxis = [];
+                this.chartObj.yAxis.push({title: {text: v}});
 
-                _.each(values, function (v) {
-                    this.data.yAxis.push({title: {text: v}});
-                }, this);
-
-            } else {
-                console.warn("TODO yAxis is not coded. Method has to be implemented.");
-            }
+            }, this));
         };
 
-        FENIX_Highchart_Adapter.prototype._processSeriesForTimeSeries = function () {
+        FENIX_Highchart_Adapter.prototype._processSeries = function (isTimeserie) {
+            var x = this.aux.x,
+                y = this.aux.y,
+                value = this.aux.value,
+                data = this.$data;
 
-            this.data.series = [];
+            // Sort Data TODO: check if the sort is alway applicable
+            this._sortData(data, x.index);
 
-            this.model.data.sort(_.bind(function (a, b) {
+            // create Series
+            if (isTimeserie) {
+                // TODO: move it to the template!!
+                console.warn('TODO: xAxis Categories: for timeserie directly datatime??');
+                this.chartObj.xAxis.type = 'datetime';
+                this.chartObj.series = this._createSeriesTimeserie(data, x, y, value, this.chartObj.yAxis);
+            }
+            else {
+                // create xAxis categories
+                this.chartObj.xAxis.categories = this._createXAxisCategories(data, x.index);
+                this.chartObj.series = this._createSeriesStandard(data, x, y, value, this.chartObj.yAxis, this.chartObj.xAxis);
+            }
 
-                if (a[this.columnXAxisIndex] < b[this.columnXAxisIndex]) {
+        };
+
+        /**
+         * Create unique xAxis categories
+         * @param data
+         * @private
+         */
+        FENIX_Highchart_Adapter.prototype._createXAxisCategories = function(data, xIndex) {
+
+            var xCategories = [];
+            data.forEach(function(row) {
+                if (row[xIndex] === null) {
+                    console.warn("Error on the xAxis data (is null)", row[xIndex], row);
+                }
+                else {
+                    xCategories.push(row[xIndex]);
+                }
+            });
+            return _.uniq(xCategories);
+
+        };
+
+        FENIX_Highchart_Adapter.prototype._createSeriesTimeserie = function (data, x, y, value, yAxis) {
+            var xIndex = x.index,
+                xDataType = x.column.dataType,
+                yIndex = y.index,
+                valueIndex = value.index,
+                yAxis = yAxis,
+                series = [];
+
+            // Create the series
+            data.forEach(_.bind(function (row) {
+
+                // unique key for series
+                var name = this._createSeriesName(row);
+
+                // get serie
+                var serie = _.findWhere(data.series, {name: name}) || {name: name},
+                    yLabel;
+
+                // data of the serie
+                serie.data = [];
+
+                // Create yAxis if exists
+                if (yIndex) {
+                    // TODO
+                    yLabel = row[yIndex];
+                    //yLabel = this.aux.code2label[this._getColumnBySubject(this.yAxisSubject).id][yValue];
+                    serie.yAxis = this._getYAxisIndex(yAxis, yLabel);
+                }
+
+                // push the value of the serie
+                if (row[xIndex] !== null && row[xIndex] !== undefined && row[valueIndex] !== undefined && row[valueIndex] !== null) {
+                    serie.data.push([this._getDatetimeByDataType(xDataType, row[xIndex]), row[valueIndex]]);
+
+                    // Add serie to series
+                    // TODO: remove the 0
+                    series = this._addSerie(series, serie)
+                }
+
+            }, this));
+
+            return series;
+        };
+
+        /**
+         * Add serie to series (TODO: clean the code, clone the object to return a new series)
+         * @param series
+         * @param serie
+         * @returns {*}
+         * @private
+         */
+        FENIX_Highchart_Adapter.prototype._addSerie = function(series, serie, valueIndex) {
+            var seriesAlreadyAdded = false;
+            for (var i = 0; i < series.length; i++) {
+                if (serie.name === series[i].name) {
+                    // this a "switch" between the timeserie and a standard chart
+                    // TODO: make it nicer, or separate the two _addSerie function
+                    // TODO: between _addSerie and _addSerieTimeseries
+                    if (valueIndex) {
+                        series[i].data[valueIndex] = serie.data[valueIndex];
+                    }
+                    else {
+                        series[i].data.push(serie.data[0]);
+                    }
+                    seriesAlreadyAdded = true;
+                    break;
+                }
+            }
+            if (!seriesAlreadyAdded) {
+                series.push(serie);
+            }
+            return series;
+        };
+
+        FENIX_Highchart_Adapter.prototype._createSeriesStandard = function (data, x, y, value, yAxis, xAxis) {
+            var xIndex = x.index,
+                xDataType = x.column.dataType,
+                yIndex = y.index,
+                valueIndex = value.index,
+                yAxis = yAxis,
+                xCategories = xAxis.categories,
+                series = [];
+
+            // Create the series
+            data.forEach(_.bind(function (row) {
+
+                // unique key for series
+                var name = this._createSeriesName(row);
+
+                // get serie
+                var serie = _.findWhere(data.series, {name: name}) || {name: name},
+                    yLabel;
+
+                // data of the serie
+                serie.data = [];
+                // initialize serie with null values. this fixed missing values from categories
+                _.each(xCategories, function() {
+                    serie.data.push(null);
+                });
+
+                // Create yAxis if exists
+                if (yIndex) {
+                    // TODO
+                    yLabel = row[yIndex];
+                    serie.yAxis = this._getYAxisIndex(yAxis, yLabel);
+                }
+
+                var index = _.indexOf(xCategories, row[xIndex]);
+                if (index) {
+
+                    serie.data[index] = row[valueIndex];
+
+                    // Add serie to series
+                    series = this._addSerie(series, serie, index)
+                }
+
+            }, this));
+
+            return series;
+        };
+
+
+        /**
+         * Sort the data by an index (in theory this should be the xAxis index 'this.aux.x.index')
+         * @param data
+         * @param index
+         * @private
+         */
+        FENIX_Highchart_Adapter.prototype._sortData = function (data, index) {
+            data.sort(_.bind(function (a, b) {
+
+                if (a[index] < b[index]) {
                     return -1;
                 }
-                if (a[this.columnXAxisIndex] > b[this.columnXAxisIndex]) {
+                if (a[index] > b[index]) {
                     return 1;
                 }
                 // a must be equal to b
                 return 0;
             }, this));
+        };
 
+        FENIX_Highchart_Adapter.prototype._getDatetimeByDataType = function (type, value) {
 
-            this.$data.forEach(_.bind(function (row) {
-
-                // unique key for series
-                var name = this._createSeriesName(row);
-
-                var serie = _.findWhere(this.data.series, {name: name}) || {name: name},
-                    yValue, yLabel, xValue, xLabel, value;
-
-                if (!serie.hasOwnProperty('yAxis')) {
-                    if (this.columnYAxisIndex) {
-                        yValue = row[this.columnYAxisIndex];
-                        yLabel = this.aux.code2label[this._getColumnBySubject(this.yAxisSubject).id][yValue];
-                        serie.yAxis = this._getYAxisIndex(yLabel);
-                    }
-                }
-
-                if (!serie.hasOwnProperty('data')) {
-                    serie.data = [];
-                }
-
-                xValue = row[this.columnXAxisIndex];
-                xLabel = this.aux.code2label[this._getColumnBySubject(this.xAxisSubject).id][xValue];
-                value = row[this.columnValueIndex];
-                serie.data.push([xLabel, value]);
-
-                var added = false;
-                for (var i = 0; i < this.data.series.length; i++) {
-                    if (serie.name === this.data.series[i].name) {
-                        this.data.series[i] = serie;
-                        added = true;
-                        break;
-                    }
-                }
-                if (!added) {
-                    this.data.series.push(serie);
-                }
-
-            }, this));
+            // TODO: this is can be simplified and not applied to each row
+            switch(type.toLowerCase()) {
+                case 'year':
+                    return Date.UTC(value, 1, 1);
+                    break;
+                default :
+                    console.warn("Date type date format not yet supported: " + type);
+                    break;
+            }
 
         };
 
-        FENIX_Highchart_Adapter.prototype._getYAxisIndex = function (label) {
+        FENIX_Highchart_Adapter.prototype._getYAxisIndex = function (yAxis, label) {
+            var index = 0;
 
-            var index = -1;
-
-            _.each(this.data.yAxis, function (yAxis, i) {
-                if (yAxis.title.text === label) {
+            _.each(yAxis, function (y, i) {
+                if (y.title.text === label) {
                     index = i;
                 }
             }, this);
@@ -243,51 +464,24 @@ define([
 
             var name = '';
 
-            _.each(this.aux.nameIndexes, function (index) {
-                var id = this.aux.index2id[index];
-                name = name.concat(this.aux.code2label[id][row[index]] + ' ');
+            _.each(this.aux.series, function (serie) {
+                if (row[serie.index] !== undefined && row[serie.index] !== null) {
+                    name = name.concat(row[serie.index] + ' ');
+                }
             }, this);
 
             return name;
         };
 
-        FENIX_Highchart_Adapter.prototype._validateData = function () {
-
-            this.errors = {};
-
-            return (Object.keys(this.errors).length === 0);
-        };
-
         FENIX_Highchart_Adapter.prototype._onValidateDataSuccess = function () {
-            this.$chartRendered = true;
-            this._createConfiguration();
-            this._renderChart();
-        };
-
-        FENIX_Highchart_Adapter.prototype._showConfigurationForm = function () {
-            window.alert("FORM");
+            amplify.publish(e.READY, this);
         };
 
         FENIX_Highchart_Adapter.prototype._onValidateDataError = function () {
             this._showConfigurationForm();
         };
 
-        FENIX_Highchart_Adapter.prototype._createConfiguration = function () {
-            this.config = $.extend(true, this.options, this.data, baseConfig);
-
-            this.config.chart.events.load = function () {
-                amplify.publish(e.READY, this);
-            };
-        };
-
-        FENIX_Highchart_Adapter.prototype._renderChart = function () {
-
-            this.$container.highcharts(this.config);
-        };
-
         FENIX_Highchart_Adapter.prototype._initVariable = function () {
-
-            this.$container = $(this.container).find(this.s.CONTENT);
 
             this.$metadata = this.model.metadata;
             this.$dsd = this.$metadata.dsd;
@@ -301,138 +495,71 @@ define([
             this.errors = {};
 
             //Container
-            if (!this.hasOwnProperty("container")) {
-                this.errors.container = "'container' attribute not present.";
-            }
+            /* if (!this.hasOwnProperty("container")) {
+             this.errors.container = "'container' attribute not present.";
+             }
 
-            if ($(this.container).find(this.s.CONTENT) === 0) {
-                this.errors.container = "'container' is not a valid HTML element.";
-            }
+             if ($(this.container).find(this.s.CONTENT) === 0) {
+             this.errors.container = "'container' is not a valid HTML element.";
+             }
 
-            //Model
-            if (!this.hasOwnProperty("model")) {
-                this.errors.model = "'model' attribute not present.";
-            }
+             //Model
+             if (!this.hasOwnProperty("model")) {
+             this.errors.model = "'model' attribute not present.";
+             }
 
-            if (typeof this.model !== 'object') {
-                this.errors.model = "'model' is not an object.";
-            }
+             if (typeof this.model !== 'object') {
+             this.errors.model = "'model' is not an object.";
+             }
 
-            //Metadata
-            if (!this.model.hasOwnProperty("metadata")) {
-                this.errors.metadata = "Model does not container 'metadata' attribute.";
-            }
+             //Metadata
+             if (!this.model.hasOwnProperty("metadata")) {
+             this.errors.metadata = "Model does not container 'metadata' attribute.";
+             }
 
-            //DSD
-            if (!this.model.metadata.hasOwnProperty("dsd")) {
-                this.errors.dsd = "Metadata does not container 'dsd' attribute.";
-            }
+             //DSD
+             if (!this.model.metadata.hasOwnProperty("dsd")) {
+             this.errors.dsd = "Metadata does not container 'dsd' attribute.";
+             }
 
-            //Columns
-            if (!Array.isArray(this.model.metadata.dsd.columns)) {
-                this.errors.columns = "DSD does not container a valid 'columns' attribute.";
-            }
+             //Columns
+             if (!Array.isArray(this.model.metadata.dsd.columns)) {
+             this.errors.columns = "DSD does not container a valid 'columns' attribute.";
+             }
 
-            //Option
-            if (this.options && typeof this.options !== 'object') {
-                this.errors.options = "'options' is not an object.";
-            }
+             //Option
+             if (this.options && typeof this.options !== 'object') {
+             this.errors.options = "'options' is not an object.";
+             }
 
-            //Data
-            if (!this.model.hasOwnProperty("data")) {
-                this.errors.data = "Model does not container 'data' attribute.";
-            }
+             //Data
+             if (!this.model.hasOwnProperty("data")) {
+             this.errors.data = "Model does not container 'data' attribute.";
+             }
 
-            // seriesSubject
-            if (!Array.isArray(this.seriesSubject)) {
-                this.errors.seriesSubject = "SeriesSubject is not an Array element";
-            }
+             // seriesSubject
+             if (!Array.isArray(this.seriesSubject)) {
+             this.errors.seriesSubject = "SeriesSubject is not an Array element";
+             }*/
 
             return (Object.keys(this.errors).length === 0);
         };
 
-        //Utils
-        FENIX_Highchart_Adapter.prototype._getLabel = function (obj, attribute) {
-
-            var label,
-                keys;
-
-            if (obj.hasOwnProperty(attribute) && obj.title !== null) {
-
-                if (obj[attribute].hasOwnProperty(this.lang)) {
-                    label = obj[attribute][this.lang];
-                } else {
-
-                    keys = Object.keys(obj[attribute]);
-
-                    if (keys.length > 0) {
-                        label = obj[attribute][keys[0]];
-                    }
-                }
-            }
-
-            return label;
-        };
-
-        FENIX_Highchart_Adapter.prototype._createCode2LabelMap = function (column) {
-
-            var map = {},
-                values;
-
-            switch (column.dataType) {
-                case 'code' :
-                    values = _.each(column.values.codes[0].codes, function (v) {
-                        map[v.code] = this._getLabel(v, 'label');
-                    }, this);
-                    break;
-                case 'year' :
-                    values = _.each(column.values.timeList, function (v) {
-                        map[v] = Date.UTC(v, 0);
-                    }, this);
-                    break;
-            }
-
-            // TODO code, customCode,  enumeration, date, month, year, time, text,label, number, percentage, bool
-
-            return map;
-        };
-
-        FENIX_Highchart_Adapter.prototype._getColumnBySubject = function (subject) {
-
-            var id = this.aux.subject2id[subject],
-                index;
-
-            if (typeof id === 'undefined') {
-                return;
-            }
-
-            index = this.aux.id2index[id];
-
-            if (typeof index === 'undefined') {
-                return;
-            }
-
-            return this.$columns.length > index ? this.$columns[index] : null;
-        };
-
-        FENIX_Highchart_Adapter.prototype._getColumnIndexBySubject = function (subject) {
-
-            _.each(this.$columns, function (column, i) {
-                if (column.subject === subject) {
-                    return i;
-                }
-            }, this);
-
-            return -1;
-        };
-
-        FENIX_Highchart_Adapter.prototype.reflow = function () {
-
-            if (typeof this.$container !== 'undefined' && this.$chartRendered) {
-                this.$container.highcharts().reflow();
-                return true;
+        FENIX_Highchart_Adapter.prototype._printAuxColumns = function () {
+            if (this.debugging) {
+                console.log("----------Aux Columns");
+                console.log(this.aux.x);
+                console.log(this.aux.y); // yAxis can be undefined (launch a warning)
+                console.log(this.aux.value);
+                console.log(this.aux.series);
+                console.log("~~~~~~~");
             }
         };
+
+        FENIX_Highchart_Adapter.prototype.destroy = function () {
+            console.warn("To be implemented");
+        };
+
 
         return FENIX_Highchart_Adapter;
     });

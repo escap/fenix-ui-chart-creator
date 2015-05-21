@@ -9,7 +9,7 @@ define(function () {
         chart: {
             events: {},
 
-            type: 'area', //Tipo di grafico:  area, areaspline, boxplot, bubble, column, line, pie, scatter, spline
+            type: 'line', //Tipo di grafico:  area, areaspline, boxplot, bubble, column, line, pie, scatter, spline
 
             alignTicks: false,
             backgroundColor: '#FFFFFF', //Colore di background
