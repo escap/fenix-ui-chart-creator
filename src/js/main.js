@@ -107,39 +107,7 @@ requirejs(['./paths'], function (paths) {
                         }
                     ]
                 });
-
-                var chartTwo = creator.render({
-                    container: "#chartTwo",
-                    series: [
-                        {
-                            filters: {
-                                'DomainCode': 'GAS',
-                                'TableType': 'activity',
-                                'GUNFCode': '1712'
-                            },
-                            type: 'line'
-                        },
-                        {
-                            filters: {
-                                'DomainCode': 'GAS',
-                                'TableType': 'activity',
-                                'GUNFCode': '1712'
-                            },
-                            value: 'GValue',
-                            type: 'line',
-                            color: 'color',
-                            name: 's2c'
-                        },
-                        {
-                            filters: {
-                                'DomainCode': 'GAS',
-                                'TableType': 'activity',
-                                'GUNFCode': '5057'
-                            },
-                            type: 'scatter'
-                        }
-                    ]
-                });
+                
             };
 
         })
