@@ -31,7 +31,7 @@ requirejs(['./paths'], function (paths) {
                 var chartOne, chartTwo;
 
                 var chartOne = creator.render({
-                    container: "#monChart2Test",
+                    container: "#chartOne",
                     creator: {
                     },
                     series: [
@@ -70,8 +70,13 @@ requirejs(['./paths'], function (paths) {
                 });
 
                 var chartTwo = creator.render({
-                    container: "#chartOne",
+                    container: "#chartTwo",
                     creator: {
+                        chartObj: {
+                            chart:{
+                                type: "column"
+                            }
+                        }
                     },
                     series: [
                         {
@@ -81,7 +86,7 @@ requirejs(['./paths'], function (paths) {
                                 'GUNFCode': '5057'
                             },
                             value: 'GValue',
-                            type: 'column',
+                            type: 'line',
                             color: 'maroon',
                             name: 's1'
                         },
@@ -93,7 +98,6 @@ requirejs(['./paths'], function (paths) {
                             },
                             name: 's2',
                             value: 'GValue',
-                            type: 'line'
                         },
                         {
                             filters: {
@@ -107,7 +111,7 @@ requirejs(['./paths'], function (paths) {
                         }
                     ]
                 });
-                
+
             };
 
         })
