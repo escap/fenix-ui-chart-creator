@@ -6,7 +6,7 @@ requirejs(['./paths'], function (paths) {
     requirejs(['fx-c-c/start', 'amplify'], function (ChartCreator) {
 
 /*        amplify.subscribe('fx.component.chart.ready', function () {
-            console.log('created!')
+            console.log('created!');
         });*/
 
         // filtering data
@@ -44,7 +44,7 @@ requirejs(['./paths'], function (paths) {
                 },
                 template: {},
                 creator: {},
-                onReady: renderCharts1
+                onReady: renderChart1
             });
 
             var creator2 = new ChartCreator();
@@ -62,22 +62,22 @@ requirejs(['./paths'], function (paths) {
                 },
                 template: {},
                 creator: {},
-                onReady: renderCharts2,
+                onReady: renderChart2,
             });
 
-            function renderCharts1() {
+            function renderChart1() {
 
                 creator.render(
                     {
-                        container: "#monChart2Test"
+                        container: "#chartTwo"
                     }
                 );
             }
 
-            function renderCharts2() {
+            function renderChart2(creator) {
                 creator2.render(
                     {
-                        container: "#monChart2TestOld",
+                        container: "#chartOne",
                         creator: {
                             chartObj: {
                                 chart:{

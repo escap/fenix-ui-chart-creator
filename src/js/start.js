@@ -104,7 +104,7 @@ define([
                 self.adapter.prepareData($.extend(true, {model: config.model}, config.adapter));
 
                 if (typeof config.onReady === 'function') {
-                    config.onReady();
+                    config.onReady(self);
                 }
 
             });

@@ -11,8 +11,7 @@ requirejs(['./paths'], function (paths) {
 
         $.getJSON("tests/resources/GHG_test_data.json", function (model) {
 
-            var creator = new ChartCreator(),
-                chartOne;
+            var creator = new ChartCreator();
 
             creator.init({
                 model: model,
@@ -28,8 +27,10 @@ requirejs(['./paths'], function (paths) {
             });
 
 
-            function renderCharts() {
-                chartOne = creator.render({
+            function renderCharts(creator) {
+                var chartOne, chartTwo;
+
+                var chartOne = creator.render({
                     container: "#monChart2Test",
                     creator: {
                     },
@@ -68,8 +69,47 @@ requirejs(['./paths'], function (paths) {
                     ]
                 });
 
-                chartOne = creator.render({
-                    container: "#monChart2TestOld",
+                var chartTwo = creator.render({
+                    container: "#chartOne",
+                    creator: {
+                    },
+                    series: [
+                        {
+                            filters: {
+                                'DomainCode': 'GAS',
+                                'TableType': 'activity',
+                                'GUNFCode': '5057'
+                            },
+                            value: 'GValue',
+                            type: 'column',
+                            color: 'maroon',
+                            name: 's1'
+                        },
+                        {
+                            filters: {
+                                'DomainCode': 'GAS',
+                                'TableType': 'activity',
+                                'GUNFCode': '5057'
+                            },
+                            name: 's2',
+                            value: 'GValue',
+                            type: 'line'
+                        },
+                        {
+                            filters: {
+                                'DomainCode': 'GAS',
+                                'TableType': 'activity',
+                                'GUNFCode': '1712'
+                            },
+                            value: 'PerDiff',
+                            name: 's3',
+                            type: 'scatter'
+                        }
+                    ]
+                });
+
+                var chartTwo = creator.render({
+                    container: "#chartTwo",
                     series: [
                         {
                             filters: {

@@ -37,8 +37,6 @@ define([
 
             $.extend(true, this.CONFIG, config);
 
-            console.log(this.CONFIG);
-
             if (this._validateInput() === true) {
                 this._prepareData();
                 if (this._validateData() === true) {
@@ -116,8 +114,6 @@ define([
                 y_dimension = this.CONFIG.y_dimension,
                 value = this.CONFIG.value;
 
-            console.log(chartObj);
-
             // get all data of the series
             var data = [];
             seriesConfig.forEach(_.bind(function(serie) {
@@ -141,8 +137,6 @@ define([
                 var s = this._createSerie(data[index], serie, x_dimension, y_dimension, valueDimension, chartObj.xAxis.categories, chartObj.yAxis);
                 chartObj.series.push($.extend(true, s, serie))
             }, this));
-
-            console.log(chartObj);
 
             return chartObj;
         };
@@ -178,8 +172,6 @@ define([
                 }
 
             }, this));
-
-            console.log(serie);
 
             return serie;
         };
