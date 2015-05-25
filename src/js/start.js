@@ -67,8 +67,11 @@ define([
             // render template
             template.render(config);
 
+            var chartObj = this.adapter.prepareChart(config.series);
+            config.chartObj = $.extend(true, {}, chartObj, creator.chartObj);
+
             // getting chart definition
-            config.chartObj = $.extend(true, {}, this.adapter.chartObj, creator.chartObj);
+            //config.chartObj = $.extend(true, {}, this.adapter.chartObj, creator.chartObj);
 
             // render chart
             creator.render(config);

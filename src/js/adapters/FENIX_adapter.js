@@ -65,7 +65,6 @@ define([
                 this._initVariable();
                 this._prepareData();
                 if (this._validateData() === true) {
-
                     this._onValidateDataSuccess();
                 } else {
                     this._onValidateDataError();
@@ -138,9 +137,6 @@ define([
             }
 
             this._printAuxColumns();
-
-            // create chart
-            this._prepareDataForChartType();
         };
 
         /**
@@ -195,27 +191,59 @@ define([
             }
         };
 
-        FENIX_Highchart_Adapter.prototype._prepareDataForChartType = function () {
-            var data = this.model.data,
-                y = this.aux.y,
-                xSubject = this.aux.x.column.subject;
+        FENIX_Highchart_Adapter.prototype.prepareChart = function () {
+            var xSubject = this.aux.x.column.subject,
+                chartObj;
 
             switch (this.type) {
                 case 'pie':
                     break;
                 case 'scatter':
                     break;
-                case 'custom' :
-                    break;
                 default :
-                    //Time series
-                    if (y.index) {
-                        this._processYAxisColumn(data, y.index);
-                    }
-                    this._processSeries(xSubject === 'time');
-
+                    chartObj = this._processStandardChart(xSubject === 'time');
                     break;
             }
+            return chartObj;
+        };
+
+
+        /**
+         * This is used for standard chart and timeseries
+         * @param isTimeserie
+         * @private
+         */
+        FENIX_Highchart_Adapter.prototype._processStandardChart = function (isTimeserie) {
+            var chartObj = $.extend(true, {}, this.chartObj),
+                x = this.aux.x,
+                y = this.aux.y,
+                value = this.aux.value,
+                data = this.$data;
+
+            // Sort Data TODO: check if the sort is alway applicable
+            this._sortData(data, x.index);
+
+            // Process yAxis
+            if (y.index) {
+                chartObj.yAxis = this._createYAxis(data, y.index);
+            }
+
+            console.log(chartObj);
+
+            // create Series
+            if (isTimeserie) {
+                // TODO: move it to the template!!
+                console.warn('TODO: xAxis Categories: for timeserie directly datatime??');
+                chartObj.xAxis.type = 'datetime';
+                chartObj.series = this._createSeriesTimeserie(data, x, y, value, chartObj.yAxis);
+            }
+            else {
+                // create xAxis categories
+                chartObj.xAxis.categories = this._createXAxisCategories(data, x.index);
+                chartObj.series = this._createSeriesStandard(data, x, y, value, chartObj.yAxis, chartObj.xAxis);
+            }
+
+            return chartObj;
         };
 
         /**
@@ -224,8 +252,9 @@ define([
          * @param columnIndex
          * @private
          */
-        FENIX_Highchart_Adapter.prototype._processYAxisColumn = function (data, columnIndex) {
-            var yAxisNames = [];
+        FENIX_Highchart_Adapter.prototype._createYAxis = function (data, columnIndex) {
+            var yAxisNames = [],
+                yAxis = [];
 
             // TODO it can be done faster the unique array
             data.forEach(function(value) {
@@ -235,39 +264,14 @@ define([
 
             // creating yAxis objects
             // TODO; probably it should merge the yAxis template somehow. PROBLEM: how to merge multiple axes properties from the baseConfig?
-            yAxisNames.forEach(_.bind(function (v) {
+            yAxisNames.forEach(function (v) {
+                yAxis.push({title: {text: v}});
+            });
 
-                // TODO: probably move it from here
-                if (!this.chartObj.yAxis)
-                    this.chartObj.yAxis = [];
-                this.chartObj.yAxis.push({title: {text: v}});
-
-            }, this));
+            console.log(yAxis);
+            return yAxis
         };
 
-        FENIX_Highchart_Adapter.prototype._processSeries = function (isTimeserie) {
-            var x = this.aux.x,
-                y = this.aux.y,
-                value = this.aux.value,
-                data = this.$data;
-
-            // Sort Data TODO: check if the sort is alway applicable
-            this._sortData(data, x.index);
-
-            // create Series
-            if (isTimeserie) {
-                // TODO: move it to the template!!
-                console.warn('TODO: xAxis Categories: for timeserie directly datatime??');
-                this.chartObj.xAxis.type = 'datetime';
-                this.chartObj.series = this._createSeriesTimeserie(data, x, y, value, this.chartObj.yAxis);
-            }
-            else {
-                // create xAxis categories
-                this.chartObj.xAxis.categories = this._createXAxisCategories(data, x.index);
-                this.chartObj.series = this._createSeriesStandard(data, x, y, value, this.chartObj.yAxis, this.chartObj.xAxis);
-            }
-
-        };
 
         /**
          * Create unique xAxis categories
