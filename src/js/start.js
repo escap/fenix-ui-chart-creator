@@ -57,9 +57,7 @@ define([
             };
         };
 
-        ChartCreator.prototype.renderFENIX = function (config) {
-
-            console.log('renderFENIX');
+/*        ChartCreator.prototype.renderFENIX = function (config) {
 
             var template = new this.templateFactory($.extend(true, {model: config.model}, config.template)),
                 creator = new this.creatorFactory($.extend(true, {model: config.model}, config.creator));
@@ -84,7 +82,7 @@ define([
 
                 }, this)
             };
-        };
+        };*/
 
         ChartCreator.prototype.preloadResources = function (config) {
 

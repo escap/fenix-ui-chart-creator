@@ -68,13 +68,13 @@ requirejs(['./paths'], function (paths) {
 
             window.setTimeout(function () {
 
-            creator.renderFENIX(
+            creator.render(
                 {
                    container: "#monChart2Test"
                 }
             );
 
-                creator2.renderFENIX(
+                creator2.render(
                     {
                         container: "#monChart2TestOld",
                         creator: {
