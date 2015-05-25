@@ -15,13 +15,23 @@ define(function () {
             jquery: "//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min",
             highcharts : "//fenixapps.fao.org/repository/js/highcharts/4.0.4/js/highcharts", //'//code.highcharts.com/highcharts',
             underscore: "//fenixapps.fao.org/repository/js/underscore/1.7.0/underscore.min",
-            amplify: "//fenixapps.fao.org/repository/js/amplify/1.1.2/amplify.min"
+            amplify: "//fenixapps.fao.org/repository/js/amplify/1.1.2/amplify.min",
+
+            // highcharts plugins
+            'highcharts-export': 'http://code.highcharts.com/modules/exporting',
+            'highcharts-export-csv': 'http://highslide-software.github.io/export-csv/export-csv'
         },
 
         shim: {
             "highcharts": {
                 "exports": "Highcharts",
                 "deps": ["jquery"]
+            },
+            "highcharts-export": {
+                "deps": ["highcharts"]
+            },
+            "highcharts-export-csv": {
+                "deps": ["highcharts", "highcharts-export" ]
             },
              "amplify": {
                 "deps": ["jquery"]

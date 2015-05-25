@@ -2,6 +2,9 @@
 define([
         'jquery',
         'fx-c-c/config/creators/highcharts_template',
+        'highcharts',
+        'highcharts-export',
+        'highcharts-export-csv',
         'amplify'
     ],
     function ($, baseConfig) {
