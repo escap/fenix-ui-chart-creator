@@ -5,9 +5,9 @@ requirejs(['./paths'], function (paths) {
 
     requirejs(['fx-c-c/start', 'amplify'], function (ChartCreator) {
 
-        amplify.subscribe('fx.component.chart.ready', function () {
+/*        amplify.subscribe('fx.component.chart.ready', function () {
             console.log('created!')
-        });
+        });*/
 
         $.getJSON("tests/resources/GHG_test_data.json", function (model) {
 
@@ -23,11 +23,12 @@ requirejs(['./paths'], function (paths) {
                     value: 'GValue'
                 },
                 template: {},
-                creator: {}
+                creator: {},
+                onReady: renderCharts
             });
 
-            window.setTimeout(function () {
 
+            function renderCharts() {
                 chartOne = creator.render({
                     container: "#monChart2Test",
                     creator: {
@@ -99,10 +100,7 @@ requirejs(['./paths'], function (paths) {
                         }
                     ]
                 });
-
-
-            }, 1000)
-
+            };
 
         })
     });

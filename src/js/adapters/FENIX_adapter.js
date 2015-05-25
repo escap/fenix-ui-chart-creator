@@ -228,8 +228,6 @@ define([
                 chartObj.yAxis = this._createYAxis(data, y.index);
             }
 
-            console.log(chartObj);
-
             // create Series
             if (isTimeserie) {
                 // TODO: move it to the template!!
@@ -268,7 +266,6 @@ define([
                 yAxis.push({title: {text: v}});
             });
 
-            console.log(yAxis);
             return yAxis
         };
 
@@ -545,6 +542,13 @@ define([
              if (!Array.isArray(this.seriesSubject)) {
              this.errors.seriesSubject = "SeriesSubject is not an Array element";
              }*/
+
+            return (Object.keys(this.errors).length === 0);
+        };
+
+        FENIX_Highchart_Adapter.prototype._validateData = function () {
+
+            this.errors = {};
 
             return (Object.keys(this.errors).length === 0);
         };

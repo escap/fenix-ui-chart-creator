@@ -11,7 +11,7 @@ define([
         var defaultOptions = {
 
                 // Chart (Highchart Definition)
-            chartObj: {
+                chartObj: {
                     chart: {},
                     xAxis: {},
                     series: []

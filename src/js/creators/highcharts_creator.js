@@ -27,8 +27,6 @@ define([
             $.extend(true, this, o, defaultOptions);
             this.hightchart_template = baseConfig;
 
-            console.log(this);
-
             return this;
         }
 
@@ -67,11 +65,7 @@ define([
 
 
         HightchartCreator.prototype._createChart = function () {
-            console.log('_createChart');
-            console.log(this.chartObj);
             this.config = $.extend(true, {}, baseConfig, this.chartObj);
-            console.log(this.config);
-            console.log(this.$container);
             this.$container.highcharts( this.config);
         };
 

@@ -31,7 +31,6 @@ define([
         };
 
         ChartCreator.prototype.render = function (config) {
-            console.log("render");
 
             var template = new this.templateFactory($.extend(true, {model: config.model}, config.template)),
                 creator = new this.creatorFactory($.extend(true, {model: config.model}, config.creator));
@@ -86,8 +85,6 @@ define([
 
         ChartCreator.prototype.preloadResources = function (config) {
 
-            console.log("preloadResources");
-
             var baseTemplate = this.getTemplateUrl(),
                 adapter = this.getAdapterUrl(config.model),
                 creator = this.getCreatorUrl(),
@@ -115,7 +112,7 @@ define([
 
         ChartCreator.prototype.getAdapterUrl = function (model) {
             //TODO add here adapter discovery logic
-            // TODO: quick check. to be modified
+            // TODO: Dirty check to be modified
             if (model.data && model.metadata) {
                 return this.adapterUrl ? this.adapterUrl : 'fx-c-c/adapters/FENIX_adapter';
             }

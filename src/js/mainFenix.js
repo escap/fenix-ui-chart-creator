@@ -5,32 +5,30 @@ requirejs(['./paths'], function (paths) {
 
     requirejs(['fx-c-c/start', 'amplify'], function (ChartCreator) {
 
-        amplify.subscribe('fx.component.chart.ready', function () {
+/*        amplify.subscribe('fx.component.chart.ready', function () {
             console.log('created!')
-        });
+        });*/
 
         // filtering data
-/*
-        $.getJSON("tests/resources/AFO_AfricaPITDataLang.json", function (model) {
-            var creator = new ChartCreator();
-            console.log(model);
-            // create serie
-            var data = [];
-            for(var i in model.data) {
-                if (model.data[i][0] === "10210" && (model.data[i][2] === "NIG" || model.data[i][2] === "ETH")) {
-                    data.push(model.data[i]);
-                }
-            }
-            model.data = data;
-            $("body").append(JSON.stringify(model));
-        });
-*/
+        /*
+         $.getJSON("tests/resources/AFO_AfricaPITDataLang.json", function (model) {
+         var creator = new ChartCreator();
+         console.log(model);
+         // create serie
+         var data = [];
+         for(var i in model.data) {
+         if (model.data[i][0] === "10210" && (model.data[i][2] === "NIG" || model.data[i][2] === "ETH")) {
+         data.push(model.data[i]);
+         }
+         }
+         model.data = data;
+         $("body").append(JSON.stringify(model));
+         });
+         */
 
-       // $.getJSON("tests/resources/afo/AFO_AfricaPITDataLang_nig_eth.json", function (model) {
+        // $.getJSON("tests/resources/afo/AFO_AfricaPITDataLang_nig_eth.json", function (model) {
         //$.getJSON("tests/resources/AFO_AfricaPITDataLang.json", function (model) {
         $.getJSON("tests/resources/afo/AFO_ProductionCapacities.json", function (model) {
-
-            console.log(model);
 
             var creator = new ChartCreator();
 
@@ -45,7 +43,8 @@ requirejs(['./paths'], function (paths) {
                     }
                 },
                 template: {},
-                creator: {}
+                creator: {},
+                onReady: renderCharts1
             });
 
             var creator2 = new ChartCreator();
@@ -62,18 +61,20 @@ requirejs(['./paths'], function (paths) {
                     }
                 },
                 template: {},
-                creator: {}
+                creator: {},
+                onReady: renderCharts2,
             });
 
+            function renderCharts1() {
 
-            window.setTimeout(function () {
+                creator.render(
+                    {
+                        container: "#monChart2Test"
+                    }
+                );
+            }
 
-            creator.render(
-                {
-                   container: "#monChart2Test"
-                }
-            );
-
+            function renderCharts2() {
                 creator2.render(
                     {
                         container: "#monChart2TestOld",
@@ -88,7 +89,7 @@ requirejs(['./paths'], function (paths) {
 
                 );
 
-            }, 1000)
+            }
         });
 
     });
