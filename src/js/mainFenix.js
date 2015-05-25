@@ -76,7 +76,7 @@ requirejs(['./paths'], function (paths) {
             }
 
             function renderChart2(creator) {
-                
+
                 creator2.render(
                     {
                         container: "#chartOne",
