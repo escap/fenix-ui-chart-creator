@@ -191,7 +191,10 @@ define([
             }
         };
 
-        FENIX_Highchart_Adapter.prototype.prepareChart = function () {
+        FENIX_Highchart_Adapter.prototype.prepareChart = function (config) {
+
+            $.extend(true, {}, config)
+
             var xSubject = this.aux.x.column.subject,
                 chartObj;
 
@@ -280,14 +283,14 @@ define([
             var xCategories = [];
             data.forEach(function(row) {
                 if (row[xIndex] === null) {
-                    console.warn("Error on the xAxis data (is null)", row[xIndex], row);
+                    console.warn("Error on the xAxis data (is null)", row[xIndex], row, xIndex);
                 }
                 else {
                     xCategories.push(row[xIndex]);
                 }
             });
-            return _.uniq(xCategories);
 
+            return _.uniq(xCategories);
         };
 
         FENIX_Highchart_Adapter.prototype._createSeriesTimeserie = function (data, x, y, value, yAxis) {
@@ -321,11 +324,13 @@ define([
 
                 // push the value of the serie
                 if (row[xIndex] !== null && row[xIndex] !== undefined && row[valueIndex] !== undefined && row[valueIndex] !== null) {
-                    serie.data.push([this._getDatetimeByDataType(xDataType, row[xIndex]), row[valueIndex]]);
+                    if (row[valueIndex] != null) {
+                        serie.data.push([this._getDatetimeByDataType(xDataType, row[xIndex]), row[valueIndex]]);
 
-                    // Add serie to series
-                    // TODO: remove the 0
-                    series = this._addSerie(series, serie)
+                        // Add serie to series
+                        // TODO: remove the 0
+                        series = this._addSerie(series, serie)
+                    }
                 }
 
             }, this));
@@ -399,10 +404,12 @@ define([
                 var index = _.indexOf(xCategories, row[xIndex]);
                 if (index) {
 
-                    serie.data[index] = isNaN(row[valueIndex])? row[valueIndex]: parseFloat(row[valueIndex]);
+                    if (row[valueIndex] != null && index != -1 ) {
+                        serie.data[index] = isNaN(row[valueIndex]) ? row[valueIndex] : parseFloat(row[valueIndex]);
 
-                    // Add serie to series
-                    series = this._addSerie(series, serie, index)
+                        // Add serie to series
+                        series = this._addSerie(series, serie, index)
+                    }
                 }
 
             }, this));

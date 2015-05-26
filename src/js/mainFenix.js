@@ -69,7 +69,7 @@ requirejs(['./paths'], function (paths) {
 
                 creator.render(
                     {
-                        container: "#chartTwo"
+                        container: "#chartOne"
                     }
                 );
 
@@ -77,9 +77,8 @@ requirejs(['./paths'], function (paths) {
 
             function renderChart2(creator) {
 
-                creator2.render(
-                    {
-                        container: "#chartOne",
+                creator2.render({
+                        container: "#chartTwo",
                         creator: {
                             chartObj: {
                                 chart:{
@@ -88,7 +87,6 @@ requirejs(['./paths'], function (paths) {
                             }
                         }
                     }
-
                 );
 
             }
