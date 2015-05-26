@@ -283,7 +283,7 @@ define(function () {
             ]
         },
         tooltip: {
-            valueSuffix: 'M',
+            valueSuffix: '',
             backgroundColor: 'rgba(255, 255, 255, 0.95)',
             borderWidth: 1,
             shadow: false
