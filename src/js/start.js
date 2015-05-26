@@ -42,11 +42,21 @@ define([
             // render template
             template.render();
 
-            // getting chart definition
-            var chartObj = this.adapter.prepareChart(config.adapter || {});
+            // TODO: Handle the error
+            try {
 
-            // render chart
-            creator.render({chartObj: chartObj});
+                // getting chart definition
+                var chartObj = this.adapter.prepareChart(config.adapter || {});
+
+                // render chart
+                creator.render({chartObj: chartObj});
+
+            }catch(e) {
+                console.error(e);
+                creator.noDataAvailable();
+            }
+
+
 
             return {
                 destroy: $.proxy(function () {
