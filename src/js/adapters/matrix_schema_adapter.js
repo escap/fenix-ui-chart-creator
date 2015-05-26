@@ -10,7 +10,10 @@ define([
 
         var defaultOptions = {
 
-                // Chart (Highchart Definition)
+                // Type of the chart. This is used to parse the data
+                // TODO: timeserie/pie/scatter
+                type: '',
+
                 chartObj: {
                     chart: {},
                     xAxis: {},
@@ -18,8 +21,8 @@ define([
                 },
 
                 filters: {
-                    xAxis: 0,
-                    yAxis: 3,
+                    xAxis: [0],
+                    yAxis: [3],
                     value: 2,
                     series: [1]
                 },
@@ -99,7 +102,7 @@ define([
                 valueIndex = this.filters.value,
                 yAxisIndex = this.filters.yAxis;
 
-            console.log(this);
+            // TODO: make it faster? In theory can be done faster, but probably is not needed
 
             // get categories
             chartObj.xAxis.categories = this._createXAxisCategories(data, xAxisIndex);
@@ -109,25 +112,21 @@ define([
                 chartObj.yAxis = this._createYAxis(data, yAxisIndex);
             }
 
+            // create yAxis
+            if (yAxisIndex) {
+                chartObj.series = this._createYAxis(data, yAxisIndex);
+            }
+
+            var series = this._createSeries(data, seriesIndexes, chartObj.xAxis.categories.length);
+
             // create series
-            chartObj.series = this._createSeriesStandard(data, xAxisIndex, yAxisIndex, valueIndex, seriesIndexes, chartObj.xAxis.categories, chartObj.yAxis);
+            chartObj.series = this._createSeriesStandard(data, series, xAxisIndex, yAxisIndex, valueIndex, seriesIndexes, chartObj.xAxis.categories, chartObj.yAxis);
 
             return chartObj;
         };
 
-        Matrix_Schema_Adapter.prototype._createXAxisCategories = function(data, xIndex) {
-
-            var xCategories = [];
-            data.forEach(function(row) {
-                if (row[xIndex] === null) {
-                    console.warn("Error on the xAxis data (is null)", row[xIndex], row);
-                }
-                else {
-                    xCategories.push(row[xIndex]);
-                }
-            });
-
-            return _.uniq(xCategories);
+        Matrix_Schema_Adapter.prototype._createXAxisCategories = function(data, xIndexes) {
+            return this._getDistinctValues(data, xIndexes);
         };
 
         Matrix_Schema_Adapter.prototype._createYAxis = function (data, index) {
@@ -156,58 +155,81 @@ define([
             return yAxis;
         };
 
-        Matrix_Schema_Adapter.prototype._createSeriesStandard = function (data, xIndex, yIndex, valueIndex, seriesIndexes, xCategories, yAxis) {
+        Matrix_Schema_Adapter.prototype._createSeries = function(data, seriesIndexes, xCategoriesLength, yAxis) {
+            var s = this._getDistinctValues(data, seriesIndexes);
+
             var series = [];
+            s.forEach(function (v) {
+                series.push({
+                    name: v,
+                    data: _.range(xCategoriesLength).map(function () { return null })
+                });
+            });
+
+            return series;
+        };
+
+        Matrix_Schema_Adapter.prototype._createSeriesStandard = function (data, series, xIndexes, yIndex, valueIndex, seriesIndexes, xCategories, yAxis) {
 
             // Create the series
             data.forEach(_.bind(function (row) {
 
-                // unique key for series
-                var name = this._createSeriesName(row, seriesIndexes);
+                // unique name for serie
+                var xCategoryIndex = _.indexOf(xCategories, this._getXAxisCategory(row, xIndexes)),
+                    serie = _.findWhere(series, {name: this._createSeriesName(row, seriesIndexes)});
 
-                // get serie
-                var serie = _.findWhere(data.series, {name: name}) || {name: name},
-                    yLabel;
+                // if xAxis categories and series exists
+                if (xCategoryIndex != -1 && (serie !== undefined || serie !== null)) {
 
-                // data of the serie
-                serie.data = [];
-                // initialize serie with null values. this fixed missing values from categories
-                _.each(xCategories, function() {
-                    serie.data.push(null);
-                });
+                    // Create yAxis if exists
+                    if (serie.yAxis === undefined && yIndex) {
+                        serie.yAxis = this._getYAxisIndex(yAxis, row[yIndex]);
+                    }
 
-                // Create yAxis if exists
-                if (yIndex) {
-                    // TODO
-                    yLabel = row[yIndex];
-                    serie.yAxis = this._getYAxisIndex(yAxis, yLabel);
+                    // push the value of the serie
+                    serie.data[xCategoryIndex] = isNaN(row[valueIndex])? row[valueIndex]: parseFloat(row[valueIndex]);
+
                 }
-
-                var index = _.indexOf(xCategories, row[xIndex]);
-                if (index) {
-
-                    serie.data[index] = isNaN(row[valueIndex])? row[valueIndex]: parseFloat(row[valueIndex]);
-
-                    // Add serie to series
-                    series = this._addSerie(series, serie, index)
-                }
-
             }, this));
 
             return series;
         };
 
         Matrix_Schema_Adapter.prototype._createSeriesName = function (row, indexes) {
+            return this._getConcatString(row, indexes);
+        };
+
+        Matrix_Schema_Adapter.prototype._getXAxisCategory = function (row, indexes) {
+            return this._getConcatString(row, indexes);
+        };
+
+        Matrix_Schema_Adapter.prototype._getConcatString = function (row, indexes) {
 
             var name = '';
 
             _.each(indexes, function (index) {
                 if (row[index] !== undefined && row[index] !== null) {
-                    name = name.concat(row[index] + ' ');
+                    if (name != '')
+                        name = name.concat(' ')
+                    name = name.concat(row[index]);
                 }
             }, this);
 
             return name;
+        };
+
+        Matrix_Schema_Adapter.prototype._getDistinctValues = function (data, indexes) {
+
+           var v = [];
+
+            _.each(data, function (row) {
+                var n = this._getConcatString(row, indexes);
+                if (n !== '') {
+                    v.push(n);
+                }
+            }, this);
+
+            return _.uniq(v);
         };
 
         Matrix_Schema_Adapter.prototype._getYAxisIndex = function (yAxis, label) {
