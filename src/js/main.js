@@ -26,94 +26,97 @@ requirejs(['./paths'], function (paths) {
                 onReady: renderCharts
             });
 
+        });
 
-            function renderCharts(creator) {
-                var chartOne, chartTwo;
 
-                var chartOne = creator.render({
-                    container: "#chartOne",
-                    creator: {
+        function renderCharts(creator) {
+            var chartOne, chartTwo;
+
+            var chartOne = creator.render({
+                container: "#chartOne",
+                creator: {
+                },
+                series: [
+                    {
+                        filters: {
+                            'DomainCode': 'GAS',
+                            'TableType': 'activity',
+                            'GUNFCode': '5057'
+                        },
+                        value: 'GValue',
+                        type: 'column',
+                        color: 'maroon',
+                        name: 's1'
                     },
-                    series: [
-                        {
-                            filters: {
-                                'DomainCode': 'GAS',
-                                'TableType': 'activity',
-                                'GUNFCode': '5057'
-                            },
-                            value: 'GValue',
-                            type: 'column',
-                            color: 'maroon',
-                            name: 's1'
+                    {
+                        filters: {
+                            'DomainCode': 'GAS',
+                            'TableType': 'activity',
+                            'GUNFCode': '5057'
                         },
-                        {
-                            filters: {
-                                'DomainCode': 'GAS',
-                                'TableType': 'activity',
-                                'GUNFCode': '5057'
-                            },
-                            name: 's2',
-                            value: 'GValue',
-                            type: 'line'
-                        },
-                        {
-                            filters: {
-                                'DomainCode': 'GAS',
-                                'TableType': 'activity',
-                                'GUNFCode': '1712'
-                            },
-                            value: 'PerDiff',
-                            name: 's3',
-                            type: 'scatter'
-                        }
-                    ]
-                });
-
-                var chartTwo = creator.render({
-                    container: "#chartTwo",
-                    creator: {
-                        chartObj: {
-                            chart:{
-                                type: "column"
-                            }
-                        }
+                        name: 's2',
+                        value: 'GValue',
+                        type: 'line'
                     },
-                    series: [
-                        {
-                            filters: {
-                                'DomainCode': 'GAS',
-                                'TableType': 'activity',
-                                'GUNFCode': '5057'
-                            },
-                            value: 'GValue',
-                            type: 'line',
-                            color: 'maroon',
-                            name: 's1'
+                    {
+                        filters: {
+                            'DomainCode': 'GAS',
+                            'TableType': 'activity',
+                            'GUNFCode': '1712'
                         },
-                        {
-                            filters: {
-                                'DomainCode': 'GAS',
-                                'TableType': 'activity',
-                                'GUNFCode': '5057'
-                            },
-                            name: 's2',
-                            value: 'GValue',
-                        },
-                        {
-                            filters: {
-                                'DomainCode': 'GAS',
-                                'TableType': 'activity',
-                                'GUNFCode': '1712'
-                            },
-                            value: 'PerDiff',
-                            name: 's3',
-                            type: 'scatter'
+                        value: 'PerDiff',
+                        name: 's3',
+                        type: 'scatter'
+                    }
+                ]
+            });
+
+            var chartTwo = creator.render({
+                container: "#chartTwo",
+                creator: {
+                    chartObj: {
+                        chart:{
+                            type: "column"
                         }
-                    ]
-                });
+                    }
+                },
+                series: [
+                    {
+                        filters: {
+                            'DomainCode': 'GAS',
+                            'TableType': 'activity',
+                            'GUNFCode': '5057'
+                        },
+                        value: 'GValue',
+                        type: 'line',
+                        color: 'maroon',
+                        name: 's1'
+                    },
+                    {
+                        filters: {
+                            'DomainCode': 'GAS',
+                            'TableType': 'activity',
+                            'GUNFCode': '5057'
+                        },
+                        name: 's2',
+                        value: 'GValue',
+                    },
+                    {
+                        filters: {
+                            'DomainCode': 'GAS',
+                            'TableType': 'activity',
+                            'GUNFCode': '1712'
+                        },
+                        value: 'PerDiff',
+                        name: 's3',
+                        type: 'scatter'
+                    }
+                ]
+            });
 
-            };
+        };
 
-        })
+
+
     });
 });

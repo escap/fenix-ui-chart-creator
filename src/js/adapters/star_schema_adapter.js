@@ -194,7 +194,7 @@ define([
                     }
                 });
             });
-            
+
             return _.uniq(xCategories);
         };
 
