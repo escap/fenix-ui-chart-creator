@@ -194,11 +194,9 @@ define([
                     }
                 });
             });
-            // TODO: check if sort it
-            //console.warn('The categories are automatically sorted');
+            
             return _.uniq(xCategories);
         };
-
 
         Star_Schema_Adapter.prototype._createYAxis = function (data, index) {;
             var yAxisNames = [],
