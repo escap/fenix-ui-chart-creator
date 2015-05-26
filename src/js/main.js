@@ -51,32 +51,13 @@ requirejs(['./paths'], function (paths) {
                             color: 'maroon',
                             name: 's1'
                         },
-                        {
-                            filters: {
-                                'DomainCode': 'GAS',
-                                'TableType': 'activity',
-                                'GUNFCode': '5057'
-                            },
-                            name: 's2',
-                            value: 'GValue',
-                            type: 'line'
-                        },
-                        {
-                            filters: {
-                                'DomainCode': 'GAS',
-                                'TableType': 'activity',
-                                'GUNFCode': '1712'
-                            },
-                            value: 'PerDiff',
-                            name: 's3',
-                            type: 'scatter'
-                        }
                     ]
                 }
             });
 
             creator.render({
                 container: "#chartTwo",
+                noData: "<div>No data Available</div>",
                 creator: {
                     chartObj: {
                         chart:{

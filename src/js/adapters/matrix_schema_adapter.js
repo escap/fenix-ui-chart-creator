@@ -93,7 +93,7 @@ define([
                     chartObj = this._processStandardChart();
                     break;
             }
-            console.log(chartObj);
+
             return chartObj;
         };
 
@@ -130,7 +130,6 @@ define([
         };
 
         Matrix_Schema_Adapter.prototype._createXAxisCategories = function(data, xIndexes, order) {
-            console.log(order);
             return this._getDistinctValues(data, xIndexes, order);
         };
 

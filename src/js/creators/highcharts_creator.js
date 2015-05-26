@@ -1,23 +1,24 @@
 /*global define, amplify, console*/
 define([
         'jquery',
+        'underscore',
         'fx-c-c/config/creators/highcharts_template',
-        'highcharts',
         //'highcharts-export',
         //'highcharts-export-csv',
         'amplify'
     ],
-    function ($, baseConfig) {
+    function ($, _, baseConfig) {
 
         'use strict';
 
         var defaultOptions = {
 
-                lang: 'EN',
-
                 s: {
                     CONTENT: '[data-role="content"]'
-                }
+                },
+
+                // TODO: handle multilanguage?
+                noData: "<div>No Data Available</div>"
 
             },
             e = {
@@ -58,24 +59,23 @@ define([
                 //Init chart container
                 this.$container = $(this.container).find(this.s.CONTENT);
 
-                this._createChart();
+                if (this._validateSeries() === true) {
 
+                    // create chart
+                    this._createChart();
+
+                }else {
+                    this.noDataAvailable();
+                }
             } else {
                 console.error(this.errors);
                 throw new Error("FENIX hightchart_creator has not a valid configuration");
             }
         };
 
-
         HightchartCreator.prototype._createChart = function () {
             this.config = $.extend(true, {}, baseConfig, this.chartObj);
-            this.$container.highcharts( this.config);
-        };
-
-        HightchartCreator.prototype._onValidateDataSuccess = function () {
-            this.$chartRendered = true;
-            this._createConfiguration();
-            this._renderChart();
+            this.$container.highcharts(this.config);
         };
 
         HightchartCreator.prototype._onValidateDataError = function () {
@@ -84,10 +84,19 @@ define([
 
         HightchartCreator.prototype._createConfiguration = function () {
             this.config = $.extend(true, baseConfig, this.chartObj);
+        };
 
-            this.config.chart.events.load = function () {
-                amplify.publish(e.READY, this);
-            };
+        HightchartCreator.prototype._validateSeries = function() {
+
+            for(var i=0; i < this.chartObj.series.length; i++) {
+                for(var j=0; j < this.chartObj.series[i].data.length; j++) {
+                    if (this.chartObj.series[i].data[j] !== null) {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         };
 
         HightchartCreator.prototype.reflow = function () {
@@ -96,6 +105,11 @@ define([
                 this.$container.highcharts().reflow();
                 return true;
             }
+        };
+
+        HightchartCreator.prototype.noDataAvailable = function () {
+            console.log();
+            this.$container.append(this.noData)
         };
 
         HightchartCreator.prototype.destroy = function () {

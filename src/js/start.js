@@ -32,8 +32,12 @@ define([
 
         ChartCreator.prototype.render = function (config) {
 
-            var template = new this.templateFactory($.extend(true, {model: config.model, container: config.container}, config.template)),
-                creator = new this.creatorFactory($.extend(true, {container: config.container}, config.creator));
+            var template = new this.templateFactory(
+                    $.extend(true, {model: config.model, container: config.container}, config.template)
+                ),
+                creator = new this.creatorFactory(
+                    $.extend(true, {container: config.container, noData: config.noData}, config.creator)
+                );
 
             // render template
             template.render();
