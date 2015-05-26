@@ -399,7 +399,7 @@ define([
                 var index = _.indexOf(xCategories, row[xIndex]);
                 if (index) {
 
-                    serie.data[index] = row[valueIndex];
+                    serie.data[index] = isNaN(row[valueIndex])? row[valueIndex]: parseFloat(row[valueIndex]);
 
                     // Add serie to series
                     series = this._addSerie(series, serie, index)
