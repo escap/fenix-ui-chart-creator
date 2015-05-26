@@ -108,8 +108,7 @@ define([
         };
 
         HightchartCreator.prototype.noDataAvailable = function () {
-            console.log();
-            this.$container.append(this.noData)
+            this.$container.html(this.noData)
         };
 
         HightchartCreator.prototype.destroy = function () {
