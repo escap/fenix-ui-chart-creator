@@ -108,17 +108,18 @@ define([
 
         };
 
-        Star_Schema_Adapter.prototype.prepareChart = function(seriesConfig) {
+        Star_Schema_Adapter.prototype.prepareChart = function(config) {
             var chartObj = $.extend(true, {}, this.chartObj),
                 x_dimension = this.CONFIG.x_dimension,
                 y_dimension = this.CONFIG.y_dimension,
-                value = this.CONFIG.value;
+                value = this.CONFIG.value,
+                seriesConfig = config.series;
 
             // get all data of the series
             var data = [];
-            seriesConfig.forEach(_.bind(function(serie) {
+            _.each(seriesConfig, function(serie) {
                 data.push(this.filterSerie(serie));
-            }, this));
+            }, this);
 
             // get categories
             chartObj.xAxis.categories = this._createXAxisCategories(data, x_dimension);

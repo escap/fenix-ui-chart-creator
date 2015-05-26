@@ -32,19 +32,17 @@ define([
 
         ChartCreator.prototype.render = function (config) {
 
-            var template = new this.templateFactory($.extend(true, {model: config.model}, config.template)),
-                creator = new this.creatorFactory($.extend(true, {model: config.model}, config.creator));
+            var template = new this.templateFactory($.extend(true, {model: config.model, container: config.container}, config.template)),
+                creator = new this.creatorFactory($.extend(true, {container: config.container}, config.creator));
 
             // render template
-            template.render(config);
+            template.render();
 
             // getting chart definition
-            var chartObj = this.adapter.prepareChart(config.series);
-            config.chartObj = $.extend(true, {}, chartObj, creator.chartObj);
-
+            var chartObj = this.adapter.prepareChart(config.adapter);
 
             // render chart
-            creator.render(config);
+            creator.render({chartObj: chartObj});
 
             return {
                 destroy: $.proxy(function () {
@@ -72,14 +70,13 @@ define([
                 self.templateFactory = Template;
                 self.creatorFactory = Creator;
 
+                // TODO: use one configuration object in this phase
                 self.adapter = new Adapter($.extend(true, {model: config.model}, config.adapter));
-
                 self.adapter.prepareData($.extend(true, {model: config.model}, config.adapter));
 
                 if (typeof config.onReady === 'function') {
                     config.onReady(self);
                 }
-
             });
         };
 

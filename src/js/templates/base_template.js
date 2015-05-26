@@ -9,8 +9,8 @@ define([
 
         var defaultOptions = {};
 
-        function Base_template() {
-            $.extend(true, this, defaultOptions);
+        function Base_template(config) {
+            $.extend(true, this, defaultOptions, config);
             return this;
         }
 

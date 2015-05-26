@@ -3,8 +3,8 @@ define([
         'jquery',
         'fx-c-c/config/creators/highcharts_template',
         'highcharts',
-        'highcharts-export',
-        'highcharts-export-csv',
+        //'highcharts-export',
+        //'highcharts-export-csv',
         'amplify'
     ],
     function ($, baseConfig) {
@@ -25,9 +25,9 @@ define([
                 READY: 'fx.component.chart.ready'
             };
 
-        function HightchartCreator(o) {
+        function HightchartCreator(config) {
 
-            $.extend(true, this, o, defaultOptions);
+            $.extend(true, this, defaultOptions, config);
             this.hightchart_template = baseConfig;
 
             return this;
