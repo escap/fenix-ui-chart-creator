@@ -195,8 +195,8 @@ define([
                 });
             });
             // TODO: check if sort it
-            console.warn('The categories are automatically sorted');
-            return _.uniq(xCategories).sort();
+            //console.warn('The categories are automatically sorted');
+            return _.uniq(xCategories);
         };
 
 
