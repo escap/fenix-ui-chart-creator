@@ -196,13 +196,14 @@ define([
                     }
                 });
             });
+            xCategories = _.uniq(xCategories);
             if (order) {
                 switch (order.toLowerCase()) {
-                    case 'asc': return _.uniq(xCategories).sort();
-                    case 'desc': return _.uniq(xCategories).reverse();
+                    case 'asc': return xCategories.sort();
+                    case 'desc': return xCategories.sort().reverse();
                 }
             }
-            return _.uniq(xCategories);
+            return xCategories;
         };
 
         Star_Schema_Adapter.prototype._createYAxis = function (data, index) {;

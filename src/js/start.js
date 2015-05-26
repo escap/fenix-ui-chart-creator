@@ -39,6 +39,7 @@ define([
             template.render();
 
             // getting chart definition
+            console.log(config.adapter);
             var chartObj = this.adapter.prepareChart(config.adapter);
 
             // render chart

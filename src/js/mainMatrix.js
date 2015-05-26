@@ -26,7 +26,12 @@ requirejs(['./paths'], function (paths) {
             function renderCharts(creator) {
 
                 var chartOne = creator.render({
-                    container: "#chartOne"
+                    container: "#chartOne",
+                    adapter: {
+                        xAxis: {
+                            order: "asc"
+                        }
+                    }
                 });
             };
         });
@@ -39,7 +44,9 @@ requirejs(['./paths'], function (paths) {
             creator.init({
                 model: model,
                 adapter: {
-
+                    xAxis: {
+                        order: "desc"
+                    }
                 },
                 template: {},
                 creator: {},
@@ -58,6 +65,7 @@ requirejs(['./paths'], function (paths) {
                             }
                         }
                     },
+
                 });
             };
         });

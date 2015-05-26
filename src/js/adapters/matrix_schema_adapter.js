@@ -25,7 +25,7 @@ define([
                     yAxis: [3],
                     value: 2,
                     series: [1]
-                },
+                }
             },
 
             e = {
@@ -76,7 +76,10 @@ define([
 
         };
 
-        Matrix_Schema_Adapter.prototype.prepareChart = function(seriesConfig) {
+        Matrix_Schema_Adapter.prototype.prepareChart = function(config) {
+
+            $.extend(true, this, config);
+
             var chartObj;
 
             switch (this.type) {
@@ -94,18 +97,19 @@ define([
             return chartObj;
         };
 
-        Matrix_Schema_Adapter.prototype._processStandardChart = function(seriesConfig) {
+        Matrix_Schema_Adapter.prototype._processStandardChart = function() {
             var chartObj  = $.extend(true, {}, this.chartObj),
                 data = this.model,
                 xAxisIndex = this.filters.xAxis,
                 seriesIndexes = this.filters.series,
                 valueIndex = this.filters.value,
-                yAxisIndex = this.filters.yAxis;
+                yAxisIndex = this.filters.yAxis,
+                xAxisConfig = this.xAxis || {};
 
             // TODO: make it faster? In theory can be done faster, but probably is not needed
 
             // get categories
-            chartObj.xAxis.categories = this._createXAxisCategories(data, xAxisIndex);
+            chartObj.xAxis.categories = this._createXAxisCategories(data, xAxisIndex, xAxisConfig.order || null);
 
             // create yAxis
             if (yAxisIndex) {
@@ -125,8 +129,9 @@ define([
             return chartObj;
         };
 
-        Matrix_Schema_Adapter.prototype._createXAxisCategories = function(data, xIndexes) {
-            return this._getDistinctValues(data, xIndexes);
+        Matrix_Schema_Adapter.prototype._createXAxisCategories = function(data, xIndexes, order) {
+            console.log(order);
+            return this._getDistinctValues(data, xIndexes, order);
         };
 
         Matrix_Schema_Adapter.prototype._createYAxis = function (data, index) {
@@ -155,7 +160,7 @@ define([
             return yAxis;
         };
 
-        Matrix_Schema_Adapter.prototype._createSeries = function(data, seriesIndexes, xCategoriesLength, yAxis) {
+        Matrix_Schema_Adapter.prototype._createSeries = function(data, seriesIndexes, xCategoriesLength) {
             var s = this._getDistinctValues(data, seriesIndexes);
 
             var series = [];
@@ -218,7 +223,7 @@ define([
             return name;
         };
 
-        Matrix_Schema_Adapter.prototype._getDistinctValues = function (data, indexes) {
+        Matrix_Schema_Adapter.prototype._getDistinctValues = function (data, indexes, order) {
 
            var v = [];
 
@@ -229,7 +234,14 @@ define([
                 }
             }, this);
 
-            return _.uniq(v);
+            v = _.uniq(v);
+            if (order) {
+                switch (order.toLowerCase()) {
+                    case 'asc': return v.sort();
+                    case 'desc': return v.sort().reverse();
+                }
+            }
+            return v;
         };
 
         Matrix_Schema_Adapter.prototype._getYAxisIndex = function (yAxis, label) {
