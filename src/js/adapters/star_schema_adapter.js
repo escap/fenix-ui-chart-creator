@@ -123,7 +123,7 @@ define([
             }, this);
 
             // get categories
-            chartObj.xAxis.categories = this._createXAxisCategories(data, x_dimension, xAxisConfig.sort || null);
+            chartObj.xAxis.categories = this._createXAxisCategories(data, x_dimension, xAxisConfig.order || null);
 
             // create yAxis
             if (y_dimension)
@@ -183,7 +183,7 @@ define([
          * @param data
          * @private
          */
-        Star_Schema_Adapter.prototype._createXAxisCategories = function(data, xIndex, sort) {
+        Star_Schema_Adapter.prototype._createXAxisCategories = function(data, xIndex, order) {
 
             var xCategories = [];
             data.forEach(function(serie) {
@@ -196,8 +196,8 @@ define([
                     }
                 });
             });
-            if (sort) {
-                switch (sort.toLowerCase()) {
+            if (order) {
+                switch (order.toLowerCase()) {
                     case 'asc': return _.uniq(xCategories).sort();
                     case 'desc': return _.uniq(xCategories).reverse();
                 }

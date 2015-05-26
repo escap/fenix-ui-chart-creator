@@ -37,7 +37,7 @@ requirejs(['./paths'], function (paths) {
                 },
                 adapter: {
                     xAxis: {
-                      sort: "ASC"
+                        order: "ASC"
                     },
                     series: [
                         {
