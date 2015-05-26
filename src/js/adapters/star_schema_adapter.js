@@ -113,7 +113,8 @@ define([
                 x_dimension = this.CONFIG.x_dimension,
                 y_dimension = this.CONFIG.y_dimension,
                 value = this.CONFIG.value,
-                seriesConfig = config.series;
+                seriesConfig = config.series,
+                xAxisConfig = config.xAxis || {};
 
             // get all data of the series
             var data = [];
@@ -122,7 +123,7 @@ define([
             }, this);
 
             // get categories
-            chartObj.xAxis.categories = this._createXAxisCategories(data, x_dimension);
+            chartObj.xAxis.categories = this._createXAxisCategories(data, x_dimension, xAxisConfig.sort || null);
 
             // create yAxis
             if (y_dimension)
@@ -182,7 +183,7 @@ define([
          * @param data
          * @private
          */
-        Star_Schema_Adapter.prototype._createXAxisCategories = function(data, xIndex) {
+        Star_Schema_Adapter.prototype._createXAxisCategories = function(data, xIndex, sort) {
 
             var xCategories = [];
             data.forEach(function(serie) {
@@ -195,7 +196,12 @@ define([
                     }
                 });
             });
-
+            if (sort) {
+                switch (sort.toLowerCase()) {
+                    case 'asc': return _.uniq(xCategories).sort();
+                    case 'desc': return _.uniq(xCategories).reverse();
+                }
+            }
             return _.uniq(xCategories);
         };
 
