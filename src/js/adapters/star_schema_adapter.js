@@ -307,11 +307,12 @@ define([
                 var data = this.filterSerie(model, serie, filters);
                 _.each(data, function(row) {
 
-                    // TODO: checks on data
                     var name = this._getName(row, serie.sliceName);
                     var value = row[valueDimension];
+                    
                     if (value !== null && name !== null) {
-                        value = isNaN(row[valueDimension]) ? row[valueDimension] : parseFloat(row[valueDimension]);
+                        value = isNaN(row[valueDimension])? row[valueDimension]: parseFloat(row[valueDimension]);
+
                         // add serie
                         chartSerie.data.push([name, value]);
                     }
