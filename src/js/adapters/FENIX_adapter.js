@@ -35,7 +35,7 @@ define([
                     yAxis: 'mu',
                     value: 'value',
                     series: [],
-                    addYAxisToSerieName: true //TODO
+                    addYAxisToSeriesName: true //TODO
                     // N.B. for now the yAxis is added to the serie name to avoid conflicts
                 },
 
@@ -82,7 +82,7 @@ define([
                 value = this.o.filters.value,
                 series = this.o.filters.series,
                 columns = this.o.$columns,
-                addYAxisToSerieName = this.o.filters.addYAxisToSerieName;
+                addYAxisToSeriesName = this.o.filters.addYAxisToSeriesName;
 
             // parsing columns to get
             columns.forEach(_.bind(function (column, index) {
