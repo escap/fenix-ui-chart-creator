@@ -43,6 +43,7 @@ define([
                 console.error(this.errors);
                 throw new Error("Star schema adapter has not a valid configuration");
             }
+
         };
 
         Star_Schema_Adapter.prototype._validateInput = function () {
