@@ -188,9 +188,8 @@ define([
                 // push the value of the serie
                 if (row[xDimension] !== null && row[xDimension] !== undefined && row[valueDimension] !== undefined && row[valueDimension] !== null) {
 
-                    var index = _.indexOf(xCategories, row[xDimension]),
-                        value = isNaN(row[valueDimension])? row[valueDimension]: parseFloat(row[valueDimension]);
-                    serie.data[index] = value;
+                    var index = _.indexOf(xCategories, row[xDimension]);
+                    serie.data[index] = isNaN(row[valueDimension])? row[valueDimension]: parseFloat(row[valueDimension]);
 
                 }
 
@@ -290,7 +289,7 @@ define([
                 seriesConfig = config.series;
 
             // force type "pie" to chart
-            chartObj.chart.type = "pie"
+            chartObj.chart.type = "pie";
 
             // initialize the series
             chartObj.series = [];
@@ -302,7 +301,7 @@ define([
                     // TODO: name?
                     name: '',
                     data: []
-                }
+                };
 
                 var data = this.filterSerie(model, serie, filters);
                 _.each(data, function(row) {
