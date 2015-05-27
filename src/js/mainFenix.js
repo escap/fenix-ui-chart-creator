@@ -69,16 +69,7 @@ requirejs(['./paths'], function (paths) {
 
                 creator.render(
                     {
-                        container: "#chartOne"
-                    }
-                );
-
-            }
-
-            function renderChart2(creator) {
-
-                creator2.render({
-                        container: "#chartTwo",
+                        container: "#chartOne",
                         creator: {
                             chartObj: {
                                 chart:{
@@ -89,6 +80,23 @@ requirejs(['./paths'], function (paths) {
                     }
                 );
 
+
+            }
+
+            function renderChart2(creator) {
+
+                creator.render(
+                    {
+                        container: "#chartTwo",
+                        creator: {
+                            chartObj: {
+                                chart:{
+                                    type: "column"
+                                }
+                            }
+                        }
+                    }
+                );
             }
         });
 

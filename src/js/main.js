@@ -50,7 +50,7 @@ requirejs(['./paths'], function (paths) {
                             type: 'column',
                             color: 'maroon',
                             name: 's1'
-                        },
+                        }
                     ]
                 }
             });
@@ -96,6 +96,34 @@ requirejs(['./paths'], function (paths) {
                             value: 'PerDiff',
                             name: 's3',
                             type: 'scatter'
+                        }
+                    ]
+                }
+            });
+
+
+            creator.render({
+                container: "#chartThree",
+                noData: "<div>No data Available</div>",
+                creator: {
+                    chartObj: {
+                        chart:{
+                            type: "column"
+                        }
+                    }
+                },
+                adapter: {
+                    series: [
+                        {
+                            filters: {
+                                'DomainCode': 'GAS',
+                                'TableType': 'activity',
+                                'GUNFCode': '5057'
+                            },
+                            value: 'GValue',
+                            type: 'line',
+                            color: 'maroon',
+                            name: 's1'
                         }
                     ]
                 }

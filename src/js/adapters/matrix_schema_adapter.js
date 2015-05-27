@@ -34,13 +34,12 @@ define([
             };
 
         function Matrix_Schema_Adapter() {
-            $.extend(true, this, defaultOptions);
             return this;
         }
 
         Matrix_Schema_Adapter.prototype.prepareData = function (config) {
 
-            $.extend(true, this, config);
+            $.extend(true, this, defaultOptions, config);
 
             if (this._validateInput() === true) {
                 if (this._validateData() === true) {
@@ -84,6 +83,7 @@ define([
 
             switch (this.type) {
                 case 'pie':
+                    chartObj = this._processStandardChart();
                     break;
                 case 'scatter':
                     break;
@@ -280,6 +280,39 @@ define([
                 series.push(serie);
             }
             return series;
+        };
+
+
+        Matrix_Schema_Adapter.prototype._processPieChart = function() {
+            var chartObj  = $.extend(true, {}, this.chartObj),
+                data = this.model,
+                xAxisIndex = this.filters.xAxis,
+                seriesIndexes = this.filters.series,
+                valueIndex = this.filters.value,
+                yAxisIndex = this.filters.yAxis,
+                xAxisConfig = this.xAxis || {};
+
+            // TODO: make it faster? In theory can be done faster, but probably is not needed
+
+            // get categories
+            chartObj.xAxis.categories = this._createXAxisCategories(data, xAxisIndex, xAxisConfig.order || null);
+
+            // create yAxis
+            if (yAxisIndex) {
+                chartObj.yAxis = this._createYAxis(data, yAxisIndex);
+            }
+
+            // create yAxis
+            if (yAxisIndex) {
+                chartObj.series = this._createYAxis(data, yAxisIndex);
+            }
+
+            var series = this._createSeries(data, seriesIndexes, chartObj.xAxis.categories.length);
+
+            // create series
+            chartObj.series = this._createSeriesStandard(data, series, xAxisIndex, yAxisIndex, valueIndex, seriesIndexes, chartObj.xAxis.categories, chartObj.yAxis);
+
+            return chartObj;
         };
 
         return Matrix_Schema_Adapter;

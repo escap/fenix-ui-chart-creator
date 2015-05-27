@@ -55,11 +55,12 @@ define([
             };
 
         function FENIX_Highchart_Adapter() {
-            $.extend(true, this, defaultOptions);
+            return this;
         }
 
         FENIX_Highchart_Adapter.prototype.prepareData = function (config) {
-            $.extend(true, this, config);
+
+            $.extend(true, this, defaultOptions, config);
 
             if (this._validateInput() === true) {
                 this._initVariable();

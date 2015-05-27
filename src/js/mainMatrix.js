@@ -152,5 +152,45 @@ requirejs(['./paths'], function (paths) {
             };
         });
 
+        $.getJSON("tests/resources/matrix/pie.json", function (model) {
+
+            var creator = new ChartCreator();
+
+            creator.init({
+                model: model,
+                adapter: {
+
+                },
+                template: {
+                },
+                creator: {},
+                onReady: renderCharts
+            });
+
+
+            function renderCharts(creator) {
+
+                creator.render({
+                    container: "#chartFive",
+                    creator: {
+                        chartObj: {
+                            chart: {
+                                type: "column"
+                            }
+                        }
+                    },
+                    adapter: {
+                        type: "pie",
+                        filters: {
+                            value: 0,
+                            series: [1]
+                        }
+
+                    }
+                });
+            };
+        });
+
+
     });
 });

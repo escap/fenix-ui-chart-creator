@@ -26,7 +26,7 @@ define([
         function Star_Schema_Adapter() {
             $.extend(true, this, defaultOptions);
 
-            this.CONFIG = {
+            this.o = {
                 charts_data: {}
             };
 
@@ -35,7 +35,7 @@ define([
 
         Star_Schema_Adapter.prototype.prepareData = function (config) {
 
-            $.extend(true, this.CONFIG, config);
+            $.extend(true, this.o, config);
 
             if (this._validateInput() === true) {
                 this._prepareData();
@@ -84,11 +84,11 @@ define([
 
         Star_Schema_Adapter.prototype._prepareData = function () {
 
-            for (var i = 0; i < this.CONFIG.model.length; i++) {
-                var row = this.CONFIG.model[i];
-                var f = this.CONFIG.filters.slice();
+            for (var i = 0; i < this.o.model.length; i++) {
+                var row = this.o.model[i];
+                var f = this.o.filters.slice();
 
-                this.create_tree_item(this.CONFIG.charts_data, f, row);
+                this.create_tree_item(this.o.charts_data, f, row);
             }
 
         };
@@ -110,9 +110,9 @@ define([
 
         Star_Schema_Adapter.prototype.prepareChart = function(config) {
             var chartObj = $.extend(true, {}, this.chartObj),
-                x_dimension = this.CONFIG.x_dimension,
-                y_dimension = this.CONFIG.y_dimension,
-                value = this.CONFIG.value,
+                x_dimension = this.o.x_dimension,
+                y_dimension = this.o.y_dimension,
+                value = this.o.value,
                 seriesConfig = config.series,
                 xAxisConfig = config.xAxis || {};
 
@@ -252,9 +252,9 @@ define([
 
         Star_Schema_Adapter.prototype.filterSerie = function (config) {
 
-            var series = this.CONFIG.charts_data;
+            var series = this.o.charts_data;
 
-            _.each(this.CONFIG.filters, _.bind(function (f) {
+            _.each(this.o.filters, _.bind(function (f) {
                 //Controlla che esiste
                 series = series[config.filters[f]];
 

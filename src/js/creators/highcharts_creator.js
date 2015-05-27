@@ -28,36 +28,37 @@ define([
 
         function HightchartCreator(config) {
 
-            $.extend(true, this, defaultOptions, config);
-            this.hightchart_template = baseConfig;
+            this.o = {};
+            $.extend(true, this.o, defaultOptions, config);
+            this.o.hightchart_template = baseConfig;
 
             return this;
         }
 
         HightchartCreator.prototype._validateInput = function () {
 
-            this.errors = {};
+            this.o.errors = {};
 
             //Container
-            if (!this.hasOwnProperty("container")) {
-                this.errors.container = "'container' attribute not present.";
+            if (!this.o.hasOwnProperty("container")) {
+                this.o.errors.container = "'container' attribute not present.";
             }
 
-            if ($(this.container).find(this.s.CONTENT) === 0) {
-                this.errors.container = "'container' is not a valid HTML element.";
+            if ($(this.o.container).find(this.o.s.CONTENT) === 0) {
+                this.o.errors.container = "'container' is not a valid HTML element.";
             }
 
-            return (Object.keys(this.errors).length === 0);
+            return (Object.keys(this.o.errors).length === 0);
         };
 
         HightchartCreator.prototype.render = function (config) {
 
-            $.extend(true, this, config);
+            $.extend(true, this.o, config);
 
             if (this._validateInput() === true) {
 
                 //Init chart container
-                this.$container = $(this.container).find(this.s.CONTENT);
+                this.$container = $(this.o.container).find(this.o.s.CONTENT);
 
                 if (this._validateSeries() === true) {
 
@@ -68,14 +69,14 @@ define([
                     this.noDataAvailable();
                 }
             } else {
-                console.error(this.errors);
+                console.error(this.o.errors);
                 throw new Error("FENIX hightchart_creator has not a valid configuration");
             }
         };
 
         HightchartCreator.prototype._createChart = function () {
-            this.config = $.extend(true, {}, baseConfig, this.chartObj);
-            this.$container.highcharts(this.config);
+            this.o.config = $.extend(true, {}, baseConfig, this.o.chartObj);
+            this.$container.highcharts(this.o.config);
         };
 
         HightchartCreator.prototype._onValidateDataError = function () {
@@ -83,14 +84,14 @@ define([
         };
 
         HightchartCreator.prototype._createConfiguration = function () {
-            this.config = $.extend(true, baseConfig, this.chartObj);
+            this.o.config = $.extend(true, {}, baseConfig, this.o.chartObj);
         };
 
         HightchartCreator.prototype._validateSeries = function() {
 
-            for(var i=0; i < this.chartObj.series.length; i++) {
-                for(var j=0; j < this.chartObj.series[i].data.length; j++) {
-                    if (this.chartObj.series[i].data[j] !== null) {
+            for(var i=0; i < this.o.chartObj.series.length; i++) {
+                for(var j=0; j < this.o.chartObj.series[i].data.length; j++) {
+                    if (this.o.chartObj.series[i].data[j] !== null) {
                         return true;
                     }
                 }
@@ -108,11 +109,11 @@ define([
         };
 
         HightchartCreator.prototype.noDataAvailable = function () {
-            this.$container.html(this.noData)
+            this.$container.html(this.o.noData)
         };
 
         HightchartCreator.prototype.destroy = function () {
-            this.$container.highcharts().destroy();
+            this.o.$container.highcharts().destroy();
         };
 
         return HightchartCreator;
