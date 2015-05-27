@@ -211,7 +211,6 @@ define([
             return chartObj;
         };
 
-
         /**
          * This is used for standard chart and timeseries
          * @param isTimeserie
@@ -272,7 +271,6 @@ define([
 
             return yAxis
         };
-
 
         /**
          * Create unique xAxis categories
@@ -417,7 +415,6 @@ define([
 
             return series;
         };
-
 
         /**
          * Sort the data by an index (in theory this should be the xAxis index 'this.aux.x.index')

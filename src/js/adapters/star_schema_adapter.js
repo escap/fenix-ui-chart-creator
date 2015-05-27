@@ -15,7 +15,8 @@ define([
                     chart: {},
                     xAxis: {},
                     series: []
-                }
+                },
+                chartsData: {}
             },
 
             e = {
@@ -24,18 +25,13 @@ define([
             };
 
         function Star_Schema_Adapter() {
-            $.extend(true, this, defaultOptions);
-
-            this.o = {
-                charts_data: {}
-            };
 
             return this;
         }
 
         Star_Schema_Adapter.prototype.prepareData = function (config) {
 
-            $.extend(true, this.o, config);
+            this.o = $.extend(true, {}, defaultOptions, config);
 
             if (this._validateInput() === true) {
                 this._prepareData();
@@ -88,15 +84,13 @@ define([
                 var row = this.o.model[i];
                 var f = this.o.filters.slice();
 
-                this.create_tree_item(this.o.charts_data, f, row);
+                this.create_tree_item(this.o.chartsData, f, row);
             }
 
         };
 
         Star_Schema_Adapter.prototype._validateData = function () {
-
             this.errors = {};
-
             return (Object.keys(this.errors).length === 0);
         };
 
@@ -109,36 +103,61 @@ define([
         };
 
         Star_Schema_Adapter.prototype.prepareChart = function(config) {
-            var chartObj = $.extend(true, {}, this.chartObj),
-                x_dimension = this.o.x_dimension,
-                y_dimension = this.o.y_dimension,
-                value = this.o.value,
+
+            config = $.extend(true, {}, this.o, config);
+
+            var chartObj;
+
+            switch (config.type) {
+                case 'pie':
+                    chartObj = this._processPieChart(config);
+                    break;
+                case 'scatter':
+                    break;
+                case 'timeserie':
+                    break;
+                default :
+                    chartObj = this._processStandardChart(config);
+                    break;
+            }
+
+            console.log(chartObj);
+            return chartObj;
+        };
+
+        Star_Schema_Adapter.prototype._processStandardChart = function(config) {
+            var chartObj = config.chartObj,
+                x_dimension = config.x_dimension,
+                y_dimension = config.y_dimension,
+                value = config.value,
+                chartsData = config.chartsData,
                 seriesConfig = config.series,
+                filters = config.filters,
                 xAxisConfig = config.xAxis || {};
 
             // get all data of the series
             var data = [];
             _.each(seriesConfig, function(serie) {
-                data.push(this.filterSerie(serie));
+                data.push(this.filterSerie(chartsData, serie, filters));
             }, this);
 
             // get categories
             chartObj.xAxis.categories = this._createXAxisCategories(data, x_dimension, xAxisConfig.order || null);
 
             // create yAxis
-            if (y_dimension)
+            if (y_dimension) {
                 chartObj.yAxis = this._createYAxis(data, y_dimension);
+            }
 
             // create series with merging of serie configuration
-            seriesConfig.forEach(_.bind(function(serie, index) {
+            _.each(seriesConfig, function(serie, index) {
                 var valueDimension = serie.value || value || null;
                 if (valueDimension == null) {
                     console.error("value (dimension) is null");
                 }
-
                 var s = this._createSerie(data[index], serie, x_dimension, y_dimension, valueDimension, chartObj.xAxis.categories, chartObj.yAxis);
                 chartObj.series.push($.extend(true, s, serie))
-            }, this));
+            }, this);
 
             return chartObj;
         };
@@ -250,17 +269,71 @@ define([
             return index;
         };
 
-        Star_Schema_Adapter.prototype.filterSerie = function (config) {
+        Star_Schema_Adapter.prototype.filterSerie = function (chartsData, config, filters) {
 
-            var series = this.o.charts_data;
+            var data = $.extend(true, {}, chartsData);
 
-            _.each(this.o.filters, _.bind(function (f) {
+            _.each(filters, _.bind(function (f) {
                 //Controlla che esiste
-                series = series[config.filters[f]];
+                data = data[config.filters[f]];
 
             }, this));
 
-            return series;
+            return data;
+        };
+
+        Star_Schema_Adapter.prototype._processPieChart = function(config) {
+            var chartObj  = config.chartObj,
+                model = config.chartsData,
+                valueDimension = config.value,
+                filters = config.filters,
+                seriesConfig = config.series;
+
+            // force type "pie" to chart
+            chartObj.chart.type = "pie"
+
+            // initialize the series
+            chartObj.series = [];
+
+            // Creating series (in theory just one for the pie)
+            _.each(seriesConfig, function(serie) {
+
+                var chartSerie = {
+                    // TODO: name?
+                    name: '',
+                    data: []
+                }
+
+                var data = this.filterSerie(model, serie, filters);
+                _.each(data, function(row) {
+
+                    // TODO: checks on data
+                    var name = this._getName(row, serie.sliceName);
+                    var value = row[valueDimension];
+                    if (value !== null && name !== null) {
+                        value = isNaN(row[valueDimension]) ? row[valueDimension] : parseFloat(row[valueDimension]);
+                        // add serie
+                        chartSerie.data.push([name, value]);
+                    }
+
+                }, this);
+
+                // add serie to the chart
+                chartObj.series.push(chartSerie);
+            }, this);
+
+
+            console.log(chartObj);
+            return chartObj;
+        };
+
+        Star_Schema_Adapter.prototype._getName = function (row, indexes) {
+            var n = '';
+            _.each(indexes,function(index) {
+                n = n.concat(row[index] + ' ');
+            });
+            n = n.trim();
+            return n;
         };
 
         return Star_Schema_Adapter;

@@ -9,7 +9,7 @@ requirejs(['./paths'], function (paths) {
             console.log('created!')
         });*/
 
-        $.getJSON("tests/resources/matrix/data.json", function (model) {
+    /*    $.getJSON("tests/resources/matrix/data.json", function (model) {
 
             var creator = new ChartCreator();
 
@@ -150,7 +150,7 @@ requirejs(['./paths'], function (paths) {
                     },
                 });
             };
-        });
+        });*/
 
         $.getJSON("tests/resources/matrix/pie.json", function (model) {
 
@@ -173,11 +173,6 @@ requirejs(['./paths'], function (paths) {
                 creator.render({
                     container: "#chartFive",
                     creator: {
-                        chartObj: {
-                            chart: {
-                                type: "column"
-                            }
-                        }
                     },
                     adapter: {
                         type: "pie",

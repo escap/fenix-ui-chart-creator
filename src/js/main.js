@@ -25,13 +25,12 @@ requirejs(['./paths'], function (paths) {
                 creator: {},
                 onReady: renderCharts
             });
-
         });
 
 
         function renderCharts(creator) {
 
-            creator.render({
+/*            creator.render({
                 container: "#chartOne",
                 creator: {
                 },
@@ -99,7 +98,7 @@ requirejs(['./paths'], function (paths) {
                         }
                     ]
                 }
-            });
+            });*/
 
 
             creator.render({
@@ -113,6 +112,7 @@ requirejs(['./paths'], function (paths) {
                     }
                 },
                 adapter: {
+                    type: "pie",
                     series: [
                         {
                             filters: {
@@ -121,9 +121,9 @@ requirejs(['./paths'], function (paths) {
                                 'GUNFCode': '5057'
                             },
                             value: 'GValue',
-                            type: 'line',
-                            color: 'maroon',
-                            name: 's1'
+
+                            // this is just for the pie and it's used to create the series name
+                            sliceName: ['GUNFItemNameE', 'Year']
                         }
                     ]
                 }

@@ -83,7 +83,7 @@ define([
 
             switch (this.type) {
                 case 'pie':
-                    chartObj = this._processStandardChart();
+                    chartObj = this._processPieChart();
                     break;
                 case 'scatter':
                     break;
@@ -190,9 +190,10 @@ define([
                         serie.yAxis = this._getYAxisIndex(yAxis, row[yIndex]);
                     }
 
-                    // push the value of the serie
-                    serie.data[xCategoryIndex] = isNaN(row[valueIndex])? row[valueIndex]: parseFloat(row[valueIndex]);
-
+                    if (row[valueIndex] != null) {
+                        // push the value of the serie
+                        serie.data[xCategoryIndex] = isNaN(row[valueIndex]) ? row[valueIndex] : parseFloat(row[valueIndex]);
+                    }
                 }
             }, this));
 
@@ -286,31 +287,29 @@ define([
         Matrix_Schema_Adapter.prototype._processPieChart = function() {
             var chartObj  = $.extend(true, {}, this.chartObj),
                 data = this.model,
-                xAxisIndex = this.filters.xAxis,
                 seriesIndexes = this.filters.series,
-                valueIndex = this.filters.value,
-                yAxisIndex = this.filters.yAxis,
-                xAxisConfig = this.xAxis || {};
+                valueIndex = this.filters.value;
 
-            // TODO: make it faster? In theory can be done faster, but probably is not needed
+            // force type "pie" to chart
+            chartObj.chart.type = "pie"
 
-            // get categories
-            chartObj.xAxis.categories = this._createXAxisCategories(data, xAxisIndex, xAxisConfig.order || null);
+            // initialize the series
+            chartObj.series = [
+                {
+                    // TODO: name?
+                    name: ' ',
+                    data: []
+                }
+            ];
 
-            // create yAxis
-            if (yAxisIndex) {
-                chartObj.yAxis = this._createYAxis(data, yAxisIndex);
-            }
+            _.each(data, function(row) {
 
-            // create yAxis
-            if (yAxisIndex) {
-                chartObj.series = this._createYAxis(data, yAxisIndex);
-            }
+                var name = this._createSeriesName(row, seriesIndexes);
+                if (row[valueIndex] != null && name != null) {
+                    chartObj.series[0].data.push([name, isNaN(row[valueIndex])? row[valueIndex]: parseFloat(row[valueIndex])]);
+                }
 
-            var series = this._createSeries(data, seriesIndexes, chartObj.xAxis.categories.length);
-
-            // create series
-            chartObj.series = this._createSeriesStandard(data, series, xAxisIndex, yAxisIndex, valueIndex, seriesIndexes, chartObj.xAxis.categories, chartObj.yAxis);
+            }, this);
 
             return chartObj;
         };
