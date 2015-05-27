@@ -23,9 +23,13 @@ define([
 
         ChartCreator.prototype.init = function (config) {
 
-            if (this._validateInput(config)) {
-
-                this.preloadResources(config);
+            var self = this;
+            try {
+                if (this._validateInput(config)) {
+                    this.preloadResources(config);
+                }
+            }catch(e) {
+                self.onError();
             }
 
         };
@@ -52,11 +56,8 @@ define([
                 creator.render({chartObj: chartObj});
 
             }catch(e) {
-                console.error(e);
                 creator.noDataAvailable();
             }
-
-
 
             return {
                 destroy: $.proxy(function () {
@@ -94,9 +95,14 @@ define([
             });
         };
 
+        ChartCreator.prototype.onError = function () {
+            console.warn("TODO: handle chart on error");
+        };
+
         ChartCreator.prototype.getAdapterUrl = function (model) {
-            //TODO add here adapter discovery logic
+            // TODO add here adapter discovery logic
             // TODO: Dirty check to be modified
+            // TODO: Validate the model (What to do in case or errors?)
 
             if (model.data && model.metadata) {
                 return this.adapterUrl? this.adapterUrl: 'fx-c-c/adapters/FENIX_adapter';

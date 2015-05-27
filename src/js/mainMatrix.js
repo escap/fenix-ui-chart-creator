@@ -73,7 +73,6 @@ requirejs(['./paths'], function (paths) {
 
         $.getJSON("tests/resources/matrix/rankings.json", function (model) {
 
-
             // reshape model data (rankings has it's own join data method)
             var data = [];
             model.forEach(function(row) {
@@ -111,6 +110,36 @@ requirejs(['./paths'], function (paths) {
             };
         });
 
+
+        $.getJSON("tests/resources/matrix/nodata.json", function (model) {
+
+             var creator = new ChartCreator();
+
+            creator.init({
+                model: model,
+                adapter: {
+
+                },
+                template: {},
+                creator: {},
+                onReady: renderCharts
+            });
+
+
+            function renderCharts(creator) {
+
+                var chartOne = creator.render({
+                    container: "#chartFour",
+                    creator: {
+                        chartObj: {
+                            chart: {
+                                type: "column"
+                            }
+                        }
+                    },
+                });
+            };
+        });
 
     });
 });
