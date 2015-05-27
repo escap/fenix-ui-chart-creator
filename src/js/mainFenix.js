@@ -73,7 +73,7 @@ requirejs(['./paths'], function (paths) {
                         creator: {
                             chartObj: {
                                 chart:{
-                                    type: "column"
+                                    type: "line"
                                 }
                             }
                         }
