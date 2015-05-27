@@ -309,7 +309,7 @@ define([
 
                     var name = this._getName(row, serie.sliceName);
                     var value = row[valueDimension];
-                    
+
                     if (value !== null && name !== null) {
                         value = isNaN(row[valueDimension])? row[valueDimension]: parseFloat(row[valueDimension]);
 

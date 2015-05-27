@@ -39,7 +39,7 @@ define([
 
         Matrix_Schema_Adapter.prototype.prepareData = function (config) {
 
-            $.extend(true, this, defaultOptions, config);
+            this.o = $.extend(true, {}, defaultOptions, config);
 
             if (this._validateInput() === true) {
                 if (this._validateData() === true) {
@@ -77,34 +77,34 @@ define([
 
         Matrix_Schema_Adapter.prototype.prepareChart = function(config) {
 
-            $.extend(true, this, config);
+            var config = $.extend(true, this.o, config);
 
             var chartObj;
 
-            switch (this.type) {
+            switch (config.type) {
                 case 'pie':
-                    chartObj = this._processPieChart();
+                    chartObj = this._processPieChart(config);
                     break;
                 case 'scatter':
                     break;
                 case 'timeserie':
                     break;
                 default :
-                    chartObj = this._processStandardChart();
+                    chartObj = this._processStandardChart(config);
                     break;
             }
 
             return chartObj;
         };
 
-        Matrix_Schema_Adapter.prototype._processStandardChart = function() {
-            var chartObj  = $.extend(true, {}, this.chartObj),
-                data = this.model,
-                xAxisIndex = this.filters.xAxis,
-                seriesIndexes = this.filters.series,
-                valueIndex = this.filters.value,
-                yAxisIndex = this.filters.yAxis,
-                xAxisConfig = this.xAxis || {};
+        Matrix_Schema_Adapter.prototype._processStandardChart = function(config) {
+            var chartObj  = config.chartObj,
+                data = config.model,
+                xAxisIndex = config.filters.xAxis,
+                seriesIndexes = config.filters.series,
+                valueIndex = config.filters.value,
+                yAxisIndex = config.filters.yAxis,
+                xAxisConfig = config.xAxis || {};
 
             // TODO: make it faster? In theory can be done faster, but probably is not needed
 
@@ -284,11 +284,11 @@ define([
         };
 
 
-        Matrix_Schema_Adapter.prototype._processPieChart = function() {
-            var chartObj  = $.extend(true, {}, this.chartObj),
-                data = this.model,
-                seriesIndexes = this.filters.series,
-                valueIndex = this.filters.value;
+        Matrix_Schema_Adapter.prototype._processPieChart = function(config) {
+            var chartObj  = config.chartObj,
+                data = config.model,
+                seriesIndexes = config.filters.series,
+                valueIndex = config.filters.value;
 
             // force type "pie" to chart
             chartObj.chart.type = "pie"
