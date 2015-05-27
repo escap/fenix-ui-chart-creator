@@ -75,9 +75,9 @@ define([
 
         };
 
-        Matrix_Schema_Adapter.prototype.prepareChart = function(config) {
+        Matrix_Schema_Adapter.prototype.prepareChart = function(c) {
 
-            var config = $.extend(true, this.o, config);
+            var config = $.extend(true, this.o, c);
 
             var chartObj;
 
@@ -215,7 +215,7 @@ define([
             _.each(indexes, function (index) {
                 if (row[index] !== undefined && row[index] !== null) {
                     if (name != '')
-                        name = name.concat(' ')
+                        name = name.concat(' ');
                     name = name.concat(row[index]);
                 }
             }, this);
@@ -225,7 +225,7 @@ define([
 
         Matrix_Schema_Adapter.prototype._getDistinctValues = function (data, indexes, order) {
 
-           var v = [];
+            var v = [];
 
             _.each(data, function (row) {
                 var n = this._getConcatString(row, indexes);
@@ -291,7 +291,7 @@ define([
                 valueIndex = config.filters.value;
 
             // force type "pie" to chart
-            chartObj.chart.type = "pie"
+            chartObj.chart.type = "pie";
 
             // initialize the series
             chartObj.series = [

@@ -30,7 +30,7 @@ requirejs(['./paths'], function (paths) {
 
         function renderCharts(creator) {
 
-/*            creator.render({
+            creator.render({
                 container: "#chartOne",
                 creator: {
                 },
@@ -98,7 +98,7 @@ requirejs(['./paths'], function (paths) {
                         }
                     ]
                 }
-            });*/
+            });
 
 
             creator.render({

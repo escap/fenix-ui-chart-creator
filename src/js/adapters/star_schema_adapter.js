@@ -95,16 +95,16 @@ define([
         };
 
         Star_Schema_Adapter.prototype._onValidateDataSuccess = function () {
-
+            return true;
         };
 
         Star_Schema_Adapter.prototype._onValidateDataError = function () {
-
+            return true;
         };
 
-        Star_Schema_Adapter.prototype.prepareChart = function(config) {
+        Star_Schema_Adapter.prototype.prepareChart = function(c) {
 
-            config = $.extend(true, {}, this.o, config);
+            var config = $.extend(true, {}, this.o, c);
 
             var chartObj;
 
@@ -121,7 +121,6 @@ define([
                     break;
             }
 
-            console.log(chartObj);
             return chartObj;
         };
 
@@ -155,18 +154,21 @@ define([
                 if (valueDimension == null) {
                     console.error("value (dimension) is null");
                 }
-                var s = this._createSerie(data[index], serie, x_dimension, y_dimension, valueDimension, chartObj.xAxis.categories, chartObj.yAxis);
-                chartObj.series.push($.extend(true, s, serie))
+                // create a single serie
+                var s = this._createSerie(data[index], x_dimension, y_dimension, valueDimension, chartObj.xAxis.categories, chartObj.yAxis);
+
+                // push it to the series
+                chartObj.series.push($.extend(true, s, serie));
             }, this);
 
             return chartObj;
         };
 
-        Star_Schema_Adapter.prototype._createSerie = function (dataSerie, serie, xDimension, yDimension, valueDimension, xCategories, yAxis) {
-            var serie = {},
-                yLabel;
+        Star_Schema_Adapter.prototype._createSerie = function (dataSerie, xDimension, yDimension, valueDimension, xCategories, yAxis) {
 
-            serie.data = [];
+            var serie = {
+                data: []
+            };
 
             _.each(xCategories, function() {
                 serie.data.push(null);
@@ -178,7 +180,7 @@ define([
                 // Create yAxis if exists
                 if (yDimension) {
                     // TODO
-                    yLabel = row[yDimension];
+                    var yLabel = row[yDimension];
                     //yLabel = this.aux.code2label[this._getColumnBySubject(this.yAxisSubject).id][yValue];
                     serie.yAxis = this._getYAxisIndex(yAxis, yLabel);
                 }
@@ -197,14 +199,10 @@ define([
             return serie;
         };
 
-        /**
-         * Create unique xAxis categories
-         * @param data
-         * @private
-         */
         Star_Schema_Adapter.prototype._createXAxisCategories = function(data, xIndex, order) {
 
             var xCategories = [];
+
             data.forEach(function(serie) {
                 serie.forEach(function(row) {
                     if (row[xIndex] === null) {
@@ -222,14 +220,16 @@ define([
                     case 'desc': return xCategories.sort().reverse();
                 }
             }
+
             return xCategories;
         };
 
-        Star_Schema_Adapter.prototype._createYAxis = function (data, index) {;
-            var yAxisNames = [],
-                yAxis = []
+        Star_Schema_Adapter.prototype._createYAxis = function (data, index) {
 
-            if (index) {
+            var yAxisNames = [],
+                yAxis = [];
+
+            if (index !== null) {
                 data.forEach(function (serie) {
                     serie.forEach(function (row) {
                         if (row[index] === null) {

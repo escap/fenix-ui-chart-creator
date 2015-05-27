@@ -15,33 +15,28 @@ define([
 
                 format: 'standard',  //[custom, scatter, pie] TODO: probably not needed and not used yet
 
-                // Chart (Highchart Definition)
+                // Chart (Based on Highchart Definition)
                 chartObj: {
-                    chart: {
-                        //type: 'spline'
-                    },
-                    xAxis: {
-
-                    },
+                    chart: {},
+                    xAxis: {},
                     //yAxis: [],
                     series: []
                 },
 
-
-                // filter to create the series
-                // this could be either subject or id
+                // filters to create the series
                 filters: {
+                    // the paramenter could be either a 'subject' or an 'id'
                     xAxis: 'time',
                     yAxis: 'mu',
                     value: 'value',
                     series: [],
-                    
+
                     // TODO add as paramenter (N.B. for now the yAxis is added to the serie name to avoid conflicts)
                     addYAxisToSeriesName: true
                 },
 
+                // aux variables used to process the model
                 aux: {
-                    // variables used to process the model
                     x:{},
                     y: {},
                     value: {},
@@ -497,6 +492,7 @@ define([
 
         FENIX_Highchart_Adapter.prototype._initVariable = function () {
 
+            // TODO: this could be simplified (and not store all that information)
             this.o.$metadata = this.o.model.metadata;
             this.o.$dsd = this.o.$metadata.dsd;
             this.o.$columns = this.o.$dsd.columns;
