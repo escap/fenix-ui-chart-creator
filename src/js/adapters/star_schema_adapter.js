@@ -10,7 +10,7 @@ define([
 
         var defaultOptions = {
 
-                // Chart (Highchart Definition)
+                // Chart (Highcharts Definition)
                 chartObj: {
                     chart: {},
                     xAxis: {},
@@ -25,7 +25,6 @@ define([
             };
 
         function Star_Schema_Adapter() {
-
             return this;
         }
 
