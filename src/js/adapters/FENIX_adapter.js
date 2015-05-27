@@ -35,8 +35,9 @@ define([
                     yAxis: 'mu',
                     value: 'value',
                     series: [],
-                    addYAxisToSeriesName: true //TODO
-                    // N.B. for now the yAxis is added to the serie name to avoid conflicts
+                    
+                    // TODO add as paramenter (N.B. for now the yAxis is added to the serie name to avoid conflicts)
+                    addYAxisToSeriesName: true
                 },
 
                 aux: {
