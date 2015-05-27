@@ -27,6 +27,11 @@ requirejs(['./paths'], function (paths) {
 
                 var chartOne = creator.render({
                     container: "#chartOne",
+                    template: {
+                        title: "Title",
+                        subtitle: "Subtitle",
+                        footer: "Footer"
+                    },
                     adapter: {
                         xAxis: {
                             order: "asc"
@@ -48,7 +53,9 @@ requirejs(['./paths'], function (paths) {
                         order: "desc"
                     }
                 },
-                template: {},
+                template: {
+
+                },
                 creator: {},
                 onReady: renderCharts
             });
@@ -89,7 +96,8 @@ requirejs(['./paths'], function (paths) {
                 adapter: {
 
                 },
-                template: {},
+                template: {
+                },
                 creator: {},
                 onReady: renderCharts
             });
@@ -99,6 +107,8 @@ requirejs(['./paths'], function (paths) {
 
                 var chartOne = creator.render({
                     container: "#chartThree",
+                    template: {
+                    },
                     creator: {
                         chartObj: {
                             chart: {
@@ -120,7 +130,8 @@ requirejs(['./paths'], function (paths) {
                 adapter: {
 
                 },
-                template: {},
+                template: {
+                },
                 creator: {},
                 onReady: renderCharts
             });

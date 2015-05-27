@@ -36,6 +36,8 @@ define([
 
         ChartCreator.prototype.render = function (config) {
 
+
+
             var template = new this.templateFactory(
                     $.extend(true, {model: config.model, container: config.container}, config.template)
                 ),
