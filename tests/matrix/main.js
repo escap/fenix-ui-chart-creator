@@ -5,9 +5,9 @@ requirejs(['../../src/js/paths'], function (paths) {
 
     requirejs(['fx-c-c/start', 'amplify'], function (ChartCreator) {
 
-/*        amplify.subscribe('fx.component.chart.ready', function () {
-            console.log('created!')
-        });*/
+        /*        amplify.subscribe('fx.component.chart.ready', function () {
+         console.log('created!')
+         });*/
 
 
 
@@ -27,7 +27,7 @@ requirejs(['../../src/js/paths'], function (paths) {
 
             function renderCharts(creator) {
 
-                var chartOne = creator.render({
+                creator.render({
                     container: "#chart1",
                     template: {
                         title: "Title",
@@ -65,7 +65,7 @@ requirejs(['../../src/js/paths'], function (paths) {
 
             function renderCharts(creator) {
 
-                var chartOne = creator.render({
+                creator.render({
                     container: "#chart2",
                     creator: {
                         chartObj: {
@@ -125,7 +125,7 @@ requirejs(['../../src/js/paths'], function (paths) {
 
         $.getJSON("data/nodata.json", function (model) {
 
-             var creator = new ChartCreator();
+            var creator = new ChartCreator();
 
             creator.init({
                 model: model,
@@ -141,7 +141,7 @@ requirejs(['../../src/js/paths'], function (paths) {
 
             function renderCharts(creator) {
 
-                var chartOne = creator.render({
+                creator.render({
                     container: "#chart4",
                     creator: {
                         chartObj: {
@@ -149,6 +149,11 @@ requirejs(['../../src/js/paths'], function (paths) {
                                 type: "column"
                             }
                         }
+                    },
+                    template: {
+                        title: "Chart with no data values",
+                        subtitle: "subtitle",
+                        footer: "Footer"
                     },
                 });
             };
