@@ -56,6 +56,10 @@ requirejs(['../../src/js/paths'], function (paths) {
                             chartObj: {
                                 chart:{
                                     type: "line"
+                                },
+                                tooltip: {
+                                    crosshairs: "mixed",
+                                    shared: true
                                 }
                             }
                         }
