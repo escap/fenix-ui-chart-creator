@@ -1,32 +1,11 @@
 /*global requirejs*/
-requirejs(['./paths'], function (paths) {
+requirejs(['../../src/js/paths'], function (paths) {
 
     requirejs.config(paths);
 
     requirejs(['fx-c-c/start', 'amplify'], function (ChartCreator) {
 
-/*        amplify.subscribe('fx.component.chart.ready', function () {
-            console.log('created!');
-        });*/
-
-        // filtering data
-        /*
-         $.getJSON("tests/resources/AFO_AfricaPITDataLang.json", function (model) {
-         var creator = new ChartCreator();
-         console.log(model);
-         // create serie
-         var data = [];
-         for(var i in model.data) {
-         if (model.data[i][0] === "10210" && (model.data[i][2] === "NIG" || model.data[i][2] === "ETH")) {
-         data.push(model.data[i]);
-         }
-         }
-         model.data = data;
-         $("body").append(JSON.stringify(model));
-         });
-         */
-
-        $.getJSON("tests/resources/afo/AFO_AfricaPITDataLang_nig_eth.json", function (model) {
+        $.getJSON("data/afo/AFO_AfricaPITDataLang_nig_eth.json", function (model) {
         //$.getJSON("tests/resources/AFO_AfricaPITDataLang.json", function (model) {
        // $.getJSON("tests/resources/afo/AFO_ProductionCapacities.json", function (model) {
 

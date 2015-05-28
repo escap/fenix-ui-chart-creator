@@ -1,5 +1,5 @@
 /*global requirejs*/
-requirejs(['./paths'], function (paths) {
+requirejs(['../../src/js/paths'], function (paths) {
 
     requirejs.config(paths);
 
@@ -9,7 +9,9 @@ requirejs(['./paths'], function (paths) {
             console.log('created!')
         });*/
 
-        $.getJSON("tests/resources/matrix/data.json", function (model) {
+
+
+        $.getJSON("data/data.json", function (model) {
 
             var creator = new ChartCreator();
 
@@ -42,7 +44,7 @@ requirejs(['./paths'], function (paths) {
         });
 
 
-        $.getJSON("tests/resources/matrix/no_date.json", function (model) {
+        $.getJSON("data/no_date.json", function (model) {
 
             var creator = new ChartCreator();
 
@@ -78,7 +80,7 @@ requirejs(['./paths'], function (paths) {
         });
 
 
-        $.getJSON("tests/resources/matrix/rankings.json", function (model) {
+        $.getJSON("data/rankings.json", function (model) {
 
             // reshape model data (rankings has it's own join data method)
             var data = [];
@@ -121,7 +123,7 @@ requirejs(['./paths'], function (paths) {
         });
 
 
-        $.getJSON("tests/resources/matrix/nodata.json", function (model) {
+        $.getJSON("data/nodata.json", function (model) {
 
              var creator = new ChartCreator();
 
@@ -152,7 +154,7 @@ requirejs(['./paths'], function (paths) {
             };
         });
 
-        $.getJSON("tests/resources/matrix/pie.json", function (model) {
+        $.getJSON("data/pie.json", function (model) {
 
             var creator = new ChartCreator();
 

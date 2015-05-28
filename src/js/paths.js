@@ -1,15 +1,17 @@
 /*global define*/
 define(function () {
 
+    var prefix = '../../src/js/'
+
     var config = {
 
         paths : {
-            'fx-c-c/start' : './start',
-            'fx-c-c/html' : '../html',
-            'fx-c-c/config' : '../../config',
-            'fx-c-c/adapters' : './adapters',
-            'fx-c-c/templates' : './templates',
-            'fx-c-c/creators' : './creators',
+            'fx-c-c/start' : prefix + './start',
+            'fx-c-c/html' :  prefix + '../html',
+            'fx-c-c/config' :  prefix + '../../config',
+            'fx-c-c/adapters' :  prefix + './adapters',
+            'fx-c-c/templates' :  prefix + './templates',
+            'fx-c-c/creators' :  prefix + './creators',
 
             // third party libs
             text: '//fenixapps.fao.org/repository/js/requirejs/plugins/text/2.0.12/text',

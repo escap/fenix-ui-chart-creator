@@ -1,5 +1,5 @@
 /*global requirejs*/
-requirejs(['./paths'], function (paths) {
+requirejs(['../../src/js/paths'], function (paths) {
 
     requirejs.config(paths);
 
@@ -9,7 +9,7 @@ requirejs(['./paths'], function (paths) {
             console.log('created!')
         });*/
 
-        $.getJSON("tests/resources/GHG_test_data.json", function (model) {
+        $.getJSON("data/GHG_test_data.json", function (model) {
 
             var creator = new ChartCreator();
 
