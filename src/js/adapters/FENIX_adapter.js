@@ -191,7 +191,8 @@ define([
 
             var config = $.extend(true, {}, this.o, config);
 
-            var xSubject = config.subject,
+            // check wheater the xAxis column is time
+            var xSubject = config.aux.x.column.subject,
                 chartObj;
 
             switch (config.type) {
@@ -213,6 +214,8 @@ define([
          * @private
          */
         FENIX_Highchart_Adapter.prototype._processStandardChart = function (config, isTimeserie) {
+            console.log(isTimeserie);
+
             var chartObj = config.chartObj,
                 x = config.aux.x,
                 y = config.aux.y,
@@ -229,7 +232,7 @@ define([
             }
 
             // create Series
-            if (isTimeserie) {
+            if (isTimeserie === true) {
                 // TODO: move it to the template!!
                 console.warn('TODO: xAxis Categories: for timeserie directly datatime??');
                 chartObj.xAxis.type = 'datetime';
@@ -324,7 +327,6 @@ define([
                         serie.data.push([this._getDatetimeByDataType(xDataType, row[xIndex]), row[valueIndex]]);
 
                         // Add serie to series
-                        // TODO: remove the 0
                         series = this._addSerie(series, serie)
                     }
                 }
@@ -335,12 +337,14 @@ define([
         };
 
         /**
-         * Add serie to series (TODO: clean the code, clone the object to return a new series)
+         * Add serie to series
          * @param series
          * @param serie
          * @returns {*}
          * @private
          */
+        //TODO: clean the code, clone the object to return a new series.
+        // TODO: This method can be highly simplified.
         FENIX_Highchart_Adapter.prototype._addSerie = function(series, serie, valueIndex) {
             var seriesAlreadyAdded = false;
             for (var i = 0; i < series.length; i++) {
@@ -358,7 +362,6 @@ define([
                     break;
                 }
             }
-            console.log(seriesAlreadyAdded, serie, valueIndex);
             if (!seriesAlreadyAdded) {
                 series.push(serie);
             }
@@ -410,8 +413,6 @@ define([
                 }
 
             }, this);
-
-            console.log(series);
 
             return series;
         };

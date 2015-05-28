@@ -48,7 +48,7 @@ requirejs(['./paths'], function (paths) {
                 onReady: renderChart1
             });
 
-/*            var creator2 = new ChartCreator();
+            var creator2 = new ChartCreator();
 
             creator2.init({
                 model: model,
@@ -64,7 +64,7 @@ requirejs(['./paths'], function (paths) {
                 template: {},
                 creator: {},
                 onReady: renderChart2,
-            });*/
+            });
 
             function renderChart1() {
 
