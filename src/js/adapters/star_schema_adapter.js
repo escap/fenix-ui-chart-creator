@@ -140,11 +140,15 @@ define([
                 data.push(this.filterSerie(chartsData, serie, filters));
             }, this);
 
+            if (data.length == 0) {
+                console.error("No data available TODO: (handle it)");
+            }
+
             // get categories
             chartObj.xAxis.categories = this._createXAxisCategories(data, x_dimension, xAxisConfig.order || null);
 
             // create yAxis
-            if (y_dimension) {
+            if (y_dimension !== null && y_dimension !== undefined) {
                 chartObj.yAxis = this._createYAxis(data, y_dimension);
             }
 
@@ -175,7 +179,7 @@ define([
             });
 
             // Create the series
-            dataSerie.forEach(_.bind(function (row) {
+            _.each(dataSerie, function (row) {
 
                 // Create yAxis if exists
                 if (yDimension) {
@@ -193,7 +197,7 @@ define([
 
                 }
 
-            }, this));
+            }, this);
 
             return serie;
         };
@@ -202,8 +206,8 @@ define([
 
             var xCategories = [];
 
-            data.forEach(function(serie) {
-                serie.forEach(function(row) {
+            _.each(data, function(serie) {
+                _.each(serie, function(row) {
                     if (row[xIndex] === null) {
                         console.warn("Error on the xAxis data (is null)", row[xIndex], row);
                     }

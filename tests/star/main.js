@@ -9,7 +9,7 @@ requirejs(['../../src/js/paths'], function (paths) {
             console.log('created!')
         });*/
 
-        $.getJSON("data/GHG_test_data.json", function (model) {
+   /*     $.getJSON("data/GHG_test_data.json", function (model) {
 
             var creator = new ChartCreator();
 
@@ -128,8 +128,48 @@ requirejs(['../../src/js/paths'], function (paths) {
                     ]
                 }
             });
-        };
+        };*/
 
+
+        $.getJSON("data/flude/data.json", function (model) {
+
+            console.log(model);
+
+            var creator = new ChartCreator();
+
+            creator.init({
+                model: model,
+                adapter: {
+                    filters: ['Country'],
+                    x_dimension: 'Year'
+                },
+                template: {},
+                creator: {},
+                onReady: renderCharts
+            });
+        });
+
+
+        function renderCharts(creator) {
+
+            console.log(creator);
+            creator.render({
+                container: "#chart1",
+                creator: {
+                },
+                adapter: {
+                    series: [
+                        {
+                            filters: {
+                                'Country': 'BWA',
+                            },
+                            value: 'NFLoss',
+                            name: 'BWA'
+                        }
+                    ]
+                }
+            });
+        };
 
 
     });
