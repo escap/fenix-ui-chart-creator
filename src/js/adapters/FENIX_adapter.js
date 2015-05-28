@@ -13,7 +13,7 @@ define([
 
                 lang: 'EN',
 
-                format: 'standard',  //[custom, scatter, pie] TODO: probably not needed and not used yet
+                type: 'timeserie',  //[custom, scatter, pie] TODO: probably not needed and not used yet
 
                 // Chart (Based on Highchart Definition)
                 chartObj: {
@@ -200,7 +200,7 @@ define([
                 case 'scatter':
                     break;
                 default :
-                    chartObj = this._processStandardChart(config, xSubject === 'time');
+                    chartObj = this._processStandardChart(config, (xSubject === 'time' && config.type.toLowerCase() === 'timeserie'));
                     break;
             }
 
@@ -312,16 +312,15 @@ define([
                 serie.data = [];
 
                 // Create yAxis if exists
-                if (yIndex) {
-                    // TODO
-                    yLabel = row[yIndex];
-                    //yLabel = this.aux.code2label[this._getColumnBySubject(this.yAxisSubject).id][yValue];
-                    serie.yAxis = this._getYAxisIndex(yAxis, yLabel);
+                if (yIndex !== null) {
+                    serie.yAxis = this._getYAxisIndex(yAxis, row[yIndex]);
                 }
 
                 // push the value of the serie
                 if (row[xIndex] !== null && row[xIndex] !== undefined && row[valueIndex] !== undefined && row[valueIndex] !== null) {
-                    if (row[valueIndex] != null) {
+
+                    if (row[valueIndex] !== null) {
+
                         serie.data.push([this._getDatetimeByDataType(xDataType, row[xIndex]), row[valueIndex]]);
 
                         // Add serie to series
@@ -359,6 +358,7 @@ define([
                     break;
                 }
             }
+            console.log(seriesAlreadyAdded, serie, valueIndex);
             if (!seriesAlreadyAdded) {
                 series.push(serie);
             }
@@ -393,16 +393,13 @@ define([
                 });
 
                 // Create yAxis if exists
-                if (yIndex) {
-                    // TODO
-                    yLabel = row[yIndex];
-                    serie.yAxis = this._getYAxisIndex(yAxis, yLabel);
+                if (yIndex !== null) {
+                    serie.yAxis = this._getYAxisIndex(yAxis, row[yIndex]);
                 }
 
-                console.log("hre");
-
                 var index = _.indexOf(xCategories, row[xIndex]);
-                if (index) {
+
+                if (index !== null) {
 
                     if (row[valueIndex] != null && index != -1 ) {
                         serie.data[index] = isNaN(row[valueIndex]) ? row[valueIndex] : parseFloat(row[valueIndex]);
@@ -456,14 +453,16 @@ define([
         FENIX_Highchart_Adapter.prototype._getYAxisIndex = function (yAxis, label) {
             var index = 0;
 
-            _.each(yAxis, function (y, i) {
-                if (y.title.text === label) {
-                    index = i;
-                }
-            }, this);
+            if (label !== null) {
+                _.each(yAxis, function (y, i) {
+                    if (y.title.text === label) {
+                        index = i;
+                    }
+                }, this);
 
-            if (index < 0) {
-                console.error("Data contains an unknown yAxis value: " + label);
+                if (index < 0) {
+                    console.error("Data contains an unknown yAxis value: " + label);
+                }
             }
 
             return index;

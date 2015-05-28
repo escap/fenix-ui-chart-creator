@@ -149,8 +149,9 @@ define([
 
                 yAxisNames = _.uniq(yAxisNames);
 
+                // TODO: probably it should merge the yAxis template somehow.
+                // TODO: PROBLEM: how to merge multiple axes properties from the baseConfig?
                 // creating yAxis objects
-                // TODO; probably it should merge the yAxis template somehow. PROBLEM: how to merge multiple axes properties from the baseConfig?
                 yAxisNames.forEach(_.bind(function (v) {
                     yAxis.push({title: {text: v}});
                 }, this));

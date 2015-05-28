@@ -26,18 +26,19 @@ requirejs(['./paths'], function (paths) {
          });
          */
 
-        // $.getJSON("tests/resources/afo/AFO_AfricaPITDataLang_nig_eth.json", function (model) {
+        $.getJSON("tests/resources/afo/AFO_AfricaPITDataLang_nig_eth.json", function (model) {
         //$.getJSON("tests/resources/AFO_AfricaPITDataLang.json", function (model) {
-        $.getJSON("tests/resources/afo/AFO_ProductionCapacities.json", function (model) {
+       // $.getJSON("tests/resources/afo/AFO_ProductionCapacities.json", function (model) {
 
             var creator = new ChartCreator();
 
             creator.init({
                 model: model,
                 adapter: {
+                    type: "timeserie",
                     filters: {
                         xAxis: 'time',
-                        yAxis: 'item',
+                        yAxis: 'Element',
                         value: 'value',
                         series: []
                     }
@@ -47,7 +48,7 @@ requirejs(['./paths'], function (paths) {
                 onReady: renderChart1
             });
 
-            var creator2 = new ChartCreator();
+/*            var creator2 = new ChartCreator();
 
             creator2.init({
                 model: model,
@@ -63,7 +64,7 @@ requirejs(['./paths'], function (paths) {
                 template: {},
                 creator: {},
                 onReady: renderChart2,
-            });
+            });*/
 
             function renderChart1() {
 
@@ -73,7 +74,7 @@ requirejs(['./paths'], function (paths) {
                         creator: {
                             chartObj: {
                                 chart:{
-                                    type: "line"
+                                    type: "column"
                                 }
                             }
                         }
