@@ -28,7 +28,7 @@ requirejs(['../../src/js/paths'], function (paths) {
             function renderCharts(creator) {
 
                 var chartOne = creator.render({
-                    container: "#chartOne",
+                    container: "#chart1",
                     template: {
                         title: "Title",
                         subtitle: "Subtitle",
@@ -66,7 +66,7 @@ requirejs(['../../src/js/paths'], function (paths) {
             function renderCharts(creator) {
 
                 var chartOne = creator.render({
-                    container: "#chartTwo",
+                    container: "#chart2",
                     creator: {
                         chartObj: {
                             chart: {
@@ -108,7 +108,7 @@ requirejs(['../../src/js/paths'], function (paths) {
             function renderCharts(creator) {
 
                 var chartOne = creator.render({
-                    container: "#chartThree",
+                    container: "#chart3",
                     template: {
                     },
                     creator: {
@@ -142,7 +142,7 @@ requirejs(['../../src/js/paths'], function (paths) {
             function renderCharts(creator) {
 
                 var chartOne = creator.render({
-                    container: "#chartFour",
+                    container: "#chart4",
                     creator: {
                         chartObj: {
                             chart: {
@@ -173,7 +173,7 @@ requirejs(['../../src/js/paths'], function (paths) {
             function renderCharts(creator) {
 
                 creator.render({
-                    container: "#chartFive",
+                    container: "#chart5",
                     creator: {
                     },
                     adapter: {

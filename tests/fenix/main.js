@@ -49,25 +49,23 @@ requirejs(['../../src/js/paths'], function (paths) {
 
                 creator.render(
                     {
-                        container: "#chartOne",
+                        container: "#chart1",
                         creator: {
                             chartObj: {
                                 chart:{
-                                    type: "column"
+                                    type: "line"
                                 }
                             }
                         }
                     }
                 );
-
-
             }
 
             function renderChart2(creator) {
 
                 creator.render(
                     {
-                        container: "#chartTwo",
+                        container: "#chart2",
                         creator: {
                             chartObj: {
                                 chart:{

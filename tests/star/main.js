@@ -31,7 +31,7 @@ requirejs(['../../src/js/paths'], function (paths) {
         function renderCharts(creator) {
 
             creator.render({
-                container: "#chartOne",
+                container: "#chart1",
                 creator: {
                 },
                 adapter: {
@@ -55,7 +55,7 @@ requirejs(['../../src/js/paths'], function (paths) {
             });
 
             creator.render({
-                container: "#chartTwo",
+                container: "#chart2",
                 noData: "<div>No data Available</div>",
                 creator: {
                     chartObj: {
@@ -102,7 +102,7 @@ requirejs(['../../src/js/paths'], function (paths) {
 
 
             creator.render({
-                container: "#chartThree",
+                container: "#chart3",
                 noData: "<div>No data Available</div>",
                 creator: {
                     chartObj: {
