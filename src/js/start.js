@@ -29,7 +29,7 @@ define([
                     this.preloadResources(config);
                 }
             }catch(e) {
-                self.onError();
+                self.onError(e);
             }
 
         };
@@ -52,8 +52,6 @@ define([
                 // getting chart definition
                 var chartObj = this.adapter.prepareChart(config.adapter || {});
 
-                console.log(chartObj);
-
                 // render chart
                 creator.render({chartObj: chartObj});
 
@@ -74,7 +72,7 @@ define([
         ChartCreator.prototype.preloadResources = function (config) {
 
             var baseTemplate = this.getTemplateUrl(),
-                adapter = this.getAdapterUrl(config.model),
+                adapter = this.getAdapterUrl(config.model, (config.adapter)? config.adapter.adapterType: null),
                 creator = this.getCreatorUrl(),
                 self = this;
 
@@ -97,22 +95,38 @@ define([
             });
         };
 
-        ChartCreator.prototype.onError = function () {
-            console.warn("TODO: handle chart on error");
+        ChartCreator.prototype.onError = function (e) {
+            console.error("ChartCreator Error: ", e);
         };
 
-        ChartCreator.prototype.getAdapterUrl = function (model) {
-            // TODO add here adapter discovery logic
-            // TODO: Dirty check to be modified
-            // TODO: Validate the model (What to do in case or errors?)
+        ChartCreator.prototype.getAdapterUrl = function (model, adapterType) {
 
-            if (model.data && model.metadata) {
-                return this.adapterUrl? this.adapterUrl: 'fx-c-c/adapters/FENIX_adapter';
+            // TODO add here adapter discovery logic
+
+           // TODO: Dirty switch to check wheater there is an adapterType specified
+            if (adapterType !== null && adapterType !== undefined) {
+                switch(adapterType.toLocaleLowerCase()) {
+                    case 'fenix': return this.adapterUrl ? this.adapterUrl : 'fx-c-c/adapters/FENIX_adapter';
+                    case 'wds-array': return this.adapterUrl ? this.adapterUrl : 'fx-c-c/adapters/matrix_schema_adapter';
+                    case 'wds-objects': return this.adapterUrl ? this.adapterUrl : 'fx-c-c/adapters/star_schema_adapter';
+                }
             }
-            else if (Array.isArray(model[0])) {
-                return this.adapterUrl ? this.adapterUrl: 'fx-c-c/adapters/matrix_schema_adapter';
+            else {
+                // TODO: Dirty check to be modified
+                // TODO: Validate the model (What to do in case or errors?)
+                if (model.data && model.metadata) {
+                    return this.adapterUrl ? this.adapterUrl : 'fx-c-c/adapters/FENIX_adapter';
+                }
+                else if (model.length > 0 && Array.isArray(model[0])) {
+                    return this.adapterUrl ? this.adapterUrl : 'fx-c-c/adapters/matrix_schema_adapter';
+                }
+                else if (model.length > 0 && typeof model[0] == 'object') {
+                    return this.adapterUrl ? this.adapterUrl : 'fx-c-c/adapters/star_schema_adapter';
+                }
+                else {
+                    throw new Error("The are not available adapter for the current model:", model);
+                }
             }
-            return this.adapterUrl? this.adapterUrl: 'fx-c-c/adapters/star_schema_adapter';
         };
 
         ChartCreator.prototype.getTemplateUrl = function () {

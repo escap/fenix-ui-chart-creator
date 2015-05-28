@@ -5,7 +5,8 @@ requirejs(['../../src/js/paths'], function (paths) {
 
     requirejs(['fx-c-c/start', 'amplify'], function (ChartCreator) {
 
-        $.getJSON("data/afo/AFO_AfricaPITDataLang_nig_eth.json", function (model) {
+        $.getJSON("data/afo/missing_date.json", function (model) {
+        //$.getJSON("data/afo/AFO_AfricaPITDataLang_nig_eth.json", function (model) {
         //$.getJSON("tests/resources/AFO_AfricaPITDataLang.json", function (model) {
        // $.getJSON("tests/resources/afo/AFO_ProductionCapacities.json", function (model) {
 
@@ -33,9 +34,10 @@ requirejs(['../../src/js/paths'], function (paths) {
                 model: model,
                 adapter: {
                     lang: 'EN',
+                    type: "",
                     filters: {
-                        xAxis: 'geo',
-                        yAxis: 'item',
+                        xAxis: 'time',
+                        yAxis: 'Element',
                         value: 'value',
                         series: []
                     }

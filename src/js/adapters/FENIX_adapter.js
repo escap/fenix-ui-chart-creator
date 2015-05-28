@@ -43,7 +43,7 @@ define([
                     series: []
                 },
 
-                debugging: true
+                debugging: false
             },
             e = {
                 DESTROY: 'fx.component.chart.destroy',
@@ -214,7 +214,7 @@ define([
          * @private
          */
         FENIX_Highchart_Adapter.prototype._processStandardChart = function (config, isTimeserie) {
-            console.log(isTimeserie);
+
 
             var chartObj = config.chartObj,
                 x = config.aux.x,

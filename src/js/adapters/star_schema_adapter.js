@@ -322,8 +322,6 @@ define([
                 chartObj.series.push(chartSerie);
             }, this);
 
-
-            console.log(chartObj);
             return chartObj;
         };
 
