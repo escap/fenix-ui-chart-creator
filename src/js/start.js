@@ -49,12 +49,10 @@ define([
             // TODO: Handle the error
             try {
 
-                console.log("here");
-
                 // getting chart definition
                 var chartObj = this.adapter.prepareChart(config.adapter || {});
 
-                console.log(chartObj);
+                console.log("chartObj", chartObj);
 
                 // render chart
                 creator.render({chartObj: chartObj});

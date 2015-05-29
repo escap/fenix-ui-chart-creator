@@ -1,7 +1,7 @@
 /*global define*/
 define(function () {
 
-    var prefix = '../../src/js/'
+    var prefix = '../../src/js/';
 
     var config = {
 
