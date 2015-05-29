@@ -55,7 +55,7 @@ define([
 
             $.extend(true, this.o, config);
 
-            console.log(this.o);
+            //console.log(this.o);
 
             if (this._validateInput() === true) {
 
@@ -92,7 +92,7 @@ define([
 
         HightchartCreator.prototype._validateSeries = function() {
 
-            console.log(this.o.chartObj.series);
+            //console.log(this.o.chartObj.series);
 
             for(var i=0; i < this.o.chartObj.series.length; i++) {
                 for(var j=0; j < this.o.chartObj.series[i].data.length; j++) {
