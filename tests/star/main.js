@@ -141,7 +141,8 @@ requirejs(['../../src/js/paths'], function (paths) {
                 model: model,
                 adapter: {
                     filters: ['Country'],
-                    x_dimension: 'Year'
+                    //type: 'timeserie',
+                    //groupby: ['Country']
                 },
                 template: {},
                 creator: {},
@@ -158,6 +159,54 @@ requirejs(['../../src/js/paths'], function (paths) {
                 creator: {
                 },
                 adapter: {
+                    xOrder: 'asc',
+                    xDimensions: ['Year'],
+                    yDimensions: ['Region'],
+
+                    series: [
+                        {
+                            filters: {
+                                'Country': 'BWA',
+                            },
+                            valueDimensions: 'NFLoss',
+                            name: 'BWA'
+                        }
+                    ]
+                }
+            });
+        };
+
+
+
+
+  /*      $.getJSON("data/flude/data.json", function (model) {
+
+            console.log(model);
+
+            var creator = new ChartCreator();
+
+            creator.init({
+                model: model,
+                adapter: {
+                    filters: ['Country']
+                },
+                template: {},
+                creator: {},
+                onReady: renderCharts
+            });
+        });
+
+
+        function renderCharts(creator) {
+
+            console.log(creator);
+            creator.render({
+                container: "#chart1",
+                creator: {
+                },
+                adapter: {
+                    x_dimension: 'Year',
+                    y_dimension: 'Region',
                     series: [
                         {
                             filters: {
@@ -169,7 +218,7 @@ requirejs(['../../src/js/paths'], function (paths) {
                     ]
                 }
             });
-        };
+        };*/
 
 
     });

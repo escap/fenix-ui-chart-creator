@@ -12,7 +12,7 @@ requirejs(['../../src/js/paths'], function (paths) {
 
             var creator = new ChartCreator();
 
-            creator.init({
+            /*creator.init({
                 model: model,
                 adapter: {
                     type: "timeserie",
@@ -81,8 +81,44 @@ requirejs(['../../src/js/paths'], function (paths) {
                         }
                     }
                 );
+            }*/
+
+            creator.init({
+                model: model,
+                adapter: {
+                    type: "standard",
+                    xDimensions: ['time'],
+                    yDimensions: ['Element'],
+                    valueDimensions: ['value'],
+                    seriesDimensions: []
+                },
+                template: {},
+                creator: {},
+                onReady: renderChart1
+            });
+
+            function renderChart1(creator) {
+
+                creator.render(
+                    {
+                        container: "#chart2",
+                        creator: {
+                            chartObj: {
+                                chart:{
+                                    type: "column"
+                                }
+                            }
+                        }
+                    }
+                );
             }
+
+
         });
+
+
+
+
 
     });
 });

@@ -6,6 +6,7 @@ define(function () {
     var config = {
 
         paths : {
+            //'fx-c-c': prefix,
             'fx-c-c/start' : prefix + './start',
             'fx-c-c/html' :  prefix + '../html',
             'fx-c-c/config' :  prefix + '../../config',

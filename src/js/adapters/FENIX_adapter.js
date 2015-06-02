@@ -23,17 +23,14 @@ define([
                     series: []
                 },
 
-                // filters to create the series
-                filters: {
-                    // the paramenter could be either a 'subject' or an 'id'
-                    xAxis: 'time',
-                    yAxis: 'mu',
-                    value: 'value',
-                    series: [],
+                // filtering parameters
+                xDimensions: ['time'],
+                yDimensions: ['mu'],
+                valueDimensions: ['value'],
+                seriesDimensions: [],
 
-                    // TODO add as paramenter (N.B. for now the yAxis is added to the serie name to avoid conflicts)
-                    addYAxisToSeriesName: true
-                },
+                // TODO add as paramenter (N.B. for now the yAxis is added to the serie name to avoid conflicts)
+                addYAxisToSeriesName: true,
 
                 // aux variables used to process the model
                 aux: {
@@ -73,12 +70,21 @@ define([
         };
 
         FENIX_Highchart_Adapter.prototype._prepareData = function () {
-            var xAxis = this.o.filters.xAxis,
-                yAxis = this.o.filters.yAxis,
-                value = this.o.filters.value,
-                series = this.o.filters.series,
+
+            // TODO: change variables names according to the new nomenclature
+
+            var xAxis = this.o.xDimensions,
+                yAxis = this.o.yDimensions,
+                value = this.o.valueDimensions,
+                series = this.o.seriesDimensions,
                 columns = this.o.$columns,
-                addYAxisToSeriesName = this.o.filters.addYAxisToSeriesName;
+                addYAxisToSeriesName = this.o.addYAxisToSeriesName;
+
+            // TODO: workaround on arrays used to standardize all charts.
+            // TODO: Add check on multiple columns (like for series)
+            xAxis = _.isArray(xAxis)? xAxis[0]: xAxis;
+            yAxis = _.isArray(yAxis)? yAxis[0]: yAxis;
+            value = _.isArray(value)? value[0]: value;
 
             // parsing columns to get
             columns.forEach(_.bind(function (column, index) {

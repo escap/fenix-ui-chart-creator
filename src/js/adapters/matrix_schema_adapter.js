@@ -20,12 +20,11 @@ define([
                     series: []
                 },
 
-                filters: {
-                    xAxis: [0],
-                    yAxis: [3],
-                    value: 2,
-                    series: [1]
-                }
+                xDimensions: [0],
+                yDimensions: [3],
+                valueDimensions: 2,
+                seriesDimensions: [1]
+
             },
 
             e = {
@@ -98,27 +97,28 @@ define([
         };
 
         Matrix_Schema_Adapter.prototype._processStandardChart = function(config) {
+
+            // TODO: change variables names according to the new nomenclature
+
             var chartObj  = config.chartObj,
                 data = config.model,
-                xAxisIndex = config.filters.xAxis,
-                seriesIndexes = config.filters.series,
-                valueIndex = config.filters.value,
-                yAxisIndex = config.filters.yAxis,
-                xAxisConfig = config.xAxis || {};
+                xAxisIndex = config.xDimensions,
+                seriesIndexes = config.seriesDimensions,
+                valueIndex = config.valueDimensions,
+                yAxisIndex = config.yDimensions,
+                xOrder = config.xOrder || null;
+
+
+            console.log(xAxisIndex,seriesIndexes, valueIndex, yAxisIndex, xOrder);
 
             // TODO: make it faster? In theory can be done faster, but probably is not needed
 
             // get categories
-            chartObj.xAxis.categories = this._createXAxisCategories(data, xAxisIndex, xAxisConfig.order || null);
+            chartObj.xAxis.categories = this._createXAxisCategories(data, xAxisIndex, xOrder);
 
             // create yAxis
-            if (yAxisIndex) {
+            if (yAxisIndex !== null && yAxisIndex !== undefined) {
                 chartObj.yAxis = this._createYAxis(data, yAxisIndex);
-            }
-
-            // create yAxis
-            if (yAxisIndex) {
-                chartObj.series = this._createYAxis(data, yAxisIndex);
             }
 
             var series = this._createSeries(data, seriesIndexes, chartObj.xAxis.categories.length);

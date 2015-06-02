@@ -125,14 +125,29 @@ define([
         };
 
         Star_Schema_Adapter.prototype._processStandardChart = function(config) {
+
+            console.log(config);
+
             var chartObj = config.chartObj,
-                x_dimension = config.x_dimension,
-                y_dimension = config.y_dimension,
-                value = config.value,
+
+            // general config for xDimensions, yDimensions, valueDimensions (otherwise can be serie specific)
+                x_dimension = config.xDimensions,
+                y_dimension = config.yDimensions,
+                value = config.valueDimensions,
+
                 chartsData = config.chartsData,
                 seriesConfig = config.series,
                 filters = config.filters,
-                xAxisConfig = config.xAxis || {};
+                xOrder = config.xOrder || null;
+
+            console.log(x_dimension, y_dimension, value);
+
+            // TODO: workaround on arrays used to standardize all charts.
+            // TODO: Add check on multiple columns (like for series)
+            x_dimension = _.isArray(x_dimension)? x_dimension[0]: x_dimension;
+            y_dimension = _.isArray(y_dimension)? y_dimension[0]: y_dimension;
+            value = _.isArray(value)? value[0]: value;
+
 
             // get all data of the series
             var data = [];
@@ -145,7 +160,7 @@ define([
             }
 
             // get categories
-            chartObj.xAxis.categories = this._createXAxisCategories(data, x_dimension, xAxisConfig.order || null);
+            chartObj.xAxis.categories = this._createXAxisCategories(data, x_dimension, xOrder);
 
             // create yAxis
             if (y_dimension !== null && y_dimension !== undefined) {
@@ -154,12 +169,19 @@ define([
 
             // create series with merging of serie configuration
             _.each(seriesConfig, function(serie, index) {
-                var valueDimension = serie.value || value || null;
-                if (valueDimension == null) {
+
+                // valueDimensions checks if serie.valueDimensions is defined, otherwise uses the global one, otherwise throws an error
+                var valueDimensions = serie.valueDimensions || value || null;
+                // TODO: workaround on arrays used to standardize all charts.
+                // TODO: Add check on multiple columns (like for series)
+                valueDimensions = _.isArray(valueDimensions)? valueDimensions[0]: valueDimensions;
+
+                if (valueDimensions == null) {
                     console.error("value (dimension) is null");
+                    throw new Error("value (dimension) is null");
                 }
                 // create a single serie
-                var s = this._createSerie(data[index], x_dimension, y_dimension, valueDimension, chartObj.xAxis.categories, chartObj.yAxis);
+                var s = this._createSerie(data[index], x_dimension, y_dimension, valueDimensions, chartObj.xAxis.categories, chartObj.yAxis);
 
                 // push it to the series
                 chartObj.series.push($.extend(true, s, serie));

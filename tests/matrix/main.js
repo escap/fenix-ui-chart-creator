@@ -20,8 +20,13 @@ requirejs(['../../src/js/paths'], function (paths) {
                 adapter: {
 
                 },
-                template: {},
-                creator: {},
+                template: {
+                    // TODO: base template
+                    //base_template: ''
+                },
+                creator: {
+
+                },
                 onReady: renderCharts
             });
 
@@ -35,16 +40,23 @@ requirejs(['../../src/js/paths'], function (paths) {
                         footer: "Footer"
                     },
                     adapter: {
-                        xAxis: {
+/*                        xAxis: {
                             order: "asc"
-                        }
+                        }*/
+
+                        // used in init just for MATRIX and FENIX
+                        xOrder: 'asc',
+                        xDimensions: [0],
+                        yDimensions: [1],
+                        valueDimensions: 2,
+                        seriesDimensions: [1]
                     }
                 });
             };
         });
 
 
-        $.getJSON("data/no_date.json", function (model) {
+    /*    $.getJSON("data/no_date.json", function (model) {
 
             var creator = new ChartCreator();
 
@@ -191,7 +203,7 @@ requirejs(['../../src/js/paths'], function (paths) {
                     }
                 });
             };
-        });
+        });*/
 
 
     });
