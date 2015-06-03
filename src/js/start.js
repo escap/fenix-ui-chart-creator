@@ -52,7 +52,7 @@ define([
                 // getting chart definition
                 var chartObj = this.adapter.prepareChart(config.adapter || {});
 
-                console.log(chartObj);
+               // console.log(chartObj);
 
                 // render chart
                 creator.render({chartObj: chartObj});

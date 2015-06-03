@@ -126,8 +126,6 @@ define([
 
         Star_Schema_Adapter.prototype._processStandardChart = function(config) {
 
-            console.log(config);
-
             var chartObj = config.chartObj,
 
             // general config for xDimensions, yDimensions, valueDimensions (otherwise can be serie specific)
@@ -139,8 +137,6 @@ define([
                 seriesConfig = config.series,
                 filters = config.filters,
                 xOrder = config.xOrder || null;
-
-            console.log(x_dimension, y_dimension, value);
 
             // TODO: workaround on arrays used to standardize all charts.
             // TODO: Add check on multiple columns (like for series)
