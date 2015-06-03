@@ -1,4 +1,4 @@
-/*global define*/
+/*global define, console*/
 define([
         'require',
         'jquery',
@@ -122,7 +122,7 @@ define([
                 else if (model.length > 0 && Array.isArray(model[0])) {
                     return this.adapterUrl ? this.adapterUrl : 'fx-c-c/adapters/matrix_schema_adapter';
                 }
-                else if (model.length > 0 && typeof model[0] == 'object') {
+                else if (model.length > 0 && typeof model[0] === 'object') {
                     return this.adapterUrl ? this.adapterUrl : 'fx-c-c/adapters/star_schema_adapter';
                 }
                 else {

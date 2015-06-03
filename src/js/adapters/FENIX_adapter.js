@@ -126,8 +126,8 @@ define([
                         // TODO: issue with the y axis and inconsistent series
                         // TODO i.e. series with the same name but with different yAxis
                         // if (index != this.aux.x.index && index != this.aux.y.index && index != this.aux.value.index) {
-                        if (index != this.o.aux.x.index && index != this.o.aux.value.index) {
-                            if (column.dataType != 'code') {
+                        if (index !== this.o.aux.x.index && index !== this.o.aux.value.index) {
+                            if (column.dataType !== 'code') {
                                 // check if serie already in series (skip coded columns!)
                                 this.o.aux.series.push(this._getColumnStructure(this.o.$columns, column, index));
                             }
@@ -154,14 +154,13 @@ define([
                 switch (column.dataType) {
                     case 'code':
                         return this._getColumnLabel(columns, column, index);
-                        break;
                     // TODO: add checks for particular cases if needed
                     default :
                         return {
                             column: column,
                             index: index,
                             id: column.id
-                        }
+                        };
                 }
             }
         };
@@ -171,7 +170,7 @@ define([
          * @param columns
          * @param column
          * @param index
-         * @return the column containing the labels and its index
+         * @return {column: *, index: string, columnCode: *, columnCodeIndex: *, id: (*|string)} column containing the labels and its index
          */
         FENIX_Highchart_Adapter.prototype._getColumnLabel = function (columns, column, columnCodeIndex) {
 
@@ -180,14 +179,14 @@ define([
 
             for (var index in columns) {
                 if (columns[index].hasOwnProperty('id')) {
-                    if (columnLabelID == columns[index].id) {
+                    if (columnLabelID === columns[index].id) {
                         return {
                             column: column,
                             index: index,
                             columnCode: columnCode,
                             columnCodeIndex: columnCodeIndex,
                             id: column.id
-                        }
+                        };
                     }
                 }
             }
@@ -195,7 +194,7 @@ define([
 
         FENIX_Highchart_Adapter.prototype.prepareChart = function (config) {
 
-            var config = $.extend(true, {}, this.o, config);
+            config = $.extend(true, {}, this.o, config);
 
             // check wheater the xAxis column is time
             var xSubject = config.aux.x.column.subject,
@@ -275,7 +274,7 @@ define([
                 yAxis.push({title: {text: v}});
             });
 
-            return yAxis
+            return yAxis;
         };
 
         /**
@@ -303,8 +302,8 @@ define([
                 xDataType = x.column.dataType,
                 yIndex = y.index,
                 valueIndex = value.index,
-                auxSeries = auxSeries,
-                yAxis = yAxis,
+/*                auxSeries = auxSeries,
+                yAxis = yAxis,*/
                 series = [];
 
             // Create the series
@@ -333,7 +332,7 @@ define([
                         serie.data.push([this._getDatetimeByDataType(xDataType, row[xIndex]), row[valueIndex]]);
 
                         // Add serie to series
-                        series = this._addSerie(series, serie)
+                        series = this._addSerie(series, serie);
                     }
                 }
 
@@ -379,9 +378,9 @@ define([
                 xDataType = x.column.dataType,
                 yIndex = y.index,
                 valueIndex = value.index,
-                yAxis = yAxis,
+/*                yAxis = yAxis,
+                auxSeries = auxSeries,*/
                 xCategories = xAxis.categories,
-                auxSeries = auxSeries,
                 series = [];
 
             // Create the series
@@ -410,11 +409,11 @@ define([
 
                 if (index !== null) {
 
-                    if (row[valueIndex] != null && index != -1 ) {
+                    if (row[valueIndex] !== null && index !== -1 ) {
                         serie.data[index] = isNaN(row[valueIndex]) ? row[valueIndex] : parseFloat(row[valueIndex]);
 
                         // Add serie to series
-                        series = this._addSerie(series, serie, index)
+                        series = this._addSerie(series, serie, index);
                     }
                 }
 
@@ -449,7 +448,6 @@ define([
             switch(type.toLowerCase()) {
                 case 'year':
                     return Date.UTC(value, 1, 1);
-                    break;
                 default :
                     console.warn("Date type date format not yet supported: " + type);
                     break;

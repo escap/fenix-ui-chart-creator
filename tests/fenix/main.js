@@ -1,9 +1,11 @@
 /*global requirejs*/
 requirejs(['../../src/js/paths'], function (paths) {
 
+    'use strict';
+
     requirejs.config(paths);
 
-    requirejs(['fx-c-c/start', 'amplify'], function (ChartCreator) {
+    requirejs(['fx-c-c/start', 'jquery', 'amplify'], function (ChartCreator, $) {
 
         $.getJSON("data/afo/missing_date.json", function (model) {
         //$.getJSON("data/afo/AFO_AfricaPITDataLang_nig_eth.json", function (model) {

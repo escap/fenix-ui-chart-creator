@@ -1,14 +1,15 @@
 /*global requirejs*/
 requirejs(['../../src/js/paths'], function (paths) {
 
+    'use strict';
+
     requirejs.config(paths);
 
-    requirejs(['fx-c-c/start', 'amplify'], function (ChartCreator) {
+    requirejs(['fx-c-c/start', 'jquery', 'amplify'], function (ChartCreator, $) {
 
         /*        amplify.subscribe('fx.component.chart.ready', function () {
          console.log('created!')
          });*/
-
 
 
         $.getJSON("data/data.json", function (model) {
@@ -52,7 +53,7 @@ requirejs(['../../src/js/paths'], function (paths) {
                         seriesDimensions: [1]
                     }
                 });
-            };
+            }
         });
 
 

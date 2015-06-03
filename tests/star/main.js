@@ -1,9 +1,11 @@
 /*global requirejs*/
 requirejs(['../../src/js/paths'], function (paths) {
 
+    'use strict';
+
     requirejs.config(paths);
 
-    requirejs(['fx-c-c/start', 'amplify'], function (ChartCreator) {
+    requirejs(['fx-c-c/start', 'jquery', 'amplify'], function (ChartCreator, $) {
 
 /*        amplify.subscribe('fx.component.chart.ready', function () {
             console.log('created!')
@@ -133,14 +135,12 @@ requirejs(['../../src/js/paths'], function (paths) {
 
         $.getJSON("data/flude/data.json", function (model) {
 
-            console.log(model);
-
             var creator = new ChartCreator();
 
             creator.init({
                 model: model,
                 adapter: {
-                    filters: ['Country'],
+                    filters: ['Country']
                     //type: 'timeserie',
                     //groupby: ['Country']
                 },
@@ -153,7 +153,6 @@ requirejs(['../../src/js/paths'], function (paths) {
 
         function renderCharts(creator) {
 
-            console.log(creator);
             creator.render({
                 container: "#chart1",
                 creator: {
@@ -166,7 +165,7 @@ requirejs(['../../src/js/paths'], function (paths) {
                     series: [
                         {
                             filters: {
-                                'Country': 'BWA',
+                                'Country': 'BWA'
                             },
                             valueDimensions: 'NFLoss',
                             name: 'BWA'
@@ -174,7 +173,7 @@ requirejs(['../../src/js/paths'], function (paths) {
                     ]
                 }
             });
-        };
+        }
 
 
 

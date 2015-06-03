@@ -167,7 +167,7 @@ define([
             s.forEach(function (v) {
                 series.push({
                     name: v,
-                    data: _.range(xCategoriesLength).map(function () { return null })
+                    data: _.range(xCategoriesLength).map(function () { return null; })
                 });
             });
 
@@ -184,14 +184,14 @@ define([
                     serie = _.findWhere(series, {name: this._createSeriesName(row, seriesIndexes)});
 
                 // if xAxis categories and series exists
-                if (xCategoryIndex != -1 && (serie !== undefined || serie !== null)) {
+                if (xCategoryIndex !== -1 && (serie !== undefined || serie !== null)) {
 
                     // Create yAxis if exists
                     if (serie.yAxis === undefined && yIndex) {
                         serie.yAxis = this._getYAxisIndex(yAxis, row[yIndex]);
                     }
 
-                    if (row[valueIndex] != null) {
+                    if (row[valueIndex] !== null) {
                         // push the value of the serie
                         serie.data[xCategoryIndex] = isNaN(row[valueIndex]) ? row[valueIndex] : parseFloat(row[valueIndex]);
                     }
@@ -215,8 +215,9 @@ define([
 
             _.each(indexes, function (index) {
                 if (row[index] !== undefined && row[index] !== null) {
-                    if (name != '')
+                    if (name !== '') {
                         name = name.concat(' ');
+                    }
                     name = name.concat(row[index]);
                 }
             }, this);
@@ -306,7 +307,7 @@ define([
             _.each(data, function(row) {
 
                 var name = this._createSeriesName(row, seriesIndexes);
-                if (row[valueIndex] != null && name != null) {
+                if (row[valueIndex] !== null && name !== null) {
                     chartObj.series[0].data.push([name, isNaN(row[valueIndex])? row[valueIndex]: parseFloat(row[valueIndex])]);
                 }
 

@@ -155,7 +155,7 @@ define([
                 data.push(this.filterSerie(chartsData, serie, filters));
             }, this);
 
-            if (data.length == 0) {
+            if (data.length === 0) {
                 console.error("No data available TODO: (handle it)");
             }
 
@@ -176,7 +176,7 @@ define([
                 // TODO: Add check on multiple columns (like for series)
                 valueDimensions = _.isArray(valueDimensions)? valueDimensions[0]: valueDimensions;
 
-                if (valueDimensions == null) {
+                if (valueDimensions === null) {
                     console.error("value (dimension) is null");
                     throw new Error("value (dimension) is null");
                 }
