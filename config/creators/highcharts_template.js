@@ -144,7 +144,7 @@ define(function () {
                 }
             }
         },
-        plotOptions: {
+/*        plotOptions: {
             series: {
                 allowPointSelect: true, //Permette di selezionare i punti della chart
                 //pointPlacement: "on", Per partire dall'origine
@@ -178,7 +178,7 @@ define(function () {
                     }
                 }
             }
-        },
+        },*/
 
 
         title: {
