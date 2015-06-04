@@ -1,13 +1,15 @@
 /*global define*/
 define(function () {
 
+    'use strict';
+
     return {
 
         //Line chart
         chart: {
             events: {},
 
-            type: 'area', //Tipo di grafico:  area, areaspline, boxplot, bubble, column, line, pie, scatter, spline
+            type: 'line', //Tipo di grafico:  area, areaspline, boxplot, bubble, column, line, pie, scatter, spline
 
             alignTicks: false,
             backgroundColor: '#FFFFFF', //Colore di background
@@ -73,7 +75,7 @@ define(function () {
             enabled: false //Attiva o disattiva il link di HighCharts dalla chart
         },
         exporting: {
-            enabled: false
+            enabled: true
         },
         navigation: { //Modifica lo stile dei bottoni e spesso del solo bottone dell'esportazione (lo sfondo)
             buttonOptions: {
@@ -142,7 +144,7 @@ define(function () {
                 }
             }
         },
-        plotOptions: {
+/*        plotOptions: {
             series: {
                 allowPointSelect: true, //Permette di selezionare i punti della chart
                 //pointPlacement: "on", Per partire dall'origine
@@ -159,11 +161,6 @@ define(function () {
                     }
                 },
                 fillColor: {
-                    linearGradient: [0, 0, 0, 350],
-                    stops: [
-                        [0, 'rgba(55, 155, 205,0.5)'],
-                        [1, 'rgba(255,255,255,0)']
-                    ]
                 },
                 marker: {
                     enabled: false, //Attiva o disattiva i marker
@@ -171,38 +168,17 @@ define(function () {
                     symbol: 'circle', // Tipologia di marker
                     radius: 4,
                     lineWidth: 1,
-                    lineColor: '#379bcd',
-                    fillColor: '#FFFFFF',
                     states: {
                         hover: {
                             enabled: true, // Attiva o disattiva il marker quando si passa sopra la chart
                             symbol: 'circle',
-                            fillColor: '#FFFFFF',
-                            lineColor: '#3ca7da',
                             radius: 5,
                             lineWidth: 2
                         }
                     }
                 }
-                //cursor: 'cell',// Cambia il cursore on rollover del grafico
-                //dashStyle: 'ShortDash', //Tipologia di linea (Solid ShortDash ShortDot ShortDashDot ShortDashDotDot Dot Dash LongDash DashDot LongDashDot LongDashDotDot)
-                /*dataLabels: {
-                 enabled: true, //Attiva le label sopra i punti nel grafico
-                 backgroundColor: '#FFFFFF',
-                 borderRadius: 3,
-                 borderWidth: 1,
-                 borderColor: '#666666'
-
-                 },*/
-                /*events: {// Aggiunge eventi alla chart
-                 show: function(event) { //Aggiunge evento di quando un elemnto ricompare cliccandolo dalla legenda
-                 alert ('The series was just shown');
-                 }
-                 },*/
-
             }
-        },
-        //END
+        },*/
 
 
         title: {
@@ -229,31 +205,17 @@ define(function () {
                     fontSize: 12
                 }
             },
-            type: 'datetime',
-            dateTimeLabelFormats: { // don't display the dummy year
+            //type: 'datetime',
+/*            dateTimeLabelFormats: { // don't display the dummy year
                 //month: '%e. %b',
                 year: '%Y'
-            },
+            },*/
             title: {
                 enabled: false,
                 text: 'null'
             }
-
-            /*plotLines: [{ //linea custom possono essere anche più di una, è un array
-             color: '#666666',
-             width: 1,
-             value: 11.5,
-             dashStyle: 'dash',
-             zIndex: 3
-             }, { //linea custom possono essere anche più di una, è un array
-             color: '#FFFFFF',
-             width: 1,
-             value: 11.5,
-             zIndex: 2
-             }]*/
         },
         yAxis: {
-
             gridLineWidth: 1, // IMPORTANTE - Attiva le linee verticali
             lineWidth: 1,
             //tickWidth: 1,
@@ -278,10 +240,12 @@ define(function () {
             ]
         },
         tooltip: {
-            valueSuffix: 'M',
-            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+            //valueSuffix: '',
+           // backgroundColor: 'rgba(255, 255, 255, 0.95)',
             borderWidth: 1,
-            shadow: false
+            shadow: true,
+            crosshairs: "mixed",
+           // shared: true
         }
 
     };

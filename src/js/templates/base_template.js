@@ -1,54 +1,61 @@
-/*global define*/
+/*global define,console*/
 define([
         'jquery',
-        'text!fx-c-c/html/templates/base_template.html'
+        'handlebars',
+        'text!fx-c-c/html/templates/base_template.hbs'
     ],
-    function ($, template) {
+    function ($, Handlebars, template) {
 
-        var defaultOptions = {};
+        'use strict';
 
-        function Base_template() {
-            $.extend(true, this, defaultOptions);
+        var defaultOptions = {
+        };
+
+        function Base_template(config) {
+            // this should be always reinitialized
+            this.o = {};
+            $.extend(true, this.o, defaultOptions, config);
+            return this;
         }
 
-        Base_template.prototype.render = function (config) {
-            $.extend(true, this, config);
+        Base_template.prototype.render = function () {
 
             if (this._validateInput() === true) {
                 this._initVariable();
-                this._injectTemplate();
+                this._injectTemplate(template);
             } else {
-                console.error(this.errors);
+                console.error(this.o.errors);
                 throw new Error("FENIX Chart creator has not a valid configuration");
             }
+
+            return this;
         };
 
         Base_template.prototype._injectTemplate = function () {
-            this.$container.html(template);
+            var source = $(template).html();
+            var t = Handlebars.compile(source);
+            var dynamic_data = this.o;
+            var html = t(dynamic_data);
+            this.o.$container.html(html);
         };
 
         Base_template.prototype._initVariable = function () {
-            this.$container = $(this.container);
+            this.o.$container = $(this.o.container);
         };
 
         Base_template.prototype._validateInput = function () {
 
-            this.errors = {};
+            this.o.errors = {};
 
-            if (!this.hasOwnProperty("container")) {
-                this.errors['container'] = "'container' attribute not present";
+            if (!this.o.hasOwnProperty("container")) {
+                this.o.errors.container = "'container' attribute not present";
             }
 
-            //Model
-            if (!this.hasOwnProperty("model")) {
-                this.errors['model'] = "'model' attribute not present.";
-            }
+            return (Object.keys(this.o.errors).length === 0);
+        };
 
-            if (typeof this.model !== 'object') {
-                this.errors['model'] = "'model' is not an object.";
-            }
+        Base_template.prototype.destroy = function () {
 
-            return (Object.keys(this.errors).length === 0);
         };
 
         return Base_template;
