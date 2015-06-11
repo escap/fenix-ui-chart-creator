@@ -23,7 +23,7 @@ define(function () {
             highcharts: '{FENIX_CDN}/js/highcharts/4.0.4/js/highcharts',
 
 
-            // highcharts plugins
+            // highcharts plugins TODO: switch to CDN if they are going to be used
             'highcharts-export': 'http://code.highcharts.com/modules/exporting',
             'highcharts-export-csv': 'http://highslide-software.github.io/export-csv/export-csv'
         },
