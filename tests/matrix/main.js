@@ -1,7 +1,14 @@
 /*global requirejs*/
-requirejs(['../../src/js/paths'], function (paths) {
+requirejs(['../../src/js/paths', '../utils'], function (paths, Utils) {
 
     'use strict';
+
+    var FENIX_CDN = "//fenixapps.fao.org/repository",
+        baseUrl = '../../src/js/';
+
+    // replace placeholders and baseUrl
+    paths = Utils.replacePlaceholders(paths, FENIX_CDN);
+    paths.baseUrl = baseUrl;
 
     requirejs.config(paths);
 

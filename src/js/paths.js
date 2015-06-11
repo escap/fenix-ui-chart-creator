@@ -5,8 +5,6 @@ define(function () {
 
     var config = {
 
-        baseUrl: '../../src/js/',
-
         paths : {
             //'fx-c-c': prefix,
             'fx-c-c/start': './start',
@@ -17,12 +15,13 @@ define(function () {
             'fx-c-c/creators': './creators',
 
             // third party libs
-            text: '//fenixapps.fao.org/repository/js/requirejs/plugins/text/2.0.12/text',
-            jquery: "//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min",
-            highcharts: "//fenixapps.fao.org/repository/js/highcharts/4.0.4/js/highcharts", //'//code.highcharts.com/highcharts',
-            underscore: "//fenixapps.fao.org/repository/js/underscore/1.7.0/underscore.min",
-            amplify: "//fenixapps.fao.org/repository/js/amplify/1.1.2/amplify.min",
-            handlebars: "//fenixapps.fao.org/repository/js/handlebars/2.0.0/handlebars",
+            text: '{FENIX_CDN}/js/requirejs/plugins/text/2.0.12/text',
+            jquery: '{FENIX_CDN}/js/jquery/2.1.1/jquery.min',
+            underscore: '{FENIX_CDN}/js/underscore/1.7.0/underscore.min',
+            amplify: '{FENIX_CDN}/js/amplify/1.1.2/amplify.min',
+            'handlebars': '{FENIX_CDN}/js/handlebars/2.0.0/handlebars',
+            highcharts: '{FENIX_CDN}/js/highcharts/4.0.4/js/highcharts',
+
 
             // highcharts plugins
             'highcharts-export': 'http://code.highcharts.com/modules/exporting',
