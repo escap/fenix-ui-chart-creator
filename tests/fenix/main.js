@@ -21,7 +21,7 @@ requirejs(['../../src/js/paths', '../utils'], function (paths, Utils) {
 
             var creator = new ChartCreator();
 
-            /*creator.init({
+            creator.init({
                 model: model,
                 adapter: {
                     type: "timeserie",
@@ -90,12 +90,12 @@ requirejs(['../../src/js/paths', '../utils'], function (paths, Utils) {
                         }
                     }
                 );
-            }*/
+            }
 
             creator.init({
                 model: model,
                 adapter: {
-                    type: "standard",
+                    type: "timeserie",
                     xDimensions: ['time'],
                     yDimensions: ['Element'],
                     valueDimensions: ['value'],

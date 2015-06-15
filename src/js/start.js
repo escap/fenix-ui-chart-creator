@@ -46,13 +46,15 @@ define([
             // render template
             template.render();
 
+            var chartObj = this.adapter.prepareChart(config.adapter || {});
+
             // TODO: Handle the error
             try {
 
                 // getting chart definition
-                var chartObj = this.adapter.prepareChart(config.adapter || {});
 
-               // console.log(chartObj);
+
+                //console.log(chartObj);
 
                 // render chart
                 creator.render({chartObj: chartObj});

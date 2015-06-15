@@ -447,7 +447,7 @@ define([
             // TODO: this is can be simplified and not applied to each row
             switch(type.toLowerCase()) {
                 case 'year':
-                    return Date.UTC(value, 1, 1);
+                    return Date.UTC(value, 0, 1);
                 default :
                     console.warn("Date type date format not yet supported: " + type);
                     break;
