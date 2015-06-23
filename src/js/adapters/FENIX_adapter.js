@@ -247,6 +247,13 @@ define([
                 // create xAxis categories
                 chartObj.xAxis.categories = this._createXAxisCategories(data, x.index);
                 chartObj.series = this._createSeriesStandard(data, x, y, value, chartObj.yAxis, chartObj.xAxis, auxSeries);
+
+/*                // TODO: make it nicer
+                // check if the xAxis series is just one value, force to column chart
+                console.log( chartObj.xAxis.categories)
+                if (chartObj.xAxis.categories.length <= 1 ) {
+                    chartObj.chart.type = 'column';
+                }*/
             }
 
             return chartObj;
