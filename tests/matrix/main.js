@@ -64,7 +64,7 @@ requirejs(['../../src/js/paths', '../utils'], function (paths, Utils) {
         });
 
 
-    /*    $.getJSON("data/no_date.json", function (model) {
+        $.getJSON("data/no_date.json", function (model) {
 
             var creator = new ChartCreator();
 
@@ -211,7 +211,7 @@ requirejs(['../../src/js/paths', '../utils'], function (paths, Utils) {
                     }
                 });
             };
-        });*/
+        });
 
 
     });
