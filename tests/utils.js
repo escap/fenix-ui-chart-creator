@@ -80,6 +80,13 @@ define([],
                         chartObj: {
                             chart:{
                                 type: "pie"
+                            },
+                            plotOptions: {
+                                pie: {
+                                    allowPointSelect: true,
+                                    cursor: 'pointer',
+                                    showInLegend: true
+                                }
                             }
                         }
                     }
