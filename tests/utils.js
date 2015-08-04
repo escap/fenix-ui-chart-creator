@@ -1,6 +1,8 @@
-/*global define, console*/
+/*global define, console, $*/
 define([],
     function () {
+
+        // TODO: JQuery is assumed to be already loaded
 
         'use strict';
 
@@ -28,9 +30,55 @@ define([],
                 return Math.random().toString(36).substring(7);
             }
 
+            function lineChartOptions(options, container) {
+                return $.extend({}, options || {}, {
+                    container: container || createDiv(),
+                    creator: {
+                        chartObj: {
+                            chart:{
+                                type: "line"
+                            },
+                            tooltip: {
+                                crosshairs: "mixed",
+                                shared: true
+                            }
+                        }
+                    }
+                });
+            }
+
+            function columnChartOptions(options, container) {
+                return $.extend({}, options || {}, {
+                    container: container || createDiv(),
+                    creator: {
+                        chartObj: {
+                            chart:{
+                                type: "column"
+                            }
+                        }
+                    }
+                });
+            }
+
+            function barChartOptions(options, container) {
+                return $.extend({}, options || {}, {
+                    container: container || createDiv(),
+                    creator: {
+                        chartObj: {
+                            chart:{
+                                type: "bar"
+                            }
+                        }
+                    }
+                });
+            }
+
             return {
                 replacePlaceholders: replacePlaceholders,
-                createDiv: createDiv
+                createDiv: createDiv,
+                lineChartOptions: lineChartOptions,
+                columnChartOptions: columnChartOptions,
+                barChartOptions: barChartOptions
             };
         };
     return Utils();

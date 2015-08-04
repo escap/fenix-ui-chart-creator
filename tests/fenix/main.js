@@ -12,51 +12,7 @@ requirejs(['../../src/js/paths', '../utils'], function (paths, Utils) {
 
     requirejs.config(paths);
 
-    function lineChartOptions(options, container) {
-        return $.extend({}, options || {}, {
-            container: container || Utils.createDiv(),
-            creator: {
-                chartObj: {
-                    chart:{
-                        type: "line"
-                    },
-                    tooltip: {
-                        crosshairs: "mixed",
-                        shared: true
-                    }
-                }
-            }
-        });
-    }
-
-    function columnChartOptions(options, container) {
-        return $.extend({}, options || {}, {
-            container: container || Utils.createDiv(),
-            creator: {
-                chartObj: {
-                    chart:{
-                        type: "column"
-                    }
-                }
-            }
-        });
-    }
-
-    function barChartOptions(options, container) {
-        return $.extend({}, options || {}, {
-            container: container || Utils.createDiv(),
-            creator: {
-                chartObj: {
-                    chart:{
-                        type: "bar"
-                    }
-                }
-            }
-        });
-    }
-
-
-    requirejs(['fx-c-c/start', 'jquery', 'amplify'], function (ChartCreator, $) {
+    requirejs(['fx-c-c/start', 'jquery', '../utils', 'amplify'], function (ChartCreator, $, Utils) {
 
         // Chart with scattered data
         $.getJSON("data/afo/scattered_data.json", function (model) {
@@ -76,15 +32,15 @@ requirejs(['../../src/js/paths', '../utils'], function (paths, Utils) {
                 },
                 template: {},
                 creator: {}
-            })).then(function( creator ) {
+            })).then(function(creator) {
                 var o = {
                     template: {
-                        title: "Chart with Timeserie",
+                        title: "Chart with Timeserie"
                     }
                 };
-                creator.render(lineChartOptions(o));
-                creator.render(columnChartOptions(o));
-                creator.render(barChartOptions(o));
+                creator.render(Utils.lineChartOptions(o));
+                creator.render(Utils.columnChartOptions(o));
+                creator.render(Utils.barChartOptions(o));
             });
 
             // Scattered Data Chart
@@ -102,15 +58,15 @@ requirejs(['../../src/js/paths', '../utils'], function (paths, Utils) {
                 },
                 template: {},
                 creator: {}
-            })).then(function( creator ) {
+            })).then(function(creator) {
                 var o = {
                     template: {
-                        title: "Chart with scattered data",
+                        title: "Chart with scattered data"
                     }
                 };
-                creator.render(lineChartOptions(o));
-                creator.render(columnChartOptions(o));
-                creator.render(barChartOptions(o));
+                creator.render(Utils.lineChartOptions(o));
+                creator.render(Utils.columnChartOptions(o));
+                creator.render(Utils.barChartOptions(o));
             });
         });
     });
