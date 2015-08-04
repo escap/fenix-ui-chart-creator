@@ -73,12 +73,26 @@ define([],
                 });
             }
 
+            function pieChartOptions(options, container) {
+                return $.extend({}, options || {}, {
+                    container: container || createDiv(),
+                    creator: {
+                        chartObj: {
+                            chart:{
+                                type: "pie"
+                            }
+                        }
+                    }
+                });
+            }
+
             return {
                 replacePlaceholders: replacePlaceholders,
                 createDiv: createDiv,
                 lineChartOptions: lineChartOptions,
                 columnChartOptions: columnChartOptions,
-                barChartOptions: barChartOptions
+                barChartOptions: barChartOptions,
+                pieChartOptions: pieChartOptions
             };
         };
     return Utils();
