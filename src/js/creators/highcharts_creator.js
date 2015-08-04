@@ -109,7 +109,6 @@ define([
         };
 
         HightchartCreator.prototype.noDataAvailable = function () {
-            console.log("here");
             this.$container.html(this.o.noData);
         };
 
