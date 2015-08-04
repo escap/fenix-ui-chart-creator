@@ -12,7 +12,7 @@ requirejs(['../../src/js/paths', '../utils'], function (paths, Utils) {
 
     requirejs.config(paths);
 
-    requirejs(['fx-c-c/start', 'jquery', '../utils', 'amplify'], function (ChartCreator, $, Utils) {
+    requirejs(['fx-c-c/start', 'jquery', 'amplify'], function (ChartCreator, $) {
 
         // Chart with scattered data
         $.getJSON("data/afo/scattered_data.json", function (model) {
