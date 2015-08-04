@@ -94,7 +94,6 @@ requirejs(['../../src/js/paths', '../utils'], function (paths, Utils) {
 
         // No Data Chart
         $.getJSON("data/nodata.json", function (model) {
-
             var c = new ChartCreator();
             $.when(c.init({
                 model: model
@@ -106,12 +105,10 @@ requirejs(['../../src/js/paths', '../utils'], function (paths, Utils) {
                 };
                 creator.render(Utils.columnChartOptions(o));
             });
-
         });
 
         // PIE
         $.getJSON("data/pie.json", function (model) {
-
             var c = new ChartCreator();
             $.when(c.init({
                 model: model
@@ -131,6 +128,7 @@ requirejs(['../../src/js/paths', '../utils'], function (paths, Utils) {
                 };
                 creator.render(Utils.pieChartOptions(o));
             });
+
         });
 
     });
