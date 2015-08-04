@@ -19,7 +19,7 @@ requirejs(['../../src/js/paths', '../utils'], function (paths, Utils) {
 
            // Consistant Timeserie Chart
             var c = new ChartCreator();
-            $.when( c.init({
+            $.when(c.init({
                 model: model,
                 adapter: {
                     type: "timeserie",
@@ -43,7 +43,7 @@ requirejs(['../../src/js/paths', '../utils'], function (paths, Utils) {
 
             // Scattered Data Chart
             var c2 = new ChartCreator();
-            $.when( c2.init({
+            $.when(c2.init({
                 model: model,
                 adapter: {
                     type: "line",
@@ -68,7 +68,7 @@ requirejs(['../../src/js/paths', '../utils'], function (paths, Utils) {
 
             // Pie hart
             var c3 = new ChartCreator();
-            $.when( c3.init({
+            $.when(c3.init({
                 model: model,
                 adapter: {
                     type: "pie",
@@ -92,7 +92,7 @@ requirejs(['../../src/js/paths', '../utils'], function (paths, Utils) {
 
             // Pie Chart with custom series
             var c4 = new ChartCreator();
-            $.when( c4.init({
+            $.when(c4.init({
                 model: model,
                 adapter: {
                     type: "pie",
