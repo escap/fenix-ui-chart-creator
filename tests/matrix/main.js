@@ -14,6 +14,7 @@ requirejs(['../../src/js/paths', '../utils'], function (paths, Utils) {
 
     requirejs(['fx-c-c/start', 'jquery', 'amplify'], function (ChartCreator, $) {
 
+        // Chart with timeseries
         $.getJSON("data/data.json", function (model) {
 
             // Line chart with X-Axis order 'xOrder'
@@ -40,6 +41,7 @@ requirejs(['../../src/js/paths', '../utils'], function (paths, Utils) {
 
         });
 
+        // Chart with no date
         $.getJSON("data/no_date.json", function (model) {
 
             // Line chart with X-Axis order 'xOrder'
@@ -65,7 +67,7 @@ requirejs(['../../src/js/paths', '../utils'], function (paths, Utils) {
 
         });
 
-
+        // FAOSTAT Rankings workaround
         $.getJSON("data/rankings.json", function (model) {
 
             // reshape model data (rankings has it's own join data method)
@@ -90,7 +92,7 @@ requirejs(['../../src/js/paths', '../utils'], function (paths, Utils) {
 
         });
 
-
+        // No Data Chart
         $.getJSON("data/nodata.json", function (model) {
 
             var c = new ChartCreator();
@@ -107,6 +109,7 @@ requirejs(['../../src/js/paths', '../utils'], function (paths, Utils) {
 
         });
 
+        // PIE
         $.getJSON("data/pie.json", function (model) {
 
             var c = new ChartCreator();
@@ -128,39 +131,7 @@ requirejs(['../../src/js/paths', '../utils'], function (paths, Utils) {
                 };
                 creator.render(Utils.pieChartOptions(o));
             });
-
-            //var creator = new ChartCreator();
-            //
-            //creator.init({
-            //    model: model,
-            //    adapter: {
-            //
-            //    },
-            //    template: {
-            //    },
-            //    creator: {},
-            //    onReady: renderCharts
-            //});
-            //
-            //
-            //function renderCharts(creator) {
-            //
-            //    creator.render({
-            //        container: "#chart5",
-            //        creator: {
-            //        },
-            //        adapter: {
-            //            type: "pie",
-            //            filters: {
-            //                value: 0,
-            //                series: [1]
-            //            }
-            //
-            //        }
-            //    });
-            //};
         });
-
 
     });
 });
