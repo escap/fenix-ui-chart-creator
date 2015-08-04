@@ -22,6 +22,7 @@ define([
         }
 
         ChartCreator.prototype.init = function (config) {
+            this.dfd = $.Deferred();
 
             var self = this;
             try {
@@ -32,6 +33,8 @@ define([
                 self.onError(e);
             }
 
+            // Return the Promise so caller can't change the Deferred
+            return this.dfd.promise();
         };
 
         ChartCreator.prototype.render = function (config) {
@@ -96,6 +99,7 @@ define([
                 if (typeof config.onReady === 'function') {
                     config.onReady(self);
                 }
+                self.dfd.resolve(self);
             });
         };
 
