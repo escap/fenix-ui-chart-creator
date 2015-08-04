@@ -14,14 +14,13 @@ requirejs(['../../src/js/paths', '../utils'], function (paths, Utils) {
 
     requirejs(['fx-c-c/start', 'jquery', 'amplify'], function (ChartCreator, $) {
 
+
+        // missing date chart
         $.getJSON("data/afo/missing_date.json", function (model) {
-        //$.getJSON("data/afo/AFO_AfricaPITDataLang_nig_eth.json", function (model) {
-        //$.getJSON("tests/resources/AFO_AfricaPITDataLang.json", function (model) {
-       // $.getJSON("tests/resources/afo/AFO_ProductionCapacities.json", function (model) {
 
-            var creator = new ChartCreator();
-
-            creator.init({
+            // Timeserie Chart
+            var c = new ChartCreator();
+            $.when( c.init({
                 model: model,
                 adapter: {
                     type: "timeserie",
@@ -33,13 +32,63 @@ requirejs(['../../src/js/paths', '../utils'], function (paths, Utils) {
                     }
                 },
                 template: {},
-                creator: {},
-                onReady: renderChart1
-            });
+                creator: {}
+            })).then(function( creator ) {
+                    creator.render({
+                            container: Utils.createDiv(),
+                            creator: {
+                                chartObj: {
+                                    chart:{
+                                        type: "line"
+                                    },
+                                    tooltip: {
+                                        crosshairs: "mixed",
+                                        shared: true
+                                    }
+                                }
+                            }
+                        }
+                    );
+                }
+            );
 
-            var creator2 = new ChartCreator();
+            // Line chart
+            c = new ChartCreator();
+            $.when( c.init({
+                model: model,
+                adapter: {
+                    type: "line",
+                    filters: {
+                        xAxis: 'time',
+                        yAxis: 'Element',
+                        value: 'value',
+                        series: []
+                    }
+                },
+                template: {},
+                creator: {}
+            })).then(function( creator ) {
+                    creator.render({
+                            container: Utils.createDiv(),
+                            creator: {
+                                chartObj: {
+                                    chart:{
+                                        type: "line"
+                                    },
+                                    tooltip: {
+                                        crosshairs: "mixed",
+                                        shared: true
+                                    }
+                                }
+                            }
+                        }
+                    );
+                }
+            );
 
-            creator2.init({
+            // Bar Chart with the same data
+            c = new ChartCreator();
+            $.when( c.init({
                 model: model,
                 adapter: {
                     lang: 'EN',
@@ -53,78 +102,24 @@ requirejs(['../../src/js/paths', '../utils'], function (paths, Utils) {
                 },
                 template: {},
                 creator: {},
-                onReady: renderChart2,
-            });
-
-            function renderChart1() {
-
-                creator.render(
-                    {
-                        container: "#chart1",
-                        creator: {
-                            chartObj: {
-                                chart:{
-                                    type: "line"
-                                },
-                                tooltip: {
-                                    crosshairs: "mixed",
-                                    shared: true
+            })).then(function( creator ) {
+                    creator.render( {
+                            container: Utils.createDiv(),
+                            creator: {
+                                chartObj: {
+                                    chart:{
+                                        type: "column"
+                                    }
                                 }
                             }
                         }
-                    }
-                );
-            }
+                    );
+                }
+            );
 
-            function renderChart2(creator) {
-
-                creator.render(
-                    {
-                        container: "#chart2",
-                        creator: {
-                            chartObj: {
-                                chart:{
-                                    type: "column"
-                                }
-                            }
-                        }
-                    }
-                );
-            }
-
-            creator.init({
-                model: model,
-                adapter: {
-                    type: "timeserie",
-                    xDimensions: ['time'],
-                    yDimensions: ['Element'],
-                    valueDimensions: ['value'],
-                    seriesDimensions: []
-                },
-                template: {},
-                creator: {},
-                onReady: renderChart1
-            });
-
-            function renderChart1(creator) {
-
-                creator.render(
-                    {
-                        container: "#chart2",
-                        creator: {
-                            chartObj: {
-                                chart:{
-                                    type: "column"
-                                }
-                            }
-                        }
-                    }
-                );
-            }
 
 
         });
-
 
 
 
