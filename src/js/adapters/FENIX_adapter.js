@@ -24,6 +24,7 @@ define([
                 },
 
                 // filtering parameters
+                // TODO: if type is 'pie' force the adapted to avoid xDimensions and yDimensions
                 xDimensions: ['time'],
                 yDimensions: ['mu'],
                 valueDimensions: ['value'],
@@ -88,6 +89,8 @@ define([
 
             // parsing columns to get
             columns.forEach(_.bind(function (column, index) {
+
+                // TODO: if type is 'pie' force the adapted to avoid xDimensions and yDimensions
 
                 // TODO: this should be already checked and validated
                 if (column.hasOwnProperty('id')) {
@@ -196,21 +199,16 @@ define([
 
             config = $.extend(true, {}, this.o, config);
 
-            // check wheater the xAxis column is time
-            var xSubject = config.aux.x.column.subject,
-                chartObj;
-
             switch (config.type) {
                 case 'pie':
-                    break;
+                    return this._processPieChart(config);
                 case 'scatter':
                     break;
                 default :
-                    chartObj = this._processStandardChart(config, (xSubject === 'time' && config.type.toLowerCase() === 'timeserie'));
-                    break;
+                    // check wheater the xAxis column is time
+                    var xSubject = config.aux.x.column.subject;
+                    return this._processStandardChart(config, (xSubject === 'time' && config.type.toLowerCase() === 'timeserie'));
             }
-
-            return chartObj;
         };
 
         /**
@@ -220,7 +218,6 @@ define([
          */
         FENIX_Highchart_Adapter.prototype._processStandardChart = function (config, isTimeserie) {
 
-
             var chartObj = config.chartObj,
                 x = config.aux.x,
                 y = config.aux.y,
@@ -228,13 +225,16 @@ define([
                 auxSeries = config.aux.series,
                 data = config.$data;
 
-            // Sort Data TODO: check if the sort is alway applicable
+            // Sort Data TODO: check if the sort is always applicable
             this._sortData(data, x.index);
 
             // Process yAxis
             if (y.index) {
                 chartObj.yAxis = this._createYAxis(data, y.index);
             }
+
+            console.log(y.index);
+            console.log(chartObj.yAxis);
 
             // create Series
             if (isTimeserie === true) {
@@ -309,8 +309,6 @@ define([
                 xDataType = x.column.dataType,
                 yIndex = y.index,
                 valueIndex = value.index,
-/*                auxSeries = auxSeries,
-                yAxis = yAxis,*/
                 series = [];
 
             // Create the series
@@ -381,12 +379,10 @@ define([
         };
 
         FENIX_Highchart_Adapter.prototype._createSeriesStandard = function (data, x, y, value, yAxis, xAxis, auxSeries) {
+
             var xIndex = x.index,
-                xDataType = x.column.dataType,
                 yIndex = y.index,
                 valueIndex = value.index,
-/*                yAxis = yAxis,
-                auxSeries = auxSeries,*/
                 xCategories = xAxis.categories,
                 series = [];
 
@@ -436,6 +432,7 @@ define([
          * @private
          */
         FENIX_Highchart_Adapter.prototype._sortData = function (data, index) {
+
             data.sort(_.bind(function (a, b) {
 
                 if (a[index] < b[index]) {
@@ -459,7 +456,6 @@ define([
                     console.warn("Date type date format not yet supported: " + type);
                     break;
             }
-
         };
 
         FENIX_Highchart_Adapter.prototype._getYAxisIndex = function (yAxis, label) {
@@ -491,6 +487,38 @@ define([
             }, this);
 
             return name;
+        };
+
+        FENIX_Highchart_Adapter.prototype._processPieChart = function(config) {
+            var chartObj = config.chartObj,
+                valueIndex = config.aux.value.index,
+                auxSeries = config.aux.series,
+                data = config.$data;
+
+            // force type "pie" to chart
+            chartObj.chart.type = "pie";
+
+            // initialize the series
+            chartObj.series = [
+                {
+                    // TODO: name?
+                    name: '',
+                    data: []
+                }
+            ];
+
+            // create PIE series
+            _.each(data, function(row) {
+
+                var name = this._createSeriesName(row, auxSeries);
+                if (row[valueIndex] !== null && name !== null) {
+                    // TODO ADD Check on values == 0? (They should be not allowed in the pie chart)
+                    chartObj.series[0].data.push([name, isNaN(row[valueIndex])? row[valueIndex]: parseFloat(row[valueIndex])]);
+                }
+
+            }, this);
+
+            return chartObj;
         };
 
         FENIX_Highchart_Adapter.prototype._onValidateDataSuccess = function () {
