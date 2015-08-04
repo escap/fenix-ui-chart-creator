@@ -14,9 +14,8 @@ requirejs(['../../src/js/paths', '../utils'], function (paths, Utils) {
 
     requirejs(['fx-c-c/start', 'jquery', 'amplify'], function (ChartCreator, $) {
 
-
-        // missing date chart
-        $.getJSON("data/afo/missing_date.json", function (model) {
+        // Chart with scattered data
+        $.getJSON("data/afo/scattered_data.json", function (model) {
 
             // Timeserie Chart
             var c = new ChartCreator();
@@ -118,11 +117,6 @@ requirejs(['../../src/js/paths', '../utils'], function (paths, Utils) {
             );
 
 
-
         });
-
-
-
-
     });
 });
