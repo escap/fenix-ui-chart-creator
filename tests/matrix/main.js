@@ -118,6 +118,7 @@ requirejs(['../../src/js/paths', '../utils'], function (paths, Utils) {
                         title: "PIE Chart"
                     },
                     adapter: {
+                        // TODO: add default PIE dimensions?
                         type: "pie",
                         xDimensions: null,
                         yDimensions: null,

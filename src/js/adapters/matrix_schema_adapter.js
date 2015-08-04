@@ -20,6 +20,7 @@ define([
                     series: []
                 },
 
+                // TODO: add default PIE dimensions?
                 xDimensions: [0],
                 yDimensions: [3],
                 valueDimensions: 2,
@@ -78,22 +79,17 @@ define([
 
             var config = $.extend(true, this.o, c);
 
-            var chartObj;
-
             switch (config.type) {
                 case 'pie':
-                    chartObj = this._processPieChart(config);
-                    break;
+                    return this._processPieChart(config);
                 case 'scatter':
                     break;
                 case 'timeserie':
                     break;
                 default :
-                    chartObj = this._processStandardChart(config);
-                    break;
+                    return this._processStandardChart(config);
             }
 
-            return chartObj;
         };
 
         Matrix_Schema_Adapter.prototype._processStandardChart = function(config) {
@@ -107,9 +103,6 @@ define([
                 valueIndex = config.valueDimensions,
                 yAxisIndex = config.yDimensions,
                 xOrder = config.xOrder || null;
-
-
-            console.log(xAxisIndex,seriesIndexes, valueIndex, yAxisIndex, xOrder);
 
             // TODO: make it faster? In theory can be done faster, but probably is not needed
 
@@ -287,10 +280,11 @@ define([
 
 
         Matrix_Schema_Adapter.prototype._processPieChart = function(config) {
+            // TODO: add default PIE dimensions?
             var chartObj  = config.chartObj,
                 data = config.model,
-                seriesIndexes = config.filters.series,
-                valueIndex = config.filters.value;
+                seriesIndexes = config.seriesDimensions,
+                valueIndex = config.valueDimensions;
 
             // force type "pie" to chart
             chartObj.chart.type = "pie";
@@ -312,6 +306,8 @@ define([
                 }
 
             }, this);
+
+            console.log(chartObj);
 
             return chartObj;
         };
