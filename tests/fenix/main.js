@@ -1,4 +1,4 @@
-/*global requirejs*/
+/*global requirejs, $*/
 requirejs(['../../src/js/paths', '../utils'], function (paths, Utils) {
 
     'use strict';
@@ -12,12 +12,56 @@ requirejs(['../../src/js/paths', '../utils'], function (paths, Utils) {
 
     requirejs.config(paths);
 
+    function lineChartOptions(options, container) {
+        return $.extend({}, options || {}, {
+            container: container || Utils.createDiv(),
+            creator: {
+                chartObj: {
+                    chart:{
+                        type: "line"
+                    },
+                    tooltip: {
+                        crosshairs: "mixed",
+                        shared: true
+                    }
+                }
+            }
+        });
+    }
+
+    function columnChartOptions(options, container) {
+        return $.extend({}, options || {}, {
+            container: container || Utils.createDiv(),
+            creator: {
+                chartObj: {
+                    chart:{
+                        type: "column"
+                    }
+                }
+            }
+        });
+    }
+
+    function barChartOptions(options, container) {
+        return $.extend({}, options || {}, {
+            container: container || Utils.createDiv(),
+            creator: {
+                chartObj: {
+                    chart:{
+                        type: "bar"
+                    }
+                }
+            }
+        });
+    }
+
+
     requirejs(['fx-c-c/start', 'jquery', 'amplify'], function (ChartCreator, $) {
 
         // Chart with scattered data
         $.getJSON("data/afo/scattered_data.json", function (model) {
 
-            // Timeserie Chart
+            // Consistant Timeserie Chart
             var c = new ChartCreator();
             $.when( c.init({
                 model: model,
@@ -33,27 +77,19 @@ requirejs(['../../src/js/paths', '../utils'], function (paths, Utils) {
                 template: {},
                 creator: {}
             })).then(function( creator ) {
-                    creator.render({
-                            container: Utils.createDiv(),
-                            creator: {
-                                chartObj: {
-                                    chart:{
-                                        type: "line"
-                                    },
-                                    tooltip: {
-                                        crosshairs: "mixed",
-                                        shared: true
-                                    }
-                                }
-                            }
-                        }
-                    );
-                }
-            );
+                var o = {
+                    template: {
+                        title: "Chart with Timeserie",
+                    }
+                };
+                creator.render(lineChartOptions(o));
+                creator.render(columnChartOptions(o));
+                creator.render(barChartOptions(o));
+            });
 
-            // Line chart
-            c = new ChartCreator();
-            $.when( c.init({
+            // Scattered Data Chart
+            var c2 = new ChartCreator();
+            $.when( c2.init({
                 model: model,
                 adapter: {
                     type: "line",
@@ -67,56 +103,16 @@ requirejs(['../../src/js/paths', '../utils'], function (paths, Utils) {
                 template: {},
                 creator: {}
             })).then(function( creator ) {
-                    creator.render({
-                            container: Utils.createDiv(),
-                            creator: {
-                                chartObj: {
-                                    chart:{
-                                        type: "line"
-                                    },
-                                    tooltip: {
-                                        crosshairs: "mixed",
-                                        shared: true
-                                    }
-                                }
-                            }
-                        }
-                    );
-                }
-            );
-
-            // Bar Chart with the same data
-            c = new ChartCreator();
-            $.when( c.init({
-                model: model,
-                adapter: {
-                    lang: 'EN',
-                    type: "",
-                    filters: {
-                        xAxis: 'time',
-                        yAxis: 'Element',
-                        value: 'value',
-                        series: []
+                var o = {
+                    template: {
+                        title: "Chart with scattered data",
                     }
-                },
-                template: {},
-                creator: {},
-            })).then(function( creator ) {
-                    creator.render( {
-                            container: Utils.createDiv(),
-                            creator: {
-                                chartObj: {
-                                    chart:{
-                                        type: "column"
-                                    }
-                                }
-                            }
-                        }
-                    );
-                }
-            );
-
-
+                };
+                creator.render(lineChartOptions(o));
+                creator.render(columnChartOptions(o));
+                creator.render(barChartOptions(o));
+            });
         });
     });
+
 });
