@@ -23,12 +23,10 @@ requirejs(['../../src/js/paths', '../utils'], function (paths, Utils) {
                 model: model,
                 adapter: {
                     type: "timeserie",
-                    filters: {
-                        xAxis: 'time',
-                        yAxis: 'Element',
-                        value: 'value',
-                        series: []
-                    }
+                    xDimensions: 'time',
+                    yDimensions: 'Element',
+                    valueDimensions: 'value',
+                    seriesDimensions: []
                 },
                 template: {},
                 creator: {}
@@ -49,12 +47,10 @@ requirejs(['../../src/js/paths', '../utils'], function (paths, Utils) {
                 model: model,
                 adapter: {
                     type: "line",
-                    filters: {
-                        xAxis: 'time',
-                        yAxis: 'Element',
-                        value: 'value',
-                        series: []
-                    }
+                    xDimensions: 'time',
+                    yDimensions: 'Element',
+                    valueDimensions: 'value',
+                    seriesDimensions: []
                 },
                 template: {},
                 creator: {}
@@ -67,6 +63,29 @@ requirejs(['../../src/js/paths', '../utils'], function (paths, Utils) {
                 creator.render(Utils.lineChartOptions(o));
                 creator.render(Utils.columnChartOptions(o));
                 creator.render(Utils.barChartOptions(o));
+            });
+
+
+            // Pie hart
+            var c3 = new ChartCreator();
+            $.when( c3.init({
+                model: model,
+                adapter: {
+                    type: "pie",
+                    xDimensions: 'time',
+                    yDimensions: 'Element',
+                    valueDimensions: 'value',
+                    seriesDimensions: []
+                },
+                template: {},
+                creator: {}
+            })).then(function(creator) {
+                var o = {
+                    template: {
+                        title: "Pie Chart with scattered data"
+                    }
+                };
+                creator.render(Utils.pieChartOptions(o));
             });
         });
     });
