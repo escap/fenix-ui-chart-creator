@@ -14,89 +14,55 @@ requirejs(['../../src/js/paths', '../utils'], function (paths, Utils) {
 
     requirejs(['fx-c-c/start', 'jquery', 'amplify'], function (ChartCreator, $) {
 
-        /*        amplify.subscribe('fx.component.chart.ready', function () {
-         console.log('created!')
-         });*/
-
-
         $.getJSON("data/data.json", function (model) {
 
-            var creator = new ChartCreator();
-
-            creator.init({
+            // Line chart with X-Axis order 'xOrder'
+            var c = new ChartCreator();
+            $.when(c.init({
                 model: model,
+                // TODO: the adpter can be moved also in the 'then' function after the promise
                 adapter: {
-
-                },
-                template: {
-                    // TODO: base template
-                    //base_template: ''
-                },
-                creator: {
-
-                },
-                onReady: renderCharts
+                    // used in init just for MATRIX and FENIX
+                    xOrder: 'asc',
+                    xDimensions: [0],
+                    yDimensions: [3],
+                    valueDimensions: 2,
+                    seriesDimensions: [1]
+                }
+            })).then(function(creator) {
+                var o = {
+                    template: {
+                        title: "Chart with Date X-Axis order 'xOrder' = 'asc'"
+                    }
+                };
+                creator.render(Utils.lineChartOptions(o));
             });
 
-            function renderCharts(creator) {
-
-                creator.render({
-                    container: "#chart1",
-                    template: {
-                        title: "Title",
-                        subtitle: "Subtitle",
-                        footer: "Footer"
-                    },
-                    adapter: {
-/*                        xAxis: {
-                            order: "asc"
-                        }*/
-
-                        // used in init just for MATRIX and FENIX
-                        xOrder: 'asc',
-                        xDimensions: [0],
-                        yDimensions: [1],
-                        valueDimensions: 2,
-                        seriesDimensions: [1]
-                    }
-                });
-            }
         });
-
 
         $.getJSON("data/no_date.json", function (model) {
 
-            var creator = new ChartCreator();
-
-            creator.init({
-                model: model,
-                adapter: {
-                    xAxis: {
-                        order: "desc"
+            // Line chart with X-Axis order 'xOrder'
+            var c = new ChartCreator();
+            $.when(c.init({
+                model: model
+            })).then(function(creator) {
+                var o = {
+                    template: {
+                        title: "Chart with X-Axis order 'xOrder' = 'desc'"
+                    },
+                    adapter: {
+                        // used in init just for MATRIX and FENIX
+                        xOrder: 'desc',
+                        xDimensions: [0],
+                        yDimensions: [3],
+                        valueDimensions: 2,
+                        seriesDimensions: [1]
                     }
-                },
-                template: {
-
-                },
-                creator: {},
-                onReady: renderCharts
+                };
+                creator.render(Utils.columnChartOptions(o));
             });
 
-
-            function renderCharts(creator) {
-
-                creator.render({
-                    container: "#chart2",
-                    creator: {
-                        chartObj: {
-                            chart: {
-                                type: "column"
-                            }
-                        }
-                    },
-
-                });
-            };
         });
 
 
@@ -110,107 +76,88 @@ requirejs(['../../src/js/paths', '../utils'], function (paths, Utils) {
             });
             model = data;
 
-
-            var creator = new ChartCreator();
-
-            creator.init({
-                model: model,
-                adapter: {
-
-                },
-                template: {
-                },
-                creator: {},
-                onReady: renderCharts
+            var c = new ChartCreator();
+            $.when(c.init({
+                model: model
+            })).then(function(creator) {
+                var o = {
+                    template: {
+                        title: "FAOSTAT Rankings"
+                    }
+                };
+                creator.render(Utils.columnChartOptions(o));
             });
 
-
-            function renderCharts(creator) {
-
-                var chartOne = creator.render({
-                    container: "#chart3",
-                    template: {
-                    },
-                    creator: {
-                        chartObj: {
-                            chart: {
-                                type: "column"
-                            }
-                        }
-                    },
-                });
-            };
         });
 
 
         $.getJSON("data/nodata.json", function (model) {
 
-            var creator = new ChartCreator();
-
-            creator.init({
-                model: model,
-                adapter: {
-
-                },
-                template: {
-                },
-                creator: {},
-                onReady: renderCharts
-            });
-
-
-            function renderCharts(creator) {
-
-                creator.render({
-                    container: "#chart4",
-                    creator: {
-                        chartObj: {
-                            chart: {
-                                type: "column"
-                            }
-                        }
-                    },
+            var c = new ChartCreator();
+            $.when(c.init({
+                model: model
+            })).then(function(creator) {
+                var o = {
                     template: {
                         title: "Chart with no data values",
-                        subtitle: "subtitle",
-                        footer: "Footer"
-                    },
-                });
-            };
+                    }
+                };
+                creator.render(Utils.columnChartOptions(o));
+            });
+
         });
 
         $.getJSON("data/pie.json", function (model) {
 
-            var creator = new ChartCreator();
-
-            creator.init({
-                model: model,
-                adapter: {
-
-                },
-                template: {
-                },
-                creator: {},
-                onReady: renderCharts
-            });
-
-
-            function renderCharts(creator) {
-
-                creator.render({
-                    container: "#chart5",
-                    creator: {
+            var c = new ChartCreator();
+            $.when(c.init({
+                model: model
+            })).then(function(creator) {
+                var o = {
+                    template: {
+                        title: "PIE Chart"
                     },
                     adapter: {
                         type: "pie",
-                        filters: {
-                            value: 0,
-                            series: [1]
-                        }
-
+                        xDimensions: null,
+                        yDimensions: null,
+                        valueDimensions: 0,
+                        seriesDimensions: [1]
                     }
-                });
-            };
+                };
+                creator.render(Utils.pieChartOptions(o));
+            });
+
+            //var creator = new ChartCreator();
+            //
+            //creator.init({
+            //    model: model,
+            //    adapter: {
+            //
+            //    },
+            //    template: {
+            //    },
+            //    creator: {},
+            //    onReady: renderCharts
+            //});
+            //
+            //
+            //function renderCharts(creator) {
+            //
+            //    creator.render({
+            //        container: "#chart5",
+            //        creator: {
+            //        },
+            //        adapter: {
+            //            type: "pie",
+            //            filters: {
+            //                value: 0,
+            //                series: [1]
+            //            }
+            //
+            //        }
+            //    });
+            //};
         });
 
 
