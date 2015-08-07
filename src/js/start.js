@@ -105,6 +105,8 @@ define([
 
         ChartCreator.prototype.onError = function (e) {
             console.error("ChartCreator Error: ", e);
+            // TODO: Add an Error message
+            this.dfd.reject("ChartCreator Error: ", e);
         };
 
         ChartCreator.prototype.getAdapterUrl = function (model, adapterType) {
