@@ -35,7 +35,7 @@ define([
 
                 // aux variables used to process the model
                 aux: {
-                    x:{},
+                    x: {},
                     y: {},
                     value: {},
                     series: []
@@ -83,14 +83,20 @@ define([
 
             // TODO: workaround on arrays used to standardize all charts.
             // TODO: Add check on multiple columns (like for series)
-            xAxis = _.isArray(xAxis)? xAxis[0]: xAxis;
-            yAxis = _.isArray(yAxis)? yAxis[0]: yAxis;
-            value = _.isArray(value)? value[0]: value;
+            xAxis = _.isArray(xAxis) ? xAxis[0] : xAxis;
+            yAxis = _.isArray(yAxis) ? yAxis[0] : yAxis;
+            value = _.isArray(value) ? value[0] : value;
+
+            // TODO: if type is 'pie' force the adapted to avoid xDimensions and yDimensions
+            if (this.o.type === 'pie') {
+                this.o.xDimensions = null;
+                this.o.yDimensions = null;
+                xAxis = this.o.xDimensions;
+                yAxis = this.o.yDimensions;
+            }
 
             // parsing columns to get
             columns.forEach(_.bind(function (column, index) {
-
-                // TODO: if type is 'pie' force the adapted to avoid xDimensions and yDimensions
 
                 // TODO: this should be already checked and validated
                 if (column.hasOwnProperty('id')) {
@@ -108,7 +114,7 @@ define([
                         this.o.aux.value = this._getColumnStructure(columns, column, index);
                     }
 
-                    if (series.length > 0){
+                    if (series.length > 0) {
                         series.forEach(_.bind(function (serie) {
                             if (column.subject === serie || column.id === serie) {
                                 this.o.aux.series.push(this._getColumnStructure(columns, column, index));
@@ -233,9 +239,6 @@ define([
                 chartObj.yAxis = this._createYAxis(data, y.index);
             }
 
-            console.log(y.index);
-            console.log(chartObj.yAxis);
-
             // create Series
             if (isTimeserie === true) {
                 // TODO: move it to the template!!
@@ -248,12 +251,12 @@ define([
                 chartObj.xAxis.categories = this._createXAxisCategories(data, x.index);
                 chartObj.series = this._createSeriesStandard(data, x, y, value, chartObj.yAxis, chartObj.xAxis, auxSeries);
 
-/*                // TODO: make it nicer
-                // check if the xAxis series is just one value, force to column chart
-                console.log( chartObj.xAxis.categories)
-                if (chartObj.xAxis.categories.length <= 1 ) {
-                    chartObj.chart.type = 'column';
-                }*/
+                /*                // TODO: make it nicer
+                 // check if the xAxis series is just one value, force to column chart
+                 console.log( chartObj.xAxis.categories)
+                 if (chartObj.xAxis.categories.length <= 1 ) {
+                 chartObj.chart.type = 'column';
+                 }*/
             }
 
             return chartObj;
@@ -270,7 +273,7 @@ define([
                 yAxis = [];
 
             // TODO it can be done faster the unique array
-            data.forEach(function(value) {
+            data.forEach(function (value) {
                 yAxisNames.push(value[columnIndex]);
             });
             yAxisNames = _.uniq(yAxisNames);
@@ -289,10 +292,10 @@ define([
          * @param data
          * @private
          */
-        FENIX_Highchart_Adapter.prototype._createXAxisCategories = function(data, xIndex) {
+        FENIX_Highchart_Adapter.prototype._createXAxisCategories = function (data, xIndex) {
 
             var xCategories = [];
-            data.forEach(function(row) {
+            data.forEach(function (row) {
                 if (row[xIndex] === null) {
                     console.warn("Error on the xAxis data (is null)", row[xIndex], row, xIndex);
                 }
@@ -353,9 +356,9 @@ define([
          * @returns {*}
          * @private
          */
-        //TODO: clean the code, clone the object to return a new series.
-        // TODO: This method can be highly simplified.
-        FENIX_Highchart_Adapter.prototype._addSerie = function(series, serie, valueIndex) {
+            //TODO: clean the code, clone the object to return a new series.
+            // TODO: This method can be highly simplified.
+        FENIX_Highchart_Adapter.prototype._addSerie = function (series, serie, valueIndex) {
             var seriesAlreadyAdded = false;
             for (var i = 0; i < series.length; i++) {
                 if (serie.name === series[i].name) {
@@ -399,7 +402,7 @@ define([
                 // data of the serie
                 serie.data = [];
                 // initialize serie with null values. this fixed missing values from categories
-                _.each(xCategories, function() {
+                _.each(xCategories, function () {
                     serie.data.push(null);
                 });
 
@@ -412,7 +415,7 @@ define([
 
                 if (index !== null) {
 
-                    if (row[valueIndex] !== null && index !== -1 ) {
+                    if (row[valueIndex] !== null && index !== -1) {
                         serie.data[index] = isNaN(row[valueIndex]) ? row[valueIndex] : parseFloat(row[valueIndex]);
 
                         // Add serie to series
@@ -449,7 +452,7 @@ define([
         FENIX_Highchart_Adapter.prototype._getDatetimeByDataType = function (type, value) {
 
             // TODO: this is can be simplified and not applied to each row
-            switch(type.toLowerCase()) {
+            switch (type.toLowerCase()) {
                 case 'year':
                     return Date.UTC(value, 0, 1);
                 default :
@@ -489,7 +492,7 @@ define([
             return name;
         };
 
-        FENIX_Highchart_Adapter.prototype._processPieChart = function(config) {
+        FENIX_Highchart_Adapter.prototype._processPieChart = function (config) {
             var chartObj = config.chartObj,
                 valueIndex = config.aux.value.index,
                 auxSeries = config.aux.series,
@@ -508,12 +511,12 @@ define([
             ];
 
             // create PIE series
-            _.each(data, function(row) {
+            _.each(data, function (row) {
 
                 var name = this._createSeriesName(row, auxSeries);
                 if (row[valueIndex] !== null && name !== null) {
                     // TODO ADD Check on values == 0? (They should be not allowed in the pie chart)
-                    chartObj.series[0].data.push([name, isNaN(row[valueIndex])? row[valueIndex]: parseFloat(row[valueIndex])]);
+                    chartObj.series[0].data.push([name, isNaN(row[valueIndex]) ? row[valueIndex] : parseFloat(row[valueIndex])]);
                 }
 
             }, this);
