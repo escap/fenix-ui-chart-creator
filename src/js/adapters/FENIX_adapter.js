@@ -232,7 +232,7 @@ define([
                 data = config.$data;
 
             // Sort Data TODO: check if the sort is always applicable
-            this._sortData(data, x.index);
+            //this._sortData(data, x.index);
 
             // Process yAxis
             if (y.index) {
