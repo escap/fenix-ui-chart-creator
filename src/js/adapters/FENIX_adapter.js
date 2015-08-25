@@ -515,8 +515,12 @@ define([
 
                 var name = this._createSeriesName(row, auxSeries);
                 if (row[valueIndex] !== null && name !== null) {
-                    // TODO ADD Check on values == 0? (They should be not allowed in the pie chart)
-                    chartObj.series[0].data.push([name, isNaN(row[valueIndex]) ? row[valueIndex] : parseFloat(row[valueIndex])]);
+                    var value = isNaN(row[valueIndex]) ? row[valueIndex] : parseFloat(row[valueIndex]);
+                    // N.B. values <=0 are not allowed in a pie chart
+                    if (value > 0) {
+                        chartObj.series[0].data.push([name, value]);
+                    }
+
                 }
 
             }, this);
