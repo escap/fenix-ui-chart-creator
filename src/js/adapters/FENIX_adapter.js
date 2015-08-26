@@ -620,7 +620,7 @@ define([
         };
 
         FENIX_Highchart_Adapter.prototype.destroy = function () {
-            console.warn("To be implemented");
+            
         };
 
 
