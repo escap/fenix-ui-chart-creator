@@ -123,7 +123,6 @@ define([
             }
             else {
 
-                console.log(model)
                 // TODO: Dirty check to be modified
                 // TODO: Validate the model (What to do in case or errors?)
                 if (model.data && model.metadata) {
@@ -136,6 +135,11 @@ define([
                     return this.adapterUrl ? this.adapterUrl : 'fx-c-c/adapters/star_schema_adapter';
                 }
                 else {
+                    if (!model.data) {
+                        model.data = [];
+                        return this.adapterUrl ? this.adapterUrl : 'fx-c-c/adapters/FENIX_adapter';
+
+                    }
                     throw new Error("The are not available adapter for the current model:", model);
                 }
             }
