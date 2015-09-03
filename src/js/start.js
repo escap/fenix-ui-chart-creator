@@ -112,7 +112,7 @@ define([
         ChartCreator.prototype.getAdapterUrl = function (model, adapterType) {
 
             // TODO add here adapter discovery logic
-
+                  debugger;
            // TODO: Dirty switch to check wheater there is an adapterType specified
             if (adapterType !== null && adapterType !== undefined) {
                 switch(adapterType.toLocaleLowerCase()) {
@@ -122,6 +122,8 @@ define([
                 }
             }
             else {
+
+                console.log(model)
                 // TODO: Dirty check to be modified
                 // TODO: Validate the model (What to do in case or errors?)
                 if (model.data && model.metadata) {
