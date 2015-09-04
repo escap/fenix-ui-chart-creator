@@ -29,7 +29,7 @@ define([
                 if (this._validateInput(config)) {
                     this.preloadResources(config);
                 }
-            }catch(e) {
+            } catch (e) {
                 self.onError(e);
             }
 
@@ -62,7 +62,7 @@ define([
                 // render chart
                 creator.render({chartObj: chartObj});
 
-            }catch(e) {
+            } catch (e) {
                 creator.noDataAvailable();
             }
 
@@ -79,7 +79,7 @@ define([
         ChartCreator.prototype.preloadResources = function (config) {
 
             var baseTemplate = this.getTemplateUrl(),
-                adapter = this.getAdapterUrl(config.model, (config.adapter)? config.adapter.adapterType: null),
+                adapter = this.getAdapterUrl(config.model, (config.adapter) ? config.adapter.adapterType : null),
                 creator = this.getCreatorUrl(),
                 self = this;
 
@@ -112,13 +112,15 @@ define([
         ChartCreator.prototype.getAdapterUrl = function (model, adapterType) {
 
             // TODO add here adapter discovery logic
-                  debugger;
-           // TODO: Dirty switch to check wheater there is an adapterType specified
+            // TODO: Dirty switch to check wheater there is an adapterType specified
             if (adapterType !== null && adapterType !== undefined) {
-                switch(adapterType.toLocaleLowerCase()) {
-                    case 'fenix': return this.adapterUrl ? this.adapterUrl : 'fx-c-c/adapters/FENIX_adapter';
-                    case 'wds-array': return this.adapterUrl ? this.adapterUrl : 'fx-c-c/adapters/matrix_schema_adapter';
-                    case 'wds-objects': return this.adapterUrl ? this.adapterUrl : 'fx-c-c/adapters/star_schema_adapter';
+                switch (adapterType.toLocaleLowerCase()) {
+                    case 'fenix':
+                        return this.adapterUrl ? this.adapterUrl : 'fx-c-c/adapters/FENIX_adapter';
+                    case 'wds-array':
+                        return this.adapterUrl ? this.adapterUrl : 'fx-c-c/adapters/matrix_schema_adapter';
+                    case 'wds-objects':
+                        return this.adapterUrl ? this.adapterUrl : 'fx-c-c/adapters/star_schema_adapter';
                 }
             }
             else {
@@ -147,12 +149,12 @@ define([
 
         ChartCreator.prototype.getTemplateUrl = function () {
             //TODO add here template discovery logic
-            return this.templateUrl? this.templateUrl: 'fx-c-c/templates/base_template';
+            return this.templateUrl ? this.templateUrl : 'fx-c-c/templates/base_template';
         };
 
         ChartCreator.prototype.getCreatorUrl = function () {
             //TODO add here template discovery logic
-            return this.creatorUrl? this.creatorUrl: 'fx-c-c/creators/highcharts_creator';
+            return this.creatorUrl ? this.creatorUrl : 'fx-c-c/creators/highcharts_creator';
         };
 
         ChartCreator.prototype._validateInput = function () {
