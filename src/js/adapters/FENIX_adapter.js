@@ -416,8 +416,7 @@ define([
                 if (index !== null) {
 
                     if (row[valueIndex] !== null && index !== -1) {
-                        serie.data[index] = isNaN(row[valueIndex]) ? row[valueIndex] : parseFloat(row[valueIndex]);
-
+                        serie.data[index] = isNaN(row[valueIndex]) ? row[valueIndex] : parseFloat(row[valueIndex].toFixed(2));
                         // Add serie to series
                         series = this._addSerie(series, serie, index);
                     }
