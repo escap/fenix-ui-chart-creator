@@ -24,11 +24,12 @@ define([
                 },
 
                 // filtering parameters
-                // TODO: if type is 'pie' force the adapted to avoid xDimensions and yDimensions
                 xDimensions: ['time'],
                 yDimensions: ['mu'],
                 valueDimensions: ['value'],
                 seriesDimensions: [],
+
+                UMColumn : "um",
 
                 // TODO add as paramenter (N.B. for now the yAxis is added to the serie name to avoid conflicts)
                 addYAxisToSeriesName: true,
@@ -150,6 +151,32 @@ define([
             this._printAuxColumns();
         };
 
+        FENIX_Highchart_Adapter.prototype._addUnitOfMeasure = function() {
+
+            var columns = this.o.$columns,
+                suffix = '',
+                index = -1;
+
+            // parsing columns to get
+            columns.forEach(_.bind(function (column, indx) {
+
+                if ((column.id === this.o.UMColumn) | (column.subject && column.subject === this.o.UMColumn)) {
+                    index = indx;
+                }
+
+            }, this));
+
+            if (index > -1 && Array.isArray(this.o.$data) && this.o.$data.length > 0) {
+                suffix = " " + this.o.$data[0][index];
+            }
+
+            return { tooltip: {
+                valueSuffix: suffix
+                }
+            };
+
+        };
+
         /**
          * Get column structure
          * @param columns
@@ -258,6 +285,8 @@ define([
                  chartObj.chart.type = 'column';
                  }*/
             }
+
+            $.extend(true, chartObj,this._addUnitOfMeasure());
 
             return chartObj;
         };
