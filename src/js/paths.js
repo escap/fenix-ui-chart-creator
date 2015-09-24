@@ -20,10 +20,10 @@ define(function () {
             underscore: '{FENIX_CDN}/js/underscore/1.7.0/underscore.min',
             amplify: '{FENIX_CDN}/js/amplify/1.1.2/amplify.min',
             'handlebars': '{FENIX_CDN}/js/handlebars/2.0.0/handlebars',
-            'highcharts': '{FENIX_CDN}/js/highcharts/4.1.6/js/highcharts',
+            'highcharts': '{FENIX_CDN}/js/highcharts/4.0.4/js/highcharts',
 
             // highcharts plugins TODO: switch to CDN if they are going to be used
-            'highcharts-export': 'http://code.highcharts.com/modules/exporting',
+            'highcharts-export': '{FENIX_CDN}/js/highcharts/4.0.4/js/modules/exporting',
             'highcharts-export-csv': 'http://highslide-software.github.io/export-csv/export-csv'
         },
 
