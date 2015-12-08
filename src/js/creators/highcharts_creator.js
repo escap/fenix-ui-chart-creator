@@ -18,7 +18,7 @@ define([
                 },
 
                 // TODO: handle multilanguage?
-                noData: "<div>No Data Available</div>"
+                noData: "<div>No data available</div>"
 
             },
             e = {
