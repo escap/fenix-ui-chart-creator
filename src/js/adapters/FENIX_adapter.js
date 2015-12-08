@@ -229,6 +229,9 @@ define([
         };
 
         FENIX_Highchart_Adapter.prototype.prepareChart = function (config) {
+/*
+            console.log(1)
+            console.log(config)*/
 
             config = $.extend(true, {}, this.o, config);
 
@@ -298,6 +301,7 @@ define([
          * @private
          */
         FENIX_Highchart_Adapter.prototype._createYAxis = function (data, columnIndex) {
+
             var yAxisNames = [],
                 yAxis = [];
 
@@ -337,6 +341,7 @@ define([
         };
 
         FENIX_Highchart_Adapter.prototype._createSeriesTimeserie = function (data, x, y, value, yAxis, auxSeries) {
+
             var xIndex = x.index,
                 xDataType = x.column.dataType,
                 yIndex = y.index,

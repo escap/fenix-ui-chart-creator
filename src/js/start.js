@@ -53,16 +53,13 @@ define([
 
             // TODO: Handle the error
             try {
-
                 // getting chart definition
-
-
-                //console.log(chartObj);
 
                 // render chart
                 creator.render({chartObj: chartObj});
 
             } catch (e) {
+                console.error("Creator raised an error: " + e );
                 creator.noDataAvailable();
             }
 
