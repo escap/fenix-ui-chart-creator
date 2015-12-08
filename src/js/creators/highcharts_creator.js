@@ -20,16 +20,12 @@ define([
                 // TODO: handle multilanguage?
                 noData: "<div>No data available</div>"
 
-            },
-            e = {
-                DESTROY: 'fx.component.chart.destroy',
-                READY: 'fx.component.chart.ready'
             };
 
         function HightchartCreator(config) {
 
-            this.o = {};
-            $.extend(true, this.o, defaultOptions, config);
+            this.o = $.extend(true, {}, defaultOptions, config);
+
             this.o.hightchart_template = baseConfig;
 
             return this;
@@ -51,9 +47,25 @@ define([
             return (Object.keys(this.o.errors).length === 0);
         };
 
-        HightchartCreator.prototype.render = function (config) {
+        HightchartCreator.prototype._mergeConfiguration= function(config) {
+
+            if (this.o.chartObj && this.o.chartObj.yAxis && config.chartObj && config.chartObj.yAxis && Array.isArray( config.chartObj.yAxis)) {
+
+                var yAxis = $.extend(true, {}, this.o.chartObj.yAxis);
+
+                for (var i = 0; i < config.chartObj.yAxis.length; i++) {
+                    config.chartObj.yAxis[i] = $.extend(true, config.chartObj.yAxis[i], yAxis);
+                }
+
+            }
 
             $.extend(true, this.o, config);
+
+        };
+
+        HightchartCreator.prototype.render = function (config) {
+
+            this._mergeConfiguration(config);
 
             if (this._validateInput() === true) {
 
@@ -75,6 +87,7 @@ define([
         };
 
         HightchartCreator.prototype._createChart = function () {
+
             this.o.config = $.extend(true, {}, baseConfig, this.o.chartObj);
             this.$container.highcharts(this.o.config);
         };
