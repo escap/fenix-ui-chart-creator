@@ -229,9 +229,6 @@ define([
         };
 
         FENIX_Highchart_Adapter.prototype.prepareChart = function (config) {
-/*
-            console.log(1)
-            console.log(config)*/
 
             config = $.extend(true, {}, this.o, config);
 
@@ -240,11 +237,84 @@ define([
                     return this._processPieChart(config);
                 case 'scatter':
                     break;
+                case 'pyramid':
+                    var xSubject = config.aux.x.column.subject,
+                        preProcessed =this._processStandardChart(config, (xSubject === 'time' && config.type.toLowerCase() === 'timeserie'));
+
+                    return this._processPyramidChart(preProcessed);
+                    break;
                 default :
                     // check wheater the xAxis column is time
                     var xSubject = config.aux.x.column.subject;
                     return this._processStandardChart(config, (xSubject === 'time' && config.type.toLowerCase() === 'timeserie'));
             }
+        };
+
+        FENIX_Highchart_Adapter.prototype._processPyramidChart = function ( obj ) {
+
+            var chartObj = obj,
+                xAxis,
+                categories,
+                seriesOne,
+                seriesTwo,
+                data = [];
+
+            if (!chartObj.xAxis || !chartObj.xAxis.categories || !Array.isArray(chartObj.xAxis.categories )) {
+                throw new Error("FENIX Chart creator: impossible to find categories");
+            }
+
+            xAxis = $.extend(true, {}, chartObj.xAxis);
+
+            categories = xAxis.categories;
+
+            //reset xAxis
+            chartObj.xAxis = [
+                $.extend(true, {}, xAxis, {
+                    categories: categories,
+                    reversed: false,
+                    labels: {
+                        step: 1
+                    }
+                }),
+                $.extend(true, {}, xAxis, {
+                    opposite: true,
+                    reversed: false,
+                    categories: categories,
+                    linkedTo: 0,
+                    labels: {
+                        step: 1
+                    }
+                })
+            ];
+
+            //convert series
+            if (!Array.isArray(chartObj.series ) || chartObj.series.length !== 2 ) {
+                console.warn("FENIX Chart creator Pyramid: series.length is not 2. Considering only first 2 series");
+            }
+
+            seriesOne =  $.extend(true, {}, chartObj.series[0]);
+            seriesTwo =  $.extend(true, {}, chartObj.series[1]);
+
+            for (var i = 0; i < seriesOne.data.length; i++) {
+                data.push( -Math.abs(seriesOne.data[i]));
+            }
+
+            seriesOne.data = data;
+
+            //reset series
+            chartObj.series = [seriesOne, seriesTwo];
+
+            //force chart type
+            chartObj.chart.type = 'bar';
+            //force plotting
+            chartObj.plotOptions = {
+                series: {
+                    stacking: 'normal'
+                }
+            };
+
+            return chartObj;
+
         };
 
         /**
