@@ -121,7 +121,12 @@ define([
             }
         };
 
-        HightchartCreator.prototype.noDataAvailable = function () {
+        HightchartCreator.prototype.noDataAvailable = function (conf) {
+
+            if (conf.container) {
+                //Init chart container
+                this.$container = $(conf.container).find(this.o.s.CONTENT);
+            }
             this.$container.html(this.o.noData);
         };
 

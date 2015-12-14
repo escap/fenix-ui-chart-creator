@@ -49,18 +49,16 @@ define([
             // render template
             template.render();
 
-            var chartObj = this.adapter.prepareChart(config.adapter || {});
-
             // TODO: Handle the error
             try {
                 // getting chart definition
-
+                var chartObj = this.adapter.prepareChart(config.adapter || {});
                 // render chart
                 creator.render({chartObj: chartObj});
 
             } catch (e) {
                 console.error("Creator raised an error: " + e );
-                creator.noDataAvailable();
+                creator.noDataAvailable({container : config.container});
             }
 
             return {

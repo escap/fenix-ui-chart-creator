@@ -295,6 +295,11 @@ define([
             seriesOne =  $.extend(true, {}, chartObj.series[0]);
             seriesTwo =  $.extend(true, {}, chartObj.series[1]);
 
+            if (!seriesOne.data || !seriesTwo.data) {
+                console.error("Impossible to process pyramid series");
+                throw new Error("Impossible to process pyramid series")
+            }
+
             for (var i = 0; i < seriesOne.data.length; i++) {
                 data.push( -Math.abs(seriesOne.data[i]));
             }
@@ -310,6 +315,21 @@ define([
             chartObj.plotOptions = {
                 series: {
                     stacking: 'normal'
+                }
+            };
+
+            chartObj.yAxis = {
+                labels: {
+                    formatter: function () {
+                        return Math.abs(this.value) + '%';
+                    }
+                }
+            };
+
+            chartObj.tooltip =  {
+                formatter: function () {
+                    return '<b>' + this.series.name + ', age ' + this.point.category + '</b><br/>' +
+                        'Population: ' + Highcharts.numberFormat(Math.abs(this.point.y), 0);
                 }
             };
 
