@@ -131,7 +131,8 @@ define([
         };
 
         HightchartCreator.prototype.destroy = function () {
-            this.o.$container.highcharts().destroy();
+
+            this.o.container.find( this.o.s.CONTENT).highcharts().destroy();
         };
 
         return HightchartCreator;
