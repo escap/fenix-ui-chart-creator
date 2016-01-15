@@ -349,10 +349,12 @@ define([
                 y = config.aux.y,
                 value = config.aux.value,
                 auxSeries = config.aux.series,
-                data = config.$data;
+                data = config.$data,
+                sort = config.sort !== false;
 
-            // Sort Data TODO: check if the sort is always applicable
-            this._sortData(data, x.index);
+            // Sort Data if applicable (default == true)
+            if(sort)
+                this._sortData(data, x.index);
 
             // Process yAxis
             if (y.index) {
