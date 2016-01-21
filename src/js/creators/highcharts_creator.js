@@ -3,7 +3,7 @@ define([
         'jquery',
         'underscore',
         'fx-c-c/config/creators/highcharts_template',
-        //'highcharts-export',
+        'highcharts-export',
         //'highcharts-export-csv',
         'amplify'
     ],
