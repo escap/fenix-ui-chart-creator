@@ -237,11 +237,104 @@ define([
                     return this._processPieChart(config);
                 case 'scatter':
                     break;
+                case 'pyramid':
+                    var xSubject = config.aux.x.column.subject,
+                        preProcessed =this._processStandardChart(config, (xSubject === 'time' && config.type.toLowerCase() === 'timeserie'));
+
+                    return this._processPyramidChart(preProcessed);
+                    break;
                 default :
                     // check wheater the xAxis column is time
                     var xSubject = config.aux.x.column.subject;
                     return this._processStandardChart(config, (xSubject === 'time' && config.type.toLowerCase() === 'timeserie'));
             }
+        };
+
+        FENIX_Highchart_Adapter.prototype._processPyramidChart = function ( obj ) {
+
+            var chartObj = obj,
+                xAxis,
+                categories,
+                seriesOne,
+                seriesTwo,
+                data = [];
+
+            if (!chartObj.xAxis || !chartObj.xAxis.categories || !Array.isArray(chartObj.xAxis.categories )) {
+                throw new Error("FENIX Chart creator: impossible to find categories");
+            }
+
+            xAxis = $.extend(true, {}, chartObj.xAxis);
+
+            categories = xAxis.categories;
+
+            //reset xAxis
+            chartObj.xAxis = [
+                $.extend(true, {}, xAxis, {
+                    categories: categories,
+                    reversed: false,
+                    labels: {
+                        step: 1
+                    }
+                }),
+                $.extend(true, {}, xAxis, {
+                    opposite: true,
+                    reversed: false,
+                    categories: categories,
+                    linkedTo: 0,
+                    labels: {
+                        step: 1
+                    }
+                })
+            ];
+
+            //convert series
+            if (!Array.isArray(chartObj.series ) || chartObj.series.length !== 2 ) {
+                console.warn("FENIX Chart creator Pyramid: series.length is not 2. Considering only first 2 series");
+            }
+
+            seriesOne =  $.extend(true, {}, chartObj.series[0]);
+            seriesTwo =  $.extend(true, {}, chartObj.series[1]);
+
+            if (!seriesOne.data || !seriesTwo.data) {
+                console.error("Impossible to process pyramid series");
+                throw new Error("Impossible to process pyramid series")
+            }
+
+            for (var i = 0; i < seriesOne.data.length; i++) {
+                data.push( -Math.abs(seriesOne.data[i]));
+            }
+
+            seriesOne.data = data;
+
+            //reset series
+            chartObj.series = [seriesOne, seriesTwo];
+
+            //force chart type
+            chartObj.chart.type = 'bar';
+            //force plotting
+            chartObj.plotOptions = {
+                series: {
+                    stacking: 'normal'
+                }
+            };
+
+            chartObj.yAxis = {
+                labels: {
+                    formatter: function () {
+                        return Math.abs(this.value) + '%';
+                    }
+                }
+            };
+
+            chartObj.tooltip =  {
+                formatter: function () {
+                    return '<b>' + this.series.name + ', age ' + this.point.category + '</b><br/>' +
+                        'Population: ' + Highcharts.numberFormat(Math.abs(this.point.y), 0);
+                }
+            };
+
+            return chartObj;
+
         };
 
         /**
@@ -256,10 +349,12 @@ define([
                 y = config.aux.y,
                 value = config.aux.value,
                 auxSeries = config.aux.series,
-                data = config.$data;
+                data = config.$data,
+                sort = config.sort !== false;
 
-            // Sort Data TODO: check if the sort is always applicable
-            //this._sortData(data, x.index);
+            // Sort Data if applicable (default == true)
+            if(sort)
+                this._sortData(data, x.index);
 
             // Process yAxis
             if (y.index) {
@@ -298,6 +393,7 @@ define([
          * @private
          */
         FENIX_Highchart_Adapter.prototype._createYAxis = function (data, columnIndex) {
+
             var yAxisNames = [],
                 yAxis = [];
 
@@ -337,6 +433,7 @@ define([
         };
 
         FENIX_Highchart_Adapter.prototype._createSeriesTimeserie = function (data, x, y, value, yAxis, auxSeries) {
+
             var xIndex = x.index,
                 xDataType = x.column.dataType,
                 yIndex = y.index,
