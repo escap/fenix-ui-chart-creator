@@ -64,6 +64,11 @@ define([
         };
 
         HightchartCreator.prototype.render = function (config) {
+//FIG
+
+            console.log("HCRENDER",config)
+            //render chart
+            return;
 
             this._mergeConfiguration(config);
 
@@ -125,7 +130,7 @@ define([
 
             if (conf.container) {
                 //Init chart container
-                this.$container = $(conf.container).find(this.o.s.CONTENT);
+                this.$container = $(conf.container);
             }
             this.$container.html(this.o.noData);
         };

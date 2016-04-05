@@ -47,9 +47,11 @@ define([
 
             this.o.errors = {};
 
+/*
             if (!this.o.hasOwnProperty("container")) {
                 this.o.errors.container = "'container' attribute not present";
             }
+*/
 
             return (Object.keys(this.o.errors).length === 0);
         };

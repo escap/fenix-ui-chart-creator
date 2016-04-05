@@ -1,11 +1,13 @@
 /*global define, amplify, console*/
 define([
+        'loglevel',
         'jquery',
         'underscore',
-        'highcharts',
+        'fx-common/pivotator/start',
+        'fx-common/pivotator/functions',
         'amplify'
     ],
-    function ($, _) {
+    function (log, $, _, Pivotator, PivotatorFunctions) {
 
         'use strict';
 
@@ -29,7 +31,7 @@ define([
                 valueDimensions: ['value'],
                 seriesDimensions: [],
 
-                UMColumn : "um",
+                UMColumn: "um",
 
                 // TODO add as paramenter (N.B. for now the yAxis is added to the serie name to avoid conflicts)
                 addYAxisToSeriesName: true,
@@ -49,12 +51,27 @@ define([
                 READY: 'fx.component.chart.ready'
             };
 
-        function FENIX_Highchart_Adapter() {
+        function FENIX_Adapter() {
+
             return this;
         }
 
-        FENIX_Highchart_Adapter.prototype.prepareData = function (config) {
+        FENIX_Adapter.prototype.prepareData = function (config) {
+            //return processed data
+            var myPivotator=new Pivotator();
 
+            //FIG TODO simplifing the arguments of pivot()
+
+           var ret = myPivotator.pivot(config.model, config.config.ROWS, config.config.COLS, {
+               myfunction: config.config.GetValue,
+               cumulative: false,
+               aggregator: config.config.Aggregator,
+               formater: config.config.Formater,
+               nbDecimal: config.config.nbDecimal
+           });
+
+            return ret;
+/*
             this.o = $.extend(true, {}, defaultOptions, config);
 
             if (this._validateInput() === true) {
@@ -62,96 +79,24 @@ define([
                 this._prepareData();
                 if (this._validateData() === true) {
                     this._onValidateDataSuccess();
+
+                    return this.model;
                 } else {
                     this._onValidateDataError();
                 }
             } else {
                 console.error(this.errors);
                 throw new Error("FENIX Chart creator has not a valid configuration");
-            }
+            }*/
         };
 
-        FENIX_Highchart_Adapter.prototype._prepareData = function () {
+        FENIX_Adapter.prototype._prepareData = function () {
 
-            // TODO: change variables names according to the new nomenclature
+            this.model = ""; //Pivotator.process(model, config)
 
-            var xAxis = this.o.xDimensions,
-                yAxis = this.o.yDimensions,
-                value = this.o.valueDimensions,
-                series = this.o.seriesDimensions,
-                columns = this.o.$columns,
-                addYAxisToSeriesName = this.o.addYAxisToSeriesName;
-
-            // TODO: workaround on arrays used to standardize all charts.
-            // TODO: Add check on multiple columns (like for series)
-            xAxis = _.isArray(xAxis) ? xAxis[0] : xAxis;
-            yAxis = _.isArray(yAxis) ? yAxis[0] : yAxis;
-            value = _.isArray(value) ? value[0] : value;
-
-            // TODO: if type is 'pie' force the adapted to avoid xDimensions and yDimensions
-            if (this.o.type === 'pie') {
-                this.o.xDimensions = null;
-                this.o.yDimensions = null;
-                xAxis = this.o.xDimensions;
-                yAxis = this.o.yDimensions;
-            }
-
-            // parsing columns to get
-            columns.forEach(_.bind(function (column, index) {
-
-                // TODO: this should be already checked and validated
-                if (column.hasOwnProperty('id')) {
-                    //if (column.hasOwnProperty('subject')) {
-
-                    if (column.subject === xAxis || column.id === xAxis) {
-                        this.o.aux.x = this._getColumnStructure(columns, column, index);
-                    }
-
-                    else if (column.subject === yAxis || column.id === yAxis) {
-                        this.o.aux.y = this._getColumnStructure(columns, column, index);
-                    }
-
-                    else if (column.subject === value || column.id === value) {
-                        this.o.aux.value = this._getColumnStructure(columns, column, index);
-                    }
-
-                    if (series.length > 0) {
-                        series.forEach(_.bind(function (serie) {
-                            if (column.subject === serie || column.id === serie) {
-                                this.o.aux.series.push(this._getColumnStructure(columns, column, index));
-                            }
-                        }, this));
-
-                        // TODO: check the series index to map dinamically
-                    }
-                }
-
-            }, this));
-
-            // get series columns
-            if (this.o.aux.series.length <= 0) {
-                columns.forEach(_.bind(function (column, index) {
-
-                    if (column.hasOwnProperty('id')) {
-                        // TODO: issue with the y axis and inconsistent series
-                        // TODO i.e. series with the same name but with different yAxis
-                        // if (index != this.aux.x.index && index != this.aux.y.index && index != this.aux.value.index) {
-                        if (index !== this.o.aux.x.index && index !== this.o.aux.value.index) {
-                            if (column.dataType !== 'code') {
-                                // check if serie already in series (skip coded columns!)
-                                this.o.aux.series.push(this._getColumnStructure(this.o.$columns, column, index));
-                            }
-                        }
-                    }
-
-
-                }, this));
-            }
-
-            this._printAuxColumns();
         };
 
-        FENIX_Highchart_Adapter.prototype._addUnitOfMeasure = function() {
+        FENIX_Adapter.prototype._addUnitOfMeasure = function () {
 
             var columns = this.o.$columns,
                 suffix = '',
@@ -170,8 +115,9 @@ define([
                 suffix = " " + this.o.$data[0][index];
             }
 
-            return { tooltip: {
-                valueSuffix: suffix
+            return {
+                tooltip: {
+                    valueSuffix: suffix
                 }
             };
 
@@ -185,7 +131,7 @@ define([
          * @returns {*}
          * @private
          */
-        FENIX_Highchart_Adapter.prototype._getColumnStructure = function (columns, column, index) {
+        FENIX_Adapter.prototype._getColumnStructure = function (columns, column, index) {
             if (column.hasOwnProperty('dataType')) {
                 switch (column.dataType) {
                     case 'code':
@@ -208,7 +154,7 @@ define([
          * @param index
          * @return {column: *, index: string, columnCode: *, columnCodeIndex: *, id: (*|string)} column containing the labels and its index
          */
-        FENIX_Highchart_Adapter.prototype._getColumnLabel = function (columns, column, columnCodeIndex) {
+        FENIX_Adapter.prototype._getColumnLabel = function (columns, column, columnCodeIndex) {
 
             var columnCode = columns[columnCodeIndex],
                 columnLabelID = columnCode.id + "_" + this.o.lang;
@@ -228,7 +174,7 @@ define([
             }
         };
 
-        FENIX_Highchart_Adapter.prototype.prepareChart = function (config) {
+        FENIX_Adapter.prototype.prepareChart = function (config) {
 
             config = $.extend(true, {}, this.o, config);
 
@@ -239,7 +185,7 @@ define([
                     break;
                 case 'pyramid':
                     var xSubject = config.aux.x.column.subject,
-                        preProcessed =this._processStandardChart(config, (xSubject === 'time' && config.type.toLowerCase() === 'timeserie'));
+                        preProcessed = this._processStandardChart(config, (xSubject === 'time' && config.type.toLowerCase() === 'timeserie'));
 
                     return this._processPyramidChart(preProcessed);
                     break;
@@ -250,7 +196,7 @@ define([
             }
         };
 
-        FENIX_Highchart_Adapter.prototype._processPyramidChart = function ( obj ) {
+        FENIX_Adapter.prototype._processPyramidChart = function (obj) {
 
             var chartObj = obj,
                 xAxis,
@@ -259,7 +205,7 @@ define([
                 seriesTwo,
                 data = [];
 
-            if (!chartObj.xAxis || !chartObj.xAxis.categories || !Array.isArray(chartObj.xAxis.categories )) {
+            if (!chartObj.xAxis || !chartObj.xAxis.categories || !Array.isArray(chartObj.xAxis.categories)) {
                 throw new Error("FENIX Chart creator: impossible to find categories");
             }
 
@@ -288,12 +234,12 @@ define([
             ];
 
             //convert series
-            if (!Array.isArray(chartObj.series ) || chartObj.series.length !== 2 ) {
+            if (!Array.isArray(chartObj.series) || chartObj.series.length !== 2) {
                 console.warn("FENIX Chart creator Pyramid: series.length is not 2. Considering only first 2 series");
             }
 
-            seriesOne =  $.extend(true, {}, chartObj.series[0]);
-            seriesTwo =  $.extend(true, {}, chartObj.series[1]);
+            seriesOne = $.extend(true, {}, chartObj.series[0]);
+            seriesTwo = $.extend(true, {}, chartObj.series[1]);
 
             if (!seriesOne.data || !seriesTwo.data) {
                 console.error("Impossible to process pyramid series");
@@ -301,7 +247,7 @@ define([
             }
 
             for (var i = 0; i < seriesOne.data.length; i++) {
-                data.push( -Math.abs(seriesOne.data[i]));
+                data.push(-Math.abs(seriesOne.data[i]));
             }
 
             seriesOne.data = data;
@@ -326,7 +272,7 @@ define([
                 }
             };
 
-            chartObj.tooltip =  {
+            chartObj.tooltip = {
                 formatter: function () {
                     return '<b>' + this.series.name + ', age ' + this.point.category + '</b><br/>' +
                         'Population: ' + Highcharts.numberFormat(Math.abs(this.point.y), 0);
@@ -342,7 +288,7 @@ define([
          * @param isTimeserie
          * @private
          */
-        FENIX_Highchart_Adapter.prototype._processStandardChart = function (config, isTimeserie) {
+        FENIX_Adapter.prototype._processStandardChart = function (config, isTimeserie) {
 
             var chartObj = config.chartObj,
                 x = config.aux.x,
@@ -353,7 +299,7 @@ define([
                 sort = config.sort !== false;
 
             // Sort Data if applicable (default == true)
-            if(sort)
+            if (sort)
                 this._sortData(data, x.index);
 
             // Process yAxis
@@ -381,7 +327,7 @@ define([
                  }*/
             }
 
-            $.extend(true, chartObj,this._addUnitOfMeasure());
+            $.extend(true, chartObj, this._addUnitOfMeasure());
 
             return chartObj;
         };
@@ -392,7 +338,7 @@ define([
          * @param columnIndex
          * @private
          */
-        FENIX_Highchart_Adapter.prototype._createYAxis = function (data, columnIndex) {
+        FENIX_Adapter.prototype._createYAxis = function (data, columnIndex) {
 
             var yAxisNames = [],
                 yAxis = [];
@@ -417,7 +363,7 @@ define([
          * @param data
          * @private
          */
-        FENIX_Highchart_Adapter.prototype._createXAxisCategories = function (data, xIndex) {
+        FENIX_Adapter.prototype._createXAxisCategories = function (data, xIndex) {
 
             var xCategories = [];
             data.forEach(function (row) {
@@ -432,7 +378,7 @@ define([
             return _.uniq(xCategories);
         };
 
-        FENIX_Highchart_Adapter.prototype._createSeriesTimeserie = function (data, x, y, value, yAxis, auxSeries) {
+        FENIX_Adapter.prototype._createSeriesTimeserie = function (data, x, y, value, yAxis, auxSeries) {
 
             var xIndex = x.index,
                 xDataType = x.column.dataType,
@@ -482,9 +428,9 @@ define([
          * @returns {*}
          * @private
          */
-            //TODO: clean the code, clone the object to return a new series.
-            // TODO: This method can be highly simplified.
-        FENIX_Highchart_Adapter.prototype._addSerie = function (series, serie, valueIndex) {
+        //TODO: clean the code, clone the object to return a new series.
+        // TODO: This method can be highly simplified.
+        FENIX_Adapter.prototype._addSerie = function (series, serie, valueIndex) {
             var seriesAlreadyAdded = false;
             for (var i = 0; i < series.length; i++) {
                 if (serie.name === series[i].name) {
@@ -507,7 +453,7 @@ define([
             return series;
         };
 
-        FENIX_Highchart_Adapter.prototype._createSeriesStandard = function (data, x, y, value, yAxis, xAxis, auxSeries) {
+        FENIX_Adapter.prototype._createSeriesStandard = function (data, x, y, value, yAxis, xAxis, auxSeries) {
 
             var xIndex = x.index,
                 yIndex = y.index,
@@ -559,7 +505,7 @@ define([
          * @param index
          * @private
          */
-        FENIX_Highchart_Adapter.prototype._sortData = function (data, index) {
+        FENIX_Adapter.prototype._sortData = function (data, index) {
 
             data.sort(_.bind(function (a, b) {
 
@@ -574,7 +520,7 @@ define([
             }, this));
         };
 
-        FENIX_Highchart_Adapter.prototype._getDatetimeByDataType = function (type, value) {
+        FENIX_Adapter.prototype._getDatetimeByDataType = function (type, value) {
 
             // TODO: this is can be simplified and not applied to each row
             switch (type.toLowerCase()) {
@@ -586,7 +532,7 @@ define([
             }
         };
 
-        FENIX_Highchart_Adapter.prototype._getYAxisIndex = function (yAxis, label) {
+        FENIX_Adapter.prototype._getYAxisIndex = function (yAxis, label) {
             var index = 0;
 
             if (label !== null) {
@@ -604,7 +550,7 @@ define([
             return index;
         };
 
-        FENIX_Highchart_Adapter.prototype._createSeriesName = function (row, auxSeries) {
+        FENIX_Adapter.prototype._createSeriesName = function (row, auxSeries) {
 
             var name = '';
 
@@ -617,7 +563,7 @@ define([
             return name;
         };
 
-        FENIX_Highchart_Adapter.prototype._processPieChart = function (config) {
+        FENIX_Adapter.prototype._processPieChart = function (config) {
             var chartObj = config.chartObj,
                 valueIndex = config.aux.value.index,
                 auxSeries = config.aux.series,
@@ -653,15 +599,15 @@ define([
             return chartObj;
         };
 
-        FENIX_Highchart_Adapter.prototype._onValidateDataSuccess = function () {
+        FENIX_Adapter.prototype._onValidateDataSuccess = function () {
             amplify.publish(e.READY, this);
         };
 
-        FENIX_Highchart_Adapter.prototype._onValidateDataError = function () {
+        FENIX_Adapter.prototype._onValidateDataError = function () {
             this._showConfigurationForm();
         };
 
-        FENIX_Highchart_Adapter.prototype._initVariable = function () {
+        FENIX_Adapter.prototype._initVariable = function () {
 
             // TODO: this could be simplified (and not store all that information)
             this.o.$metadata = this.o.model.metadata;
@@ -671,7 +617,7 @@ define([
 
         };
 
-        FENIX_Highchart_Adapter.prototype._validateInput = function () {
+        FENIX_Adapter.prototype._validateInput = function () {
 
             this.errors = {};
 
@@ -726,14 +672,14 @@ define([
             return (Object.keys(this.errors).length === 0);
         };
 
-        FENIX_Highchart_Adapter.prototype._validateData = function () {
+        FENIX_Adapter.prototype._validateData = function () {
 
             this.errors = {};
 
             return (Object.keys(this.errors).length === 0);
         };
 
-        FENIX_Highchart_Adapter.prototype._printAuxColumns = function () {
+        FENIX_Adapter.prototype._printAuxColumns = function () {
             if (this.o.debugging) {
                 console.log("----------Aux Columns");
                 console.log(this.o.aux.x);
@@ -744,10 +690,10 @@ define([
             }
         };
 
-        FENIX_Highchart_Adapter.prototype.destroy = function () {
-            
+        FENIX_Adapter.prototype.destroy = function () {
+
         };
 
 
-        return FENIX_Highchart_Adapter;
+        return FENIX_Adapter;
     });

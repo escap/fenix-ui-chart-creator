@@ -2,13 +2,11 @@
 define([
         'require',
         'jquery',
-        'fx-c-c/adapters/star_schema_adapter',
-        'fx-c-c/adapters/matrix_schema_adapter',
         'fx-c-c/adapters/FENIX_adapter',
         'fx-c-c/templates/base_template',
         'fx-c-c/creators/highcharts_creator'
     ],
-    function (RequireJS, $) {
+    function (RequireJS, $, FENIXAdapter, BaseTemplate, HighchartCreator) {
 
         'use strict';
 
@@ -16,31 +14,24 @@ define([
             default: ''
         };
 
-        function ChartCreator() {
-            $.extend(true, this, defaultOptions);
+        function ChartCreator(config) {
+            $.extend(true, this, defaultOptions, config);
+
+            if (this._validateInput(config)) {
+                this.templateFactory = BaseTemplate;
+                this.creatorFactory = HighchartCreator;
+                this.adapter = new FENIXAdapter();
+            }
+
             return this;
         }
 
-        ChartCreator.prototype.init = function (config) {
-            this.dfd = $.Deferred();
+        ChartCreator.prototype.render = function (c) {
 
-            var self = this;
-            try {
-                if (this._validateInput(config)) {
-                    this.preloadResources(config);
-                }
-            } catch (e) {
-                self.onError(e);
-            }
-
-            // Return the Promise so caller can't change the Deferred
-            return this.dfd.promise();
-        };
-
-        ChartCreator.prototype.render = function (config) {
+            var config = c || {};
 
             var template = new this.templateFactory(
-                    $.extend(true, {model: config.model, container: config.container}, config.template)
+                $.extend(true, {model: config.model, container: config.container}, config.template)
                 ),
                 creator = new this.creatorFactory(
                     $.extend(true, {container: config.container, noData: config.noData}, config.creator)
@@ -49,17 +40,32 @@ define([
             // render template
             template.render();
 
+            // getting chart definition
+
+//FIG this.adapter e' il pivotator
+            var modelFxLight = this.adapter.prepareData(config.adapter || {});
+
+            // render chart
+//FIG creator e' il renderer
+            creator.render({model: modelFxLight, config: config.creator || {}});
+
+/*
             // TODO: Handle the error
             try {
                 // getting chart definition
-                var chartObj = this.adapter.prepareChart(config.adapter || {});
+
+//FIG this.adapter e' il pivotator
+                var modelFxLight = this.adapter.prepareData(config.adapter || {});
+
                 // render chart
-                creator.render({chartObj: chartObj});
+//FIG creator e' il renderer
+                creator.render({model: modelFxLight, config: config.creator || {}});
 
             } catch (e) {
-                console.error("Creator raised an error: " + e );
-                creator.noDataAvailable({container : config.container});
+                console.error("Creator raised an error: " + e);
+                creator.noDataAvailable({container: config.container});
             }
+*/
 
             return {
                 destroy: $.proxy(function () {
@@ -71,7 +77,9 @@ define([
             };
         };
 
-        ChartCreator.prototype.preloadResources = function (config) {
+        ChartCreator.prototype.preloadResources = function (c) {
+
+            var config = c || {};
 
             var baseTemplate = this.getTemplateUrl(),
                 adapter = this.getAdapterUrl(config.model, (config.adapter) ? config.adapter.adapterType : null),
@@ -89,7 +97,7 @@ define([
 
                 // TODO: use one configuration object in this phase
                 self.adapter = new Adapter($.extend(true, {model: config.model}, config.adapter));
-                self.adapter.prepareData($.extend(true, {model: config.model}, config.adapter));
+                //self.adapter.prepareData($.extend(true, {model: config.model}, config.adapter));
 
                 if (typeof config.onReady === 'function') {
                     config.onReady(self);
@@ -105,6 +113,10 @@ define([
         };
 
         ChartCreator.prototype.getAdapterUrl = function (model, adapterType) {
+
+            if (!model) {
+                return this.adapterUrl;
+            }
 
             // TODO add here adapter discovery logic
             // TODO: Dirty switch to check wheater there is an adapterType specified
