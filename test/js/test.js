@@ -32,7 +32,7 @@ define([
                         config : optGr
                     },
                     creator : {
-                        id : "result",
+                        container : "#result",
                         type : "pie",
                         config : optGr
                     }

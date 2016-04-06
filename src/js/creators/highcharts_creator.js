@@ -132,8 +132,13 @@ define([
 
 		
 		
-		for(let i of config.model.cols)
-		{defaultRenderOptions.xAxis.categories.push(i.title["EN"]);}
+		for(var ii in config.model.cols) {
+            if(config.model.cols.hasOwnProperty(ii)){
+                i=config.model.cols[ii];
+                defaultRenderOptions.xAxis.categories.push(i.title["EN"]);
+            }
+        }
+
 			
 			
 			for(var i in config.model.rows)
@@ -145,8 +150,8 @@ define([
 		
 		console.log(this.o.container)
 		
-		$(this.o.container).empty();
-		alert('ici')
+		$(this.o.container).find(this.o.s.CONTENT).empty();
+
 			$(this.o.container).highcharts(defaultRenderOptions);
 			
             //render chart
