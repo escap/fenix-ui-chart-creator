@@ -67,7 +67,8 @@ define([
                cumulative: false,
                aggregator: config.config.Aggregator,
                formater: config.config.Formater,
-               nbDecimal: config.config.nbDecimal
+               nbDecimal: config.config.nbDecimal,
+			   fulldataformat:false
            });
 
             return ret;

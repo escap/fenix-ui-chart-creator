@@ -25,9 +25,7 @@ define([
 
         myToolbar.init("toolbar", Model.metadata.dsd, {
             onchange: function () {
-
                 var optGr = myToolbar.getConfigCOLROW();
-
                 myRenderer.render({
                     adapter: {
                         model : Model,
@@ -58,8 +56,8 @@ define([
             }
         });
 
-        log.info(myRenderer);
-        log.info(Model);
+    //    log.info(myRenderer);
+      //  log.info(Model);
     };
 
     return new Test();
