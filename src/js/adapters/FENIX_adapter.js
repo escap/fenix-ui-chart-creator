@@ -62,7 +62,7 @@ define([
 
             //FIG TODO simplifing the arguments of pivot()
 
-           var ret = myPivotator.pivot(config.model, config.config.ROWS, config.config.COLS, {
+          /* var ret = myPivotator.pivot(config.model, config.config.ROWS, config.config.COLS, {
                myfunction: config.config.GetValue,
                cumulative: false,
                aggregator: config.config.Aggregator,
@@ -70,6 +70,10 @@ define([
                nbDecimal: config.config.nbDecimal,
 			   fulldataformat:false
            });
+*/
+var ret = myPivotator.pivot(config.model, config.config);
+
+
 
             return ret;
 /*
