@@ -2,7 +2,7 @@ define([
 		'jquery',
 		"sortable",
 		"fx-common/pivotator/functions",
-		"fenixtool"
+		"fx-common/pivotator/fenixtool"
 	], function($, Sortable,myFunctions,fenixTool) {
 
 
