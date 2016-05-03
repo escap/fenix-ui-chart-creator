@@ -26,9 +26,39 @@ define([
             return this;
         }
 
-        ChartCreator.prototype.render = function (c) {
+        ChartCreator.prototype.render = function (obj) {
 
-            var config = c || {};
+            //Input parsing
+
+            var general = {
+                adapter : {},
+                creator: {
+                    config : {}
+                }
+            }, optGr = {};
+
+            optGr.AGG = obj.aggregations;
+            optGr.COLS = obj.columns;
+            optGr.VALS = obj.values;
+            optGr.ROWS = obj.rows;
+            optGr.HIDDEN = obj.hidden;
+            optGr.Aggregator = obj.aggregationFn;
+            optGr.Formater = obj.formatter;
+            optGr.GetValue = obj.valueOutputType;
+            optGr.fulldataformat = obj.showRowHeaders;
+            optGr.nbDecimal = obj.decimals;
+            optGr.showCode = obj.showCode;
+            optGr.showFlag = obj.showFlag;
+            optGr.showUnit = obj.showUnit;
+
+            general.adapter.model = obj.model;
+            general.adapter.config = optGr;
+
+            general.creator.container =  obj.el;
+            general.creator.config = optGr;
+            //end Input parsing
+
+            var config = general;
 
             var template = new this.templateFactory(
                 $.extend(true, {model: config.model, container: config.container}, config.template)
@@ -49,23 +79,23 @@ define([
 //FIG creator e' il renderer
             creator.render({model: modelFxLight, config: config.creator || {}});
 
-/*
-            // TODO: Handle the error
-            try {
-                // getting chart definition
+            /*
+             // TODO: Handle the error
+             try {
+             // getting chart definition
 
-//FIG this.adapter e' il pivotator
-                var modelFxLight = this.adapter.prepareData(config.adapter || {});
+             //FIG this.adapter e' il pivotator
+             var modelFxLight = this.adapter.prepareData(config.adapter || {});
 
-                // render chart
-//FIG creator e' il renderer
-                creator.render({model: modelFxLight, config: config.creator || {}});
+             // render chart
+             //FIG creator e' il renderer
+             creator.render({model: modelFxLight, config: config.creator || {}});
 
-            } catch (e) {
-                console.error("Creator raised an error: " + e);
-                creator.noDataAvailable({container: config.container});
-            }
-*/
+             } catch (e) {
+             console.error("Creator raised an error: " + e);
+             creator.noDataAvailable({container: config.container});
+             }
+             */
 
             return {
                 destroy: $.proxy(function () {

@@ -68,7 +68,7 @@ define([
         HightchartCreator.prototype.render = function (config) {
 //FIG
 
-            console.log("HCRENDER",config,this)
+            //console.log("HCRENDER",config,this)
 		
 		var defaultRenderOptions={
         chart: {type: 'column'},
@@ -148,7 +148,7 @@ define([
 		}
 		
 		
-		console.log(this.o.container)
+		//console.log(this.o.container)
 		
 		$(this.o.container).find(this.o.s.CONTENT).empty();
 
@@ -183,7 +183,6 @@ define([
         };
 
         HightchartCreator.prototype._createChart = function () {
-		console.log("createChart")
             this.o.config = $.extend(true, {}, baseConfig, this.o.chartObj);
 			
             this.$container.highcharts(this.o.config);
