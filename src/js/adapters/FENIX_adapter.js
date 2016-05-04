@@ -58,6 +58,7 @@ define([
 
         FENIX_Adapter.prototype.prepareData = function (config) {
             //return processed data
+			
             var myPivotator=new Pivotator();
 
             //FIG TODO simplifing the arguments of pivot()
@@ -74,7 +75,7 @@ define([
 var ret = myPivotator.pivot(config.model, config.config);
 
 
-
+console.log(config,ret)
             return ret;
 /*
             this.o = $.extend(true, {}, defaultOptions, config);

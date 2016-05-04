@@ -37,7 +37,7 @@ define([
                 }
             }, optGr = {};
 
-            optGr.AGG = obj.aggregations;
+           /* optGr.AGG = obj.aggregations;
             optGr.COLS = obj.columns;
             optGr.VALS = obj.values;
             optGr.ROWS = obj.rows;
@@ -50,12 +50,12 @@ define([
             optGr.showCode = obj.showCode;
             optGr.showFlag = obj.showFlag;
             optGr.showUnit = obj.showUnit;
-
+*/
             general.adapter.model = obj.model;
-            general.adapter.config = optGr;
+            general.adapter.config = obj;
 
             general.creator.container =  obj.el;
-            general.creator.config = optGr;
+            general.creator.config = obj;
             //end Input parsing
 
             var config = general;

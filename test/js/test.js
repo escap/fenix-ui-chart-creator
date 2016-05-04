@@ -3,7 +3,7 @@ define([
     'loglevel',
     'fx-c-c/start',
     'test/js/toolbar',
-    'test/models/data'
+    'test/models/dataFAOSTAT'
 ], function (log, ChartCreator, Toolbar, Model) {
 
     'use strict';
@@ -28,10 +28,10 @@ var self = this;
             onchange: function () {
                 var optGr = myToolbar.getConfigCOLROW(Model.metadata.dsd);
 
-                myRenderer.render(self._harmonizeInput($.extend(true, {}, {
+                myRenderer.render($.extend(true, {}, {
                     model : Model,
                     container : "#result"
-                }, optGr)));
+                }, optGr));
 
             }
         });
@@ -39,17 +39,17 @@ var self = this;
 
         var optGr = myToolbar.getConfigCOLROW(Model.metadata.dsd);
 
-        var config = this._harmonizeInput($.extend(true, {}, {
+        var config = $.extend(true, {}, {
             model : Model,
             container : "#result"
-        }, optGr));
-
+        }, optGr);
+		console.log("config",config)
         myRenderer.render(config);
 
     };
 
     Test.prototype._harmonizeInput = function (config) {
-
+/*
         var model = {};
 
         model.aggregationFn = config.Aggregator;
@@ -76,7 +76,7 @@ var self = this;
         console.log(model)
 
         return model;
-
+*/
     };
 
     return new Test();
