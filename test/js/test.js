@@ -1,10 +1,11 @@
 /*global requirejs, define*/
 define([
     'loglevel',
-    'fx-c-c/start',
+    'jquery',
+    'fx-chart/start',
     'test/js/toolbar',
     'test/models/dataFAOSTAT'
-], function (log, ChartCreator, Toolbar, Model) {
+], function (log, $, ChartCreator, Toolbar, Model) {
 
     'use strict';
 
@@ -14,69 +15,36 @@ define([
 
         log.trace("Test started");
 
-        this._renderOlap();
+        this._renderChart();
 
     };
 
-    Test.prototype._renderOlap = function () {
-var self = this;
-//console.log("Model initial",Model)
-        var myRenderer = new ChartCreator();
+    Test.prototype._renderChart = function () {
+
         var myToolbar = new Toolbar();
 
         myToolbar.init("toolbar", Model.metadata.dsd, {
             onchange: function () {
                 var optGr = myToolbar.getConfigCOLROW(Model.metadata.dsd);
 
-                myRenderer.render($.extend(true, {}, {
-                    model : Model,
-                    container : "#result"
-                }, optGr));
+                console.log(optGr.type)
+
+                myRenderer.update(optGr);
 
             }
         });
+
         myToolbar.display();
 
         var optGr = myToolbar.getConfigCOLROW(Model.metadata.dsd);
 
         var config = $.extend(true, {}, {
             model : Model,
-            container : "#result"
+            el : "#result"
         }, optGr);
-		console.log("config",config)
-        myRenderer.render(config);
 
-    };
+        var myRenderer = new ChartCreator(config);
 
-    Test.prototype._harmonizeInput = function (config) {
-/*
-        var model = {};
-
-        model.aggregationFn = config.Aggregator;
-
-        model.aggregations = config.AGG.slice(0) || [];
-        model.columns = config.COLS.slice(0);
-        model.rows = config.ROWS.slice(0);
-        model.hidden = config.HIDDEN.slice(0);
-        model.values = config.VALS.slice(0);
-
-        model.formatter = config.Formater;
-        model.valueOutputType = config.GetValue;
-        model.showRowHeaders = config.fulldataformat;
-        model.decimals = config.nbDecimal;
-
-        model.showCode = config.showCode;
-        model.showFlag = config.showFlag;
-        model.showUnit = config.showUnit;
-
-        model.model = Model;
-        model.el = "#result";
-
-        console.log("------------")
-        console.log(model)
-
-        return model;
-*/
     };
 
     return new Test();

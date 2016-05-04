@@ -31,7 +31,6 @@ define(function () {
             //selectionMarkerFill: 'rgba(0,0,0,0.25)',//Colore di fonfo della selezione per lo zoom (trasparente per far vedere sotto)
 
 
-
             resetZoomButton: {
                 position: {
                     align: 'right', //Allineamento zoom orizzontale
@@ -169,43 +168,41 @@ define(function () {
                 }
             }
         },
-/*        plotOptions: {
-            series: {
-                allowPointSelect: true, //Permette di selezionare i punti della chart
-                //pointPlacement: "on", Per partire dall'origine
-                animation: { // Configura l'animazione di entrata
-                    duration: 1000,
-                    easing: 'swing'
-                },
-                connectNulls: true,
-                cropThreshold: 3,
-                lineWidth: 1, // IMPORTANTE - Cambia lo spessore delle linee della chart
-                states: {
-                    hover: {
-                        lineWidth: 1
-                    }
-                },
-                fillColor: {
-                },
-                marker: {
-                    enabled: false, //Attiva o disattiva i marker
-                    //symbol: 'url(http://www.mentaltoy.com/resources/logoChart.png)', //Questo paramentro carica un simbolo personalizzato. Si può anche avere una chart con marker diverse sulle linee
-                    symbol: 'circle', // Tipologia di marker
-                    radius: 4,
-                    lineWidth: 1,
-                    states: {
-                        hover: {
-                            enabled: true, // Attiva o disattiva il marker quando si passa sopra la chart
-                            symbol: 'circle',
-                            radius: 5,
-                            lineWidth: 2
-                        }
-                    }
-                }
-            }
-        },*/
-
-
+        /*        plotOptions: {
+         series: {
+         allowPointSelect: true, //Permette di selezionare i punti della chart
+         //pointPlacement: "on", Per partire dall'origine
+         animation: { // Configura l'animazione di entrata
+         duration: 1000,
+         easing: 'swing'
+         },
+         connectNulls: true,
+         cropThreshold: 3,
+         lineWidth: 1, // IMPORTANTE - Cambia lo spessore delle linee della chart
+         states: {
+         hover: {
+         lineWidth: 1
+         }
+         },
+         fillColor: {
+         },
+         marker: {
+         enabled: false, //Attiva o disattiva i marker
+         //symbol: 'url(http://www.mentaltoy.com/resources/logoChart.png)', //Questo paramentro carica un simbolo personalizzato. Si può anche avere una chart con marker diverse sulle linee
+         symbol: 'circle', // Tipologia di marker
+         radius: 4,
+         lineWidth: 1,
+         states: {
+         hover: {
+         enabled: true, // Attiva o disattiva il marker quando si passa sopra la chart
+         symbol: 'circle',
+         radius: 5,
+         lineWidth: 2
+         }
+         }
+         }
+         }
+         },*/
         title: {
             //enabled: false,
             text: '',
@@ -231,10 +228,11 @@ define(function () {
                 }
             },
             //type: 'datetime',
-/*            dateTimeLabelFormats: { // don't display the dummy year
-                //month: '%e. %b',
-                year: '%Y'
-            },*/
+            /*            dateTimeLabelFormats: { // don't display the dummy year
+             //month: '%e. %b',
+             year: '%Y'
+             },*/
+            categories: [],
             title: {
                 enabled: false,
                 text: 'null'
@@ -266,12 +264,13 @@ define(function () {
         },
         tooltip: {
             //valueSuffix: '',
-           // backgroundColor: 'rgba(255, 255, 255, 0.95)',
+            // backgroundColor: 'rgba(255, 255, 255, 0.95)',
             borderWidth: 1,
             shadow: true,
             crosshairs: "mixed",
-           // shared: true
-        }
+            // shared: true
+        },
+        series: [],
+    }
 
-    };
 });

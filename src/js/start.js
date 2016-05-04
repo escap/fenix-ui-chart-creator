@@ -1,202 +1,261 @@
-/*global define, console*/
+/*global define, amplify*/
 define([
-        'require',
-        'jquery',
-        'fx-c-c/adapters/FENIX_adapter',
-        'fx-c-c/templates/base_template',
-        'fx-c-c/creators/highcharts_creator'
-    ],
-    function (RequireJS, $, FENIXAdapter, BaseTemplate, HighchartCreator) {
+    'jquery',
+    'require',
+    'underscore',
+    'loglevel',
+    'fx-chart/config/errors',
+    'fx-chart/config/events',
+    'fx-chart/config/config',
+    'fx-chart/config/config-default',
+    'amplify'
+], function ($, require, _, log, ERR, EVT, C, CD) {
 
-        'use strict';
+    'use strict';
 
-        var defaultOptions = {
-            default: ''
-        };
+    function Chart(o) {
+        log.info("FENIX Chart");
+        log.info(o);
 
-        function ChartCreator(config) {
-            $.extend(true, this, defaultOptions, config);
+        $.extend(true, this, CD, C, {initial: o});
 
-            if (this._validateInput(config)) {
-                this.templateFactory = BaseTemplate;
-                this.creatorFactory = HighchartCreator;
-                this.adapter = new FENIXAdapter();
-            }
+        this._parseInput(o);
+
+        var valid = this._validateInput();
+
+        if (valid === true) {
+
+            this._initVariables();
+    
+            this._bindEventListeners();
+
+            this._preloadPluginScript();
 
             return this;
+
+        } else {
+            log.error("Impossible to create Chart");
+            log.error(valid)
+        }
+    }
+
+    // API
+
+    /**
+     * pub/sub
+     * @return {Object} Chart instance
+     */
+    Chart.prototype.on = function (channel, fn) {
+        if (!this.channels[channel]) {
+            this.channels[channel] = [];
+        }
+        this.channels[channel].push({context: this, callback: fn});
+        return this;
+    };
+    
+    Chart.prototype.update = function ( config ) {
+
+        this.chart.update(config);
+    };
+
+    Chart.prototype._trigger = function (channel) {
+
+        if (!this.channels[channel]) {
+            return false;
+        }
+        var args = Array.prototype.slice.call(arguments, 1);
+        for (var i = 0, l = this.channels[channel].length; i < l; i++) {
+            var subscription = this.channels[channel][i];
+            subscription.callback.apply(subscription.context, args);
         }
 
-        ChartCreator.prototype.render = function (obj) {
+        return this;
+    };
 
-            //Input parsing
+    // end API
 
-            var general = {
-                adapter : {},
-                creator: {
-                    config : {}
-                }
-            }, optGr = {};
+    Chart.prototype._parseInput = function () {
 
-           /* optGr.AGG = obj.aggregations;
-            optGr.COLS = obj.columns;
-            optGr.VALS = obj.values;
-            optGr.ROWS = obj.rows;
-            optGr.HIDDEN = obj.hidden;
-            optGr.Aggregator = obj.aggregationFn;
-            optGr.Formater = obj.formatter;
-            optGr.GetValue = obj.valueOutputType;
-            optGr.fulldataformat = obj.showRowHeaders;
-            optGr.nbDecimal = obj.decimals;
-            optGr.showCode = obj.showCode;
-            optGr.showFlag = obj.showFlag;
-            optGr.showUnit = obj.showUnit;
-*/
-            general.adapter.model = obj.model;
-            general.adapter.config = obj;
+        this.id = this.initial.id;
+        this.$el = $(this.initial.el);
+        this.type = this.initial.type;
+        this.model = this.initial.model;
 
-            general.creator.container =  obj.el;
-            general.creator.config = obj;
-            //end Input parsing
+        var pc = {};
 
-            var config = general;
+        pc.aggregationFn = this.initial.aggregationFn;
 
-            var template = new this.templateFactory(
-                $.extend(true, {model: config.model, container: config.container}, config.template)
-                ),
-                creator = new this.creatorFactory(
-                    $.extend(true, {container: config.container, noData: config.noData}, config.creator)
-                );
+        pc.aggregations = this.initial.aggregations;
+        pc.columns = this.initial.columns;
+        pc.rows = this.initial.rows;
+        pc.hidden = this.initial.hidden;
+        pc.values = this.initial.values;
 
-            // render template
-            template.render();
+        pc.formatter =this.initial.formatter;
+        pc.valueOutputType =this.initial.valueOutputType;
+        pc.showRowHeaders = this.initial.showRowHeaders;
+        pc.decimals =this.initial.decimals;
 
-            // getting chart definition
+        pc.showCode = this.initial.showCode;
+        pc.showFlag = this.initial.showFlag;
+        pc.showUnit = this.initial.showUnit;
 
-//FIG this.adapter e' il pivotator
-            var modelFxLight = this.adapter.prepareData(config.adapter || {});
+        // add more pivotator config
+            
+        this.pivotatorConfig = pc;
+        
+        this.renderer = this.initial.renderer || C.renderer || CD.renderer;
 
-            // render chart
-//FIG creator e' il renderer
-            creator.render({model: modelFxLight, config: config.creator || {}});
+        this.lang = this.initial.lang || 'EN';
+    };
 
-            /*
-             // TODO: Handle the error
-             try {
-             // getting chart definition
+    Chart.prototype._validateInput = function () {
 
-             //FIG this.adapter e' il pivotator
-             var modelFxLight = this.adapter.prepareData(config.adapter || {});
+        var valid = true,
+            errors = [];
 
-             // render chart
-             //FIG creator e' il renderer
-             creator.render({model: modelFxLight, config: config.creator || {}});
+        //set Chart id
+        if (!this.id) {
 
-             } catch (e) {
-             console.error("Creator raised an error: " + e);
-             creator.noDataAvailable({container: config.container});
-             }
-             */
+            window.fx_chart_id >= 0 ? window.fx_chart_id++ : window.fx_chart_id = 0;
+            this.id = String(window.fx_chart_id);
+            log.warn("Impossible to find Chart id. Set auto id to: " + this.id);
+        }
 
-            return {
-                destroy: $.proxy(function () {
+        if (!this.$el) {
+            errors.push({code: ERR.MISSING_CONTAINER});
+            log.warn("Impossible to find Chart container");
+        }
 
-                    creator.destroy();
-                    template.destroy();
+        //Check if $el exist
+        if (this.$el.length === 0) {
+            errors.push({code: ERR.MISSING_CONTAINER});
+            log.warn("Impossible to find box container");
+        }
+        
+        //add validation
 
-                }, this)
-            };
-        };
+        return errors.length > 0 ? errors : valid;
 
-        ChartCreator.prototype.preloadResources = function (c) {
+    };
 
-            var config = c || {};
+    Chart.prototype._initVariables = function () {
 
-            var baseTemplate = this.getTemplateUrl(),
-                adapter = this.getAdapterUrl(config.model, (config.adapter) ? config.adapter.adapterType : null),
-                creator = this.getCreatorUrl(),
-                self = this;
+        //pub/sub
+        this.channels = {};
+        
+    };
 
-            RequireJS([
-                baseTemplate,
-                adapter,
-                creator
-            ], function (Template, Adapter, Creator) {
+    Chart.prototype._bindEventListeners = function () {
 
-                self.templateFactory = Template;
-                self.creatorFactory = Creator;
+        //amplify.subscribe(this._getEventName(EVT.SELECTOR_READY), this, this._onSelectorReady);
 
-                // TODO: use one configuration object in this phase
-                self.adapter = new Adapter($.extend(true, {model: config.model}, config.adapter));
-                //self.adapter.prepareData($.extend(true, {model: config.model}, config.adapter));
+    };
 
-                if (typeof config.onReady === 'function') {
-                    config.onReady(self);
-                }
-                self.dfd.resolve(self);
-            });
-        };
+    // Preload scripts
 
-        ChartCreator.prototype.onError = function (e) {
-            console.error("ChartCreator Error: ", e);
-            // TODO: Add an Error message
-            this.dfd.reject("ChartCreator Error: ", e);
-        };
+    Chart.prototype._getPluginPath = function (name) {
 
-        ChartCreator.prototype.getAdapterUrl = function (model, adapterType) {
+        var registeredSelectors = $.extend(true, {}, this.plugin_registry),
+            path;
 
-            if (!model) {
-                return this.adapterUrl;
-            }
+        var conf = registeredSelectors[name];
 
-            // TODO add here adapter discovery logic
-            // TODO: Dirty switch to check wheater there is an adapterType specified
-            if (adapterType !== null && adapterType !== undefined) {
-                switch (adapterType.toLocaleLowerCase()) {
-                    case 'fenix':
-                        return this.adapterUrl ? this.adapterUrl : 'fx-c-c/adapters/FENIX_adapter';
-                    case 'wds-array':
-                        return this.adapterUrl ? this.adapterUrl : 'fx-c-c/adapters/matrix_schema_adapter';
-                    case 'wds-objects':
-                        return this.adapterUrl ? this.adapterUrl : 'fx-c-c/adapters/star_schema_adapter';
-                }
-            }
-            else {
+        if (!conf) {
+            log.error('Registration not found for "' + name + ' plugin".');
+        }
 
-                // TODO: Dirty check to be modified
-                // TODO: Validate the model (What to do in case or errors?)
-                if (model.data && model.metadata) {
-                    return this.adapterUrl ? this.adapterUrl : 'fx-c-c/adapters/FENIX_adapter';
-                }
-                else if (model.length > 0 && Array.isArray(model[0])) {
-                    return this.adapterUrl ? this.adapterUrl : 'fx-c-c/adapters/matrix_schema_adapter';
-                }
-                else if (model.length > 0 && typeof model[0] === 'object') {
-                    return this.adapterUrl ? this.adapterUrl : 'fx-c-c/adapters/star_schema_adapter';
-                }
-                else {
-                    if (!model.data) {
-                        model.data = [];
-                        return this.adapterUrl ? this.adapterUrl : 'fx-c-c/adapters/FENIX_adapter';
+        if (conf.path) {
+            path = conf.path;
+        } else {
+            log.error('Impossible to find path configuration for "' + name + ' plugin".');
+        }
 
-                    }
-                    throw new Error("The are not available adapter for the current model:", model);
-                }
-            }
-        };
+        return path;
 
-        ChartCreator.prototype.getTemplateUrl = function () {
-            //TODO add here template discovery logic
-            return this.templateUrl ? this.templateUrl : 'fx-c-c/templates/base_template';
-        };
+    };
 
-        ChartCreator.prototype.getCreatorUrl = function () {
-            //TODO add here template discovery logic
-            return this.creatorUrl ? this.creatorUrl : 'fx-c-c/creators/highcharts_creator';
-        };
+    Chart.prototype._preloadPluginScript = function () {
 
-        ChartCreator.prototype._validateInput = function () {
-            return true;
-        };
+        var paths = [];
 
-        return ChartCreator;
-    });
+        paths.push(this._getPluginPath(this.renderer));
+
+        log.info("Chart path to load");
+        log.info(paths);
+
+        //Async load of plugin js source
+        require(paths, _.bind(this._preloadPluginScriptSuccess, this));
+
+    };
+
+    Chart.prototype._preloadPluginScriptSuccess = function () {
+        log.info('Plugin script loaded successfully');
+
+        this._renderChart();
+
+    };
+
+    Chart.prototype._renderChart = function () {
+
+        var Renderer = this._getRenderer(this.renderer);
+
+        var config = $.extend(true, {}, {
+            pivotatorConfig : this.pivotatorConfig,
+            el : this.$el,
+            model : this.model,
+            lang : this.lang,
+            type : this.type
+        });
+
+        this.chart = new Renderer(config);
+
+        this._trigger("ready");
+
+    };
+
+    Chart.prototype._getEventName = function (evt) {
+
+        return this.id.concat(evt);
+
+    };
+
+    Chart.prototype._getRenderer = function (name) {
+
+        return require(this._getPluginPath(name));
+    };
+
+    //disposition
+    Chart.prototype._unbindEventListeners = function () {
+
+        //amplify.unsubscribe(this._getEventName(EVT.SELECTOR_READY), this._onSelectorReady);
+
+    };
+
+    Chart.prototype.dispose = function () {
+
+        this.chart.dispose();
+
+        //unbind event listeners
+        this._unbindEventListeners();
+
+    };
+
+    // utils
+
+    Chart.prototype._callSelectorInstanceMethod = function (name, method, opts1, opts2) {
+
+        var Instance = this.chart;
+
+        if ($.isFunction(Instance[method])) {
+
+            return Instance[method](opts1, opts2);
+
+        } else {
+            log.error(name + " selector does not implement the mandatory " + method + "() fn");
+        }
+
+    };
+
+    return Chart;
+});

@@ -6,13 +6,11 @@ define(function () {
     var config = {
 
         paths : {
-            //'fx-c-c': prefix,
-            'fx-c-c/start': './start',
-            'fx-c-c/html': '../html',
-            'fx-c-c/config': '../../config',
-            'fx-c-c/adapters':  './adapters',
-            'fx-c-c/templates': './templates',
-            'fx-c-c/creators': './creators',
+
+            'fx-chart/start': './start',
+            'fx-chart/html': '../html',
+            'fx-chart/config': '../../config',
+            'fx-chart/renderers' : './renderers',
 
             // third party libs
             text: '{FENIX_CDN}/js/requirejs/plugins/text/2.0.12/text',

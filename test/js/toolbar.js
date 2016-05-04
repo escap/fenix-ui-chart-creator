@@ -14,7 +14,7 @@ define([
         values = [];
         chGetValue = "classicToNumber";
         chAggregator = {value:"sum",v1:"default"};
-        chFormater = "value";
+        chFormater = "localstring";
         chNbDecimal = 2;
         chshowUnit = false;
         chshowFlag = false;
@@ -26,11 +26,21 @@ define([
         init = function (id, FX, opt) {
 
             var lang = "EN";
-            if (opt.lang) {lang = opt.lang;}
-            if (opt.decimals) {chNbDecimal = opt.decimals;}
-            if (opt.showUnit) {chshowUnit = opt.showUnit;}
-            if (opt.showFlag) {chshowFlag = opt.showFlag;}
-            if (opt.showCode) {chshowCode = opt.showCode;}
+            if (opt.lang) {
+                lang = opt.lang;
+            }
+            if (opt.decimals) {
+                chNbDecimal = opt.decimals;
+            }
+            if (opt.showUnit) {
+                chshowUnit = opt.showUnit;
+            }
+            if (opt.showFlag) {
+                chshowFlag = opt.showFlag;
+            }
+            if (opt.showCode) {
+                chshowCode = opt.showCode;
+            }
             id_container = id;
 
             document.getElementById(id).className = "olapToolbar";
@@ -71,7 +81,6 @@ define([
             $.each($("#" + id_container + "_VALS >li"), function (e, a) {
                 ret.values[a.getAttribute('value')] = true
             });
-
             ret.aggregationFn = chAggregator;
             ret.valueOutputType = chGetValue;
             ret.formatter = chFormater;
@@ -79,7 +88,7 @@ define([
             ret.showUnit = chshowUnit;
             ret.showFlag = chshowFlag;
             ret.showCode = chshowCode;
-
+            ret.type=document.getElementById('typeOfChart').value
             ret2 = myfenixTool.initFXD(FX, ret);
             $.extend(ret, ret2);
 //console.log("Ret after extend",ret,ret2)
@@ -156,24 +165,40 @@ define([
 
             /*options*/
 // Aggregation functions
-var mesFunc="<fieldset class=\"options\"><label>functions</label>";
+
+
+            /*options*/
+// Aggregation functions
+            var mesFunc="<fieldset class=\"options\"><label>functions</label>";
             var liste = myFunc.getListAggregator();
             for (var i in liste) {
-			mesFunc+="<div>"+i"<div>"+"<select id=\"" + id_container + "_AGGREGATION_"+i+"\">";
-			for(var j in liste[i]){mesFunc+="<option>"+j+"</option>"}
-			mesFunc+="</select>"
+                mesFunc+=i+"<select id=\"" + id_container + "_AGGREGATION_"+i+"\" onchange='chAggregator[\""+i+"\"]=this.value;_onChange()'>";
+                for(var j in liste[i]){mesFunc+="<option>"+j+"</option>"}
+                mesFunc+="</select>"
                 //document.getElementById(id_container + "_AGGREGATION").options[document.getElementById(id_container + "_AGGREGATION").options.length] = new Option(liste[i], liste[i])
             }
-			
-			mesFunc+="</fieldset>"
-			console.log("mesFunc",mesFunc)
-			  $("#" + id_container).append(mesFunc);
-          
-			/*
-            $("#" + id_container + "_AGGREGATION").on("change", function () {
-                chAggregator["value"] = document.getElementById(id_container + "_AGGREGATION").value;
-                _onChange()
-            })*/
+
+            mesFunc+="</fieldset>"
+            mesFunc+="<fieldset class=\"options\"><label>Type of chart<label>"+
+                    "<select id='typeOfChart' onchange='  _onChange()'>"+
+                "<option value='line'>line</option>"+
+                "<option value='column'>column</option>"+
+                "<option value='area'>area</option>"+
+                "<option value='area_stacked'>stacked Area</option>"+
+                "<option value='pie'>pie</option>"+
+                "<option value='scatter'>scatter</option>"+
+                "<option value='bubble'>bubble</option>"+
+                "<option value='heatmap'>heatmap</option>"+
+                "<option value='treemap'>treemap</option>"+
+                "<option value='boxplot'>boxplot</option>"+
+                "</select>"
+            $("#" + id_container).append(mesFunc);
+
+            /*
+             $("#" + id_container + "_AGGREGATION").on("change", function () {
+             chAggregator["value"] = document.getElementById(id_container + "_AGGREGATION").value;
+             _onChange()
+             })*/
 
         }
         /*
