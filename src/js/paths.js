@@ -18,8 +18,10 @@ define(function () {
             underscore: '{FENIX_CDN}/js/underscore/1.7.0/underscore.min',
             amplify: '{FENIX_CDN}/js/amplify/1.1.2/amplify.min',
             'handlebars': '{FENIX_CDN}/js/handlebars/2.0.0/handlebars',
-            'highcharts': '{FENIX_CDN}/js/highcharts/4.0.4/js/highcharts',
-
+         //  'highcharts': '{FENIX_CDN}/js/highcharts/4.0.4/js/highcharts',
+			highcharts: 'https://code.highcharts.com/highcharts',
+			highcharts_more:'https://code.highcharts.com/highcharts-more',
+			
             // highcharts plugins TODO: switch to CDN if they are going to be used
             'highcharts-export': '{FENIX_CDN}/js/highcharts/4.0.4/js/modules/exporting',
             'highcharts-export-csv': 'http://highslide-software.github.io/export-csv/export-csv'
@@ -36,6 +38,9 @@ define(function () {
             "highcharts-export-csv": {
                 "deps": ["highcharts", "highcharts-export" ]
             },
+			"highcharts_more":{
+			deps:['highcharts']
+			},
              "amplify": {
                 "deps": ["jquery"]
             }
