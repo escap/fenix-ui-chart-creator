@@ -89,16 +89,16 @@ define([
         pc.columns = this.initial.columns;
         pc.rows = this.initial.rows;
         pc.hidden = this.initial.hidden;
-        pc.values = this.initial.values;
+        pc.values = this.initial.values || ["value"];
 
-        pc.formatter =this.initial.formatter;
+        pc.formatter =this.initial.formatter || "value";
         pc.valueOutputType =this.initial.valueOutputType;
-        pc.showRowHeaders = this.initial.showRowHeaders;
-        pc.decimals =this.initial.decimals;
+        pc.showRowHeaders = this.initial.showRowHeaders || false;
+        pc.decimals =this.initial.decimals || 2;
 
-        pc.showCode = this.initial.showCode;
-        pc.showFlag = this.initial.showFlag;
-        pc.showUnit = this.initial.showUnit;
+        pc.showCode = this.initial.showCode || false;
+        pc.showFlag = this.initial.showFlag || false;
+        pc.showUnit = this.initial.showUnit || false;
 
         // add more pivotator config
             

@@ -183,6 +183,9 @@ define([
                     "<select id='typeOfChart' onchange='  _onChange()'>"+
                 "<option value='line'>line</option>"+
                 "<option value='column'>column</option>"+
+                "<option value='column_stacked'>stacked columns</option>"+
+
+
                 "<option value='area'>area</option>"+
                 "<option value='area_stacked'>stacked Area</option>"+
                 "<option value='pie'>pie</option>"+

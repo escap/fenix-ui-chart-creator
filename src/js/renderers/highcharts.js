@@ -1,7 +1,6 @@
 /*global define, amplify*/
 define([
     'jquery',
-    'require',
     'underscore',
     'loglevel',
     'fx-chart/config/errors',
@@ -13,7 +12,7 @@ define([
     'fx-chart/config/renderers/highcharts_shared',
     'highcharts_more',
     'amplify'
-], function ($, require, _, log, ERR, EVT, C, CD, Pivotator, templates, templateStyle) {
+], function ($, _, log, ERR, EVT, C, CD, Pivotator, templates, templateStyle) {
 
     'use strict';
 
@@ -107,9 +106,7 @@ define([
 
     Highcharts.prototype._renderHighcharts = function (config) {
 
-        var configFin = $.extend({}, config, {formatter: "value", values: ["value"]});
-
-        var model = this.pivotator.pivot(this.model, configFin);
+        var model = this.pivotator.pivot(this.model, config);
 
         var chartConfig = templates[this.type];
 
@@ -131,58 +128,62 @@ define([
 
         switch (type.toLowerCase()) {
             //add type process
-		case "boxplot":
-		console.log(model.data);
-			console.log(jStat(model.data).quartiles());
-		
-		var tempData=[];
-		 for (var i in model.rows) {
-		//if (i >20) {break;}
-		 config.xAxis.categories.push(model.rows[i].join("_"));
-		// config.xAxis.categories.push("test"+i);
-		
-		var ddata=[jStat(model.data[i]).min()+0].concat(jStat(model.data[i]).quartiles().concat(jStat(model.data[i]).max()))
-		 //console.log("JSTAT",ddata)
-		 tempData.push(ddata);
-		 
-		 }
-		 
-		  config.series.push({    data: tempData});
-		/* config.xAxis.categories= ['1', '2', '3', '4', '5'];
-		  config.series.push({data:[
-                [760, 801, 848, 895, 965],
-                [733, 853, 939, 980, 1080],
-                [714, 762, 817, 870, 918],
-                [724, 802, 806, 871, 950],
-                [834, 836, 864, 882, 910]
-            ]})
-		*/
-		break;
+            case "heatmap":
+                break;
+            case "boxplot":
+                //console.log(model.data);
+                //	console.log(jStat(model.data).quartiles());
+
+                var tempData = [];
+                for (var i in model.rows) {
+                    //if (i >20) {break;}
+                    config.xAxis.categories.push(model.rows[i].join("_"));
+                    // config.xAxis.categories.push("test"+i);
+
+                    var ddata = [jStat(model.data[i]).min() + 0].concat(jStat(model.data[i]).quartiles().concat(jStat(model.data[i]).max()))
+                    //console.log("JSTAT",ddata)
+                    tempData.push(ddata);
+
+                }
+
+                config.series.push({data: tempData});
+                /* config.xAxis.categories= ['1', '2', '3', '4', '5'];
+                 config.series.push({data:[
+                 [760, 801, 848, 895, 965],
+                 [733, 853, 939, 980, 1080],
+                 [714, 762, 817, 870, 918],
+                 [724, 802, 806, 871, 950],
+                 [834, 836, 864, 882, 910]
+                 ]})
+                 */
+                break;
             default:
-			
+
                 for (var ii in model.cols) {
-			
+
                     if (model.cols.hasOwnProperty(ii)) {
                         i = model.cols[ii];
-							
+
                         config.xAxis.categories.push(i.title[this.lang]);
-					
+
                     }
                 }
 
                 for (var i in model.rows) {
-                    if (i > 20) {break;}
-			//	 console.log("1 ",config.series)
+                    if (i > 20) {
+                        break;
+                    }
+                    //	 console.log("1 ",config.series)
                     config.series.push({
                         name: model.rows[i].join(" "),
                         data: model.data[i]
                     });
-								//	 console.log("2 ",config.series)
+                    //	 console.log("2 ",config.series)
 
                 }
                 ;
         }
-console.log("config",config)
+        //console.log("config", config)
         return config;
     };
 
