@@ -8,8 +8,9 @@ define([
     'fx-chart/config/events',
     'fx-chart/config/config',
     'fx-chart/config/config-default',
+    'fx-common/pivotator/start',
     'amplify'
-], function ($, require, _, log, ERR, EVT, C, CD) {
+], function ($, require, _, log, ERR, EVT, C, CD, Pivotator) {
 
     'use strict';
 
@@ -143,6 +144,8 @@ define([
 
         //pub/sub
         this.channels = {};
+
+        this.pivotator = new Pivotator();
         
     };
 
@@ -198,12 +201,13 @@ define([
 
     Chart.prototype._renderChart = function () {
 
-        var Renderer = this._getRenderer(this.renderer);
+        var Renderer = this._getRenderer(this.renderer),
+            model = this.pivotator.pivot(this.model, this.pivotatorConfig);
 
         var config = $.extend(true, {}, {
             pivotatorConfig : this.pivotatorConfig,
             el : this.$el,
-            model : this.model,
+            model : model,
             lang : this.lang,
             type : this.type
         });

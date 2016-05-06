@@ -106,7 +106,7 @@ define([
 
     Highcharts.prototype._renderHighcharts = function (config) {
 
-        var model = this.pivotator.pivot(this.model, config);
+        var model = this.model;
 
         var chartConfig = templates[this.type];
 

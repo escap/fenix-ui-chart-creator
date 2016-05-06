@@ -21,7 +21,7 @@ require.config({
 		mapPaths: pathProjectRoot + 'submodules/fenix-ui-map-creator/src/js/paths',
 		tablePaths: pathProjectRoot + 'submodules/fenix-ui-table-creator/src/js/paths',
 		filterPaths: pathProjectRoot + 'submodules/fenix-ui-filter/src/js/paths',
-		olapPaths: pathProjectRoot + 'submodules/fenix-ui-olap/js/paths',
+		olapPaths: pathProjectRoot + 'submodules/fenix-ui-olap/src/js/paths',
 		reportPaths: pathProjectRoot + 'submodules/fenix-ui-reports/src/js/paths',
 		visualizationPaths : pathProjectRoot + 'submodules/fenix-ui-visualization-box/src/js/paths',
 		dataEditorPaths : pathProjectRoot + 'submodules/fenix-ui-DataEditor/js/paths',
@@ -52,7 +52,7 @@ require([
 	filterConfig.baseUrl = submodules_path + 'fenix-ui-filter/src/js';
 
 	var olapConfig = Olap;
-	olapConfig.baseUrl = submodules_path + 'fenix-ui-olap/js';
+	olapConfig.baseUrl = submodules_path + 'fenix-ui-olap/src/js';
 
 	var chartConfig = ChartCreator;
 	chartConfig.baseUrl = submodules_path + 'fenix-ui-chart-creator/src/js';
@@ -111,7 +111,7 @@ require([
 	], function (log, Test) {
 
 		//trace, debug, info, warn, error, silent
-		log.setLevel('trace');
+		log.setLevel('silent');
 
 		log.warn("~~~~~ FENIX Visualization Box: test");
 		log.info("===== Start testing:...");
