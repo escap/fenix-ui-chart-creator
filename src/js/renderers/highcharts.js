@@ -161,7 +161,7 @@ console.log("defaultRenderOptions",defaultRenderOptions)
                  ]})
                  */
                 break;
-				case "pie":
+				case "pie2":
 				 var tempData = [];
                 for (var i in model.rows) {
                     if (i >20) {break;}
@@ -191,7 +191,7 @@ console.log("defaultRenderOptions",defaultRenderOptions)
                 }
 
                 for (var i in model.rows) {
-                   // if (i > 20) {break;}
+                    if (i > 20) {break;}
                     //	 console.log("1 ",config.series)
                     config.series.push({
                         name: model.rows[i].join(" "),
