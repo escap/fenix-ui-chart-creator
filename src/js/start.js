@@ -55,7 +55,8 @@ define([
     };
     
     Chart.prototype.update = function ( config ) {
-
+		
+this.chart.model=  this.pivotator.pivot(this.model, config);
         this.chart.update(config);
     };
 
@@ -203,7 +204,7 @@ define([
 
         var Renderer = this._getRenderer(this.renderer),
             model = this.pivotator.pivot(this.model, this.pivotatorConfig);
-
+//console.log("model chart",model, this.pivotatorConfig)
         var config = $.extend(true, {}, {
             pivotatorConfig : this.pivotatorConfig,
             el : this.$el,

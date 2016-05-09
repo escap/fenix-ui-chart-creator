@@ -57,7 +57,7 @@ define([
     Highcharts.prototype.update = function (config) {
 
         //TODO add validation
-
+//this.model=config.model;
         this.type = config.type ? config.type : this.type;
 
         this._renderHighcharts(config);
@@ -107,7 +107,7 @@ define([
     Highcharts.prototype._renderHighcharts = function (config) {
 
         var model = this.model;
-
+	
         var chartConfig = templates[this.type];
 
         if (!config) {
@@ -117,7 +117,7 @@ define([
         var defaultRenderOptions = $.extend(true, {}, templateStyle, chartConfig);
 
         this._populateData(this.type, model, defaultRenderOptions);
-
+console.log("defaultRenderOptions",defaultRenderOptions)
         this.chart = this.el.highcharts(defaultRenderOptions);
 
         this._trigger("ready");
@@ -126,6 +126,10 @@ define([
 
     Highcharts.prototype._populateData = function (type, model, config) {
 
+	
+	console.log(type, model, config) ;
+	
+	
         switch (type.toLowerCase()) {
             //add type process
             case "heatmap":
@@ -157,6 +161,23 @@ define([
                  ]})
                  */
                 break;
+				case "pie":
+				 var tempData = [];
+                for (var i in model.rows) {
+                    if (i >20) {break;}
+                    config.xAxis.categories.push(model.rows[i].join("_"));
+                    // config.xAxis.categories.push("test"+i);
+
+                    var ddata = 					jStat(model.data[i]).sum();
+                  //  console.log("JSTAT",ddata)
+                    tempData.push(ddata);
+					                config.series.push({data: tempData});
+
+
+                }
+				break;
+				
+				
             default:
 
                 for (var ii in model.cols) {
@@ -170,9 +191,7 @@ define([
                 }
 
                 for (var i in model.rows) {
-                    if (i > 20) {
-                        break;
-                    }
+                   // if (i > 20) {break;}
                     //	 console.log("1 ",config.series)
                     config.series.push({
                         name: model.rows[i].join(" "),

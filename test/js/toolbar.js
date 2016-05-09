@@ -14,7 +14,7 @@ define([
         values = [];
         chGetValue = "classicToNumber";
         chAggregator = {value:"sum",v1:"default"};
-        chFormater = "localstring";
+        chFormater = "value";
         chNbDecimal = 2;
         chshowUnit = false;
         chshowFlag = false;
@@ -54,12 +54,12 @@ define([
              else {AGG.push({value:FX.columns[i].id,label:FX.columns[i].title[lang]})}
              }*/
             var retObj = myfenixTool.initFXT(FX, opt)
-            //console.log("convertFX",FX,retObj)
+            console.log("convertFX",retObj.values)
             hidden = retObj.hidden;
             rows = retObj.rows;
             columns = retObj.columns;
             aggregations = retObj.aggregations;
-            values = retObj.values;
+            values = retObj.values.slice(0,1);
 
         }
 
