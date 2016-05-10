@@ -27,7 +27,7 @@ define([
         if (valid === true) {
 
             this._initVariables();
-    
+
             this._bindEventListeners();
 
             this._preloadPluginScript();
@@ -53,10 +53,10 @@ define([
         this.channels[channel].push({context: this, callback: fn});
         return this;
     };
-    
-    Chart.prototype.update = function ( config ) {
-		
-this.chart.model=  this.pivotator.pivot(this.model, config);
+
+    Chart.prototype.update = function (config) {
+
+        this.chart.model = this.pivotator.pivot(this.model, config);
         this.chart.update(config);
     };
 
@@ -84,28 +84,28 @@ this.chart.model=  this.pivotator.pivot(this.model, config);
         this.model = this.initial.model;
 
         var pc = {};
-
+        
         pc.aggregationFn = this.initial.aggregationFn;
 
-        pc.aggregations = this.initial.aggregations;
+        pc.aggregations = this.initial.aggregations || [];
         pc.columns = this.initial.columns;
         pc.rows = this.initial.rows;
-        pc.hidden = this.initial.hidden;
+        pc.hidden = this.initial.hidden || [];
         pc.values = this.initial.values || ["value"];
 
-        pc.formatter =this.initial.formatter || "value";
-        pc.valueOutputType =this.initial.valueOutputType;
+        pc.formatter = this.initial.formatter || "value";
+        pc.valueOutputType = this.initial.valueOutputType;
         pc.showRowHeaders = this.initial.showRowHeaders || false;
-        pc.decimals =this.initial.decimals || 2;
+        pc.decimals = this.initial.decimals || 2;
 
         pc.showCode = this.initial.showCode || false;
         pc.showFlag = this.initial.showFlag || false;
         pc.showUnit = this.initial.showUnit || false;
 
         // add more pivotator config
-            
+
         this.pivotatorConfig = pc;
-        
+
         this.renderer = this.initial.renderer || C.renderer || CD.renderer;
 
         this.lang = this.initial.lang || 'EN';
@@ -134,7 +134,7 @@ this.chart.model=  this.pivotator.pivot(this.model, config);
             errors.push({code: ERR.MISSING_CONTAINER});
             log.warn("Impossible to find box container");
         }
-        
+
         //add validation
 
         return errors.length > 0 ? errors : valid;
@@ -147,7 +147,7 @@ this.chart.model=  this.pivotator.pivot(this.model, config);
         this.channels = {};
 
         this.pivotator = new Pivotator();
-        
+
     };
 
     Chart.prototype._bindEventListeners = function () {
@@ -204,13 +204,13 @@ this.chart.model=  this.pivotator.pivot(this.model, config);
 
         var Renderer = this._getRenderer(this.renderer),
             model = this.pivotator.pivot(this.model, this.pivotatorConfig);
-//console.log("model chart",model, this.pivotatorConfig)
+
         var config = $.extend(true, {}, {
-            pivotatorConfig : this.pivotatorConfig,
-            el : this.$el,
-            model : model,
-            lang : this.lang,
-            type : this.type
+            pivotatorConfig: this.pivotatorConfig,
+            el: this.$el,
+            model: model,
+            lang: this.lang,
+            type: this.type
         });
 
         this.chart = new Renderer(config);

@@ -107,7 +107,7 @@ define([
     Highcharts.prototype._renderHighcharts = function (config) {
 
         var model = this.model;
-	
+
         var chartConfig = templates[this.type];
 
         if (!config) {
@@ -117,7 +117,7 @@ define([
         var defaultRenderOptions = $.extend(true, {}, templateStyle, chartConfig);
 
         this._populateData(this.type, model, defaultRenderOptions);
-console.log("defaultRenderOptions",defaultRenderOptions)
+
         this.chart = this.el.highcharts(defaultRenderOptions);
 
         this._trigger("ready");
@@ -126,10 +126,6 @@ console.log("defaultRenderOptions",defaultRenderOptions)
 
     Highcharts.prototype._populateData = function (type, model, config) {
 
-	
-	console.log(type, model, config) ;
-	
-	
         switch (type.toLowerCase()) {
             //add type process
             case "heatmap":
@@ -161,23 +157,25 @@ console.log("defaultRenderOptions",defaultRenderOptions)
                  ]})
                  */
                 break;
-				case "pie2":
-				 var tempData = [];
+            case "pie2":
+                var tempData = [];
                 for (var i in model.rows) {
-                    if (i >20) {break;}
+                    if (i > 20) {
+                        break;
+                    }
                     config.xAxis.categories.push(model.rows[i].join("_"));
                     // config.xAxis.categories.push("test"+i);
 
-                    var ddata = 					jStat(model.data[i]).sum();
-                  //  console.log("JSTAT",ddata)
+                    var ddata = jStat(model.data[i]).sum();
+                    //  console.log("JSTAT",ddata)
                     tempData.push(ddata);
-					                config.series.push({data: tempData});
+                    config.series.push({data: tempData});
 
 
                 }
-				break;
-				
-				
+                break;
+
+
             default:
 
                 for (var ii in model.cols) {
@@ -191,7 +189,9 @@ console.log("defaultRenderOptions",defaultRenderOptions)
                 }
 
                 for (var i in model.rows) {
-                    if (i > 20) {break;}
+                    if (i > 20) {
+                        break;
+                    }
                     //	 console.log("1 ",config.series)
                     config.series.push({
                         name: model.rows[i].join(" "),
@@ -200,7 +200,6 @@ console.log("defaultRenderOptions",defaultRenderOptions)
                     //	 console.log("2 ",config.series)
 
                 }
-                ;
         }
         //console.log("config", config)
         return config;
@@ -209,7 +208,6 @@ console.log("defaultRenderOptions",defaultRenderOptions)
     Highcharts.prototype._getEventName = function (evt) {
 
         return this.id.concat(evt);
-
     };
 
     //disposition
