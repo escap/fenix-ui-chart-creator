@@ -271,6 +271,13 @@ define(function () {
             // shared: true
         },
         series: [],
+        noData: {
+            style: {
+                fontWeight: 'bold',
+                fontSize: '15px',
+                color: '#303030'
+            }
+        }
     }
 
 });

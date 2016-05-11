@@ -11,6 +11,7 @@ define([
     'fx-chart/config/renderers/highcharts',
     'fx-chart/config/renderers/highcharts_shared',
     'highcharts_more',
+    "highcharts_no_data",
     'amplify'
 ], function ($, _, log, ERR, EVT, C, CD, Pivotator, templates, templateStyle) {
 
@@ -57,7 +58,6 @@ define([
     Highcharts.prototype.update = function (config) {
 
         //TODO add validation
-//this.model=config.model;
         this.type = config.type ? config.type : this.type;
 
         this._renderHighcharts(config);
@@ -131,8 +131,6 @@ define([
             case "heatmap":
                 break;
             case "boxplot":
-                //console.log(model.data);
-                //	console.log(jStat(model.data).quartiles());
 
                 var tempData = [];
                 for (var i in model.rows) {
@@ -147,15 +145,7 @@ define([
                 }
 
                 config.series.push({data: tempData});
-                /* config.xAxis.categories= ['1', '2', '3', '4', '5'];
-                 config.series.push({data:[
-                 [760, 801, 848, 895, 965],
-                 [733, 853, 939, 980, 1080],
-                 [714, 762, 817, 870, 918],
-                 [724, 802, 806, 871, 950],
-                 [834, 836, 864, 882, 910]
-                 ]})
-                 */
+
                 break;
             case "pie2":
                 var tempData = [];
@@ -201,7 +191,7 @@ define([
 
                 }
         }
-        //console.log("config", config)
+//        console.log("config", config.series)
         return config;
     };
 
