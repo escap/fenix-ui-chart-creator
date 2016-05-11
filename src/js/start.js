@@ -88,10 +88,10 @@ define([
         pc.aggregationFn = this.initial.aggregationFn;
 
         pc.aggregations = this.initial.aggregations || [];
-        pc.columns = this.initial.columns;
-        pc.rows = this.initial.rows;
         pc.hidden = this.initial.hidden || [];
-        pc.values = this.initial.values || ["value"];
+        pc.columns = this.initial.x;
+        pc.values = this.initial.y || ["value"];
+        pc.rows = this.initial.series;
 
         pc.formatter = this.initial.formatter || "value";
         pc.valueOutputType = this.initial.valueOutputType;
