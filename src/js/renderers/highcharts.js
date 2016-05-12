@@ -12,6 +12,7 @@ define([
     'fx-chart/config/renderers/highcharts_shared',
     'highcharts_more',
     "highcharts_no_data",
+    "highcharts_export",
     'amplify'
 ], function ($, _, log, ERR, EVT, C, CD, Pivotator, templates, templateStyle) {
 

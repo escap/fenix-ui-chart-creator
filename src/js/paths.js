@@ -3,6 +3,8 @@ define(function () {
 
     'use strict';
 
+    var HIGHCHARTS_VERSION = "4.2.5";
+
     var config = {
 
         paths: {
@@ -18,24 +20,23 @@ define(function () {
             underscore: '{FENIX_CDN}/js/underscore/1.7.0/underscore.min',
             amplify: '{FENIX_CDN}/js/amplify/1.1.2/amplify.min',
             handlebars: '{FENIX_CDN}/js/handlebars/2.0.0/handlebars',
-            highcharts: '{FENIX_CDN}/js/highcharts/4.2.4/js/highcharts',
-            highcharts_more: '{FENIX_CDN}/js/highcharts/4.2.4/js/highcharts-more',
-            highcharts_no_data: '{FENIX_CDN}/js/highcharts/4.2.4/js/modules/no-data-to-display',
-
-            'highcharts-export': '{FENIX_CDN}/js/highcharts/4.2.4/js/modules/exporting',
-            //'highcharts-export-csv': 'http://highslide-software.github.io/export-csv/export-csv'
+            highcharts: '{FENIX_CDN}/js/highcharts/' + HIGHCHARTS_VERSION + '/js/highcharts',
+            highcharts_more: '{FENIX_CDN}/js/highcharts/' + HIGHCHARTS_VERSION + '/js/highcharts-more',
+            highcharts_no_data: '{FENIX_CDN}/js/highcharts/' + HIGHCHARTS_VERSION + '/js/modules/no-data-to-display',
+            'highcharts_export': '{FENIX_CDN}/js/highcharts/' + HIGHCHARTS_VERSION + '/js/modules/exporting',
+            //'highcharts_export_csv': 'http://highslide-software.github.io/export-csv/export-csv'
         },
 
         shim: {
             "highcharts": {
-                "exports": "Highcharts",
-                "deps": ["jquery"]
+                exports: "Highcharts",
+                deps: ["jquery"]
             },
-            "highcharts-export": {
-                "deps": ["highcharts"]
+            "highcharts_export": {
+                deps: ["highcharts"]
             },
-            "highcharts-export-csv": {
-                "deps": ["highcharts", "highcharts-export"]
+            "highcharts_export_csv": {
+                deps: ["highcharts", "highcharts_export"]
             },
             "highcharts_more": {
                 deps: ['highcharts']
@@ -44,7 +45,7 @@ define(function () {
                 deps: ['highcharts']
             },
             "amplify": {
-                "deps": ["jquery"]
+                deps: ["jquery"]
             }
         }
     };
