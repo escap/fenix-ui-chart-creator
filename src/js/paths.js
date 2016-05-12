@@ -7,7 +7,7 @@ define(function () {
 
         paths: {
 
-            'fx-chart/start': './start',
+            'fx-chart/start': './chart',
             'fx-chart/html': '../html',
             'fx-chart/config': '../../config',
             'fx-chart/renderers': './renderers',
