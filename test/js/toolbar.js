@@ -26,21 +26,11 @@ define([
         init = function (id, FX, opt) {
 
             var lang = "EN";
-            if (opt.lang) {
-                lang = opt.lang;
-            }
-            if (opt.decimals) {
-                chNbDecimal = opt.decimals;
-            }
-            if (opt.showUnit) {
-                chshowUnit = opt.showUnit;
-            }
-            if (opt.showFlag) {
-                chshowFlag = opt.showFlag;
-            }
-            if (opt.showCode) {
-                chshowCode = opt.showCode;
-            }
+            if (opt.lang) {lang = opt.lang;}
+            if (opt.decimals) {chNbDecimal = opt.decimals;}
+            if (opt.showUnit) {chshowUnit = opt.showUnit;}
+            if (opt.showFlag) {chshowFlag = opt.showFlag;}
+            if (opt.showCode) {chshowCode = opt.showCode;}
             id_container = id;
 
             document.getElementById(id).className = "olapToolbar";
@@ -54,7 +44,7 @@ define([
              else {AGG.push({value:FX.columns[i].id,label:FX.columns[i].title[lang]})}
              }*/
             var retObj = myfenixTool.initFXT(FX, opt)
-            console.log("convertFX",retObj.values)
+           // console.log("convertFX",retObj.values)
             hidden = retObj.hidden;
             rows = retObj.rows;
             columns = retObj.columns;
@@ -65,21 +55,23 @@ define([
 
 
         getConfigCOLROW = function (FX) {
-            var ret = {aggregations: {}, columns: {}, rows: {}, hidden: {}, values: {}};
+            var ret = {aggregations: {}, x: {}, series: {}, hidden: {}, y: {}};
             $.each($("#" + id_container + "_AGG >li"), function (e, a) {
                 ret.aggregations[a.getAttribute('value')] = true
             });
             $.each($("#" + id_container + "_ROWS >li"), function (e, a) {
-                ret.rows[a.getAttribute('value')] = true
-            });
+                //ret.rows[a.getAttribute('value')] = true
+			ret.series[a.getAttribute('value')] = true
+                      
+		   });
             $.each($("#" + id_container + "_COLS >li"), function (e, a) {
-                ret.columns[a.getAttribute('value')] = true
+                ret.x[a.getAttribute('value')] = true
             });
             $.each($("#" + id_container + "_HIDDEN >li"), function (e, a) {
                 ret.hidden[a.getAttribute('value')] = true
             });
             $.each($("#" + id_container + "_VALS >li"), function (e, a) {
-                ret.values[a.getAttribute('value')] = true
+                ret.y[a.getAttribute('value')] = true
             });
             ret.aggregationFn = chAggregator;
             ret.valueOutputType = chGetValue;
@@ -89,7 +81,9 @@ define([
             ret.showFlag = chshowFlag;
             ret.showCode = chshowCode;
             ret.type=document.getElementById('typeOfChart').value
-            ret2 = myfenixTool.initFXD(FX, ret);
+            ret2 = myfenixTool.initFXDgraph(FX, ret);
+			//console.log("Ret before extend",ret,ret2)
+
             $.extend(ret, ret2);
 //console.log("Ret after extend",ret,ret2)
             return ret;
@@ -177,15 +171,12 @@ define([
                 mesFunc+="</select>"
                 //document.getElementById(id_container + "_AGGREGATION").options[document.getElementById(id_container + "_AGGREGATION").options.length] = new Option(liste[i], liste[i])
             }
-
             mesFunc+="</fieldset>"
             mesFunc+="<fieldset class=\"options\"><label>Type of chart<label>"+
                     "<select id='typeOfChart' onchange='  _onChange()'>"+
                 "<option value='line'>line</option>"+
                 "<option value='column'>column</option>"+
                 "<option value='column_stacked'>stacked columns</option>"+
-
-
                 "<option value='area'>area</option>"+
                 "<option value='area_stacked'>stacked Area</option>"+
                 "<option value='pie'>pie</option>"+

@@ -60,11 +60,102 @@ define([
 
         //TODO add validation
         this.type = config.type ? config.type : this.type;
-
+//console.log("config hc",config,this.model)
         this._renderHighcharts(config);
 
     };
 
+	 Highcharts.prototype._renderHighcharts = function (config) {
+        var model = this.model;
+
+        var chartConfig = templates[this.type];
+
+        if (!config) {alert("Impossible to find chart configuration: " + this.type);}
+
+        var defaultRenderOptions = $.extend(true, {}, templateStyle, chartConfig);
+
+        this._populateData(this.type, model, defaultRenderOptions);
+//console.log("config fin",model,config,defaultRenderOptions)
+
+        this.chart = this.el.highcharts(defaultRenderOptions);
+
+        this._trigger("ready");
+
+    };
+
+     Highcharts.prototype._populateData = function (type, model, config) {
+
+        switch (type.toLowerCase()) {
+            //add type process
+            case "heatmap":
+                break;
+            case "boxplot":
+
+                var tempData = [];
+                for (var i in model.rows) {
+                    //if (i >20) {break;}
+                    config.xAxis.categories.push(model.rows[i].join("_"));
+                    // config.xAxis.categories.push("test"+i);
+
+                    var ddata = [jStat(model.data[i]).min() + 0].concat(jStat(model.data[i]).quartiles().concat(jStat(model.data[i]).max()))
+                    //console.log("JSTAT",ddata)
+                    tempData.push(ddata);
+
+                }
+
+                config.series.push({data: tempData});
+
+                break;
+            case "pie2":
+                var tempData = [];
+                for (var i in model.rows) {
+                    if (i > 20) {
+                        break;
+                    }
+                    config.xAxis.categories.push(model.rows[i].join("_"));
+                    // config.xAxis.categories.push("test"+i);
+
+                    var ddata = jStat(model.data[i]).sum();
+                    //console.log("JSTAT",ddata)
+                    tempData.push(ddata);
+                    config.series.push({data: tempData});
+
+
+                }
+                break;
+
+
+            default:
+
+                for (var ii in model.cols) {
+
+                    if (model.cols.hasOwnProperty(ii)) {
+                        i = model.cols[ii];
+
+                        config.xAxis.categories.push(i.title[this.lang]);
+
+                    }
+                }
+
+                for (var i in model.rows) {
+                    if (i > 20) {
+                        break;
+                    }
+                    //	 console.log("1 ",config.series)
+                    config.series.push({
+                        name: model.rows[i].join(" "),
+                        data: model.data[i]
+                    });
+                    //	 console.log("2 ",config.series)
+
+                }
+        }
+//        console.log("config", config.series)
+        return config;
+    };
+
+ 
+	
     Highcharts.prototype._trigger = function (channel) {
 
         if (!this.channels[channel]) {
@@ -105,98 +196,7 @@ define([
 
     };
 
-    Highcharts.prototype._renderHighcharts = function (config) {
-
-        var model = this.model;
-
-        var chartConfig = templates[this.type];
-
-        if (!config) {
-            alert("Impossible to find chart configuration: " + this.type);
-        }
-
-        var defaultRenderOptions = $.extend(true, {}, templateStyle, chartConfig);
-
-        this._populateData(this.type, model, defaultRenderOptions);
-
-        this.chart = this.el.highcharts(defaultRenderOptions);
-
-        this._trigger("ready");
-
-    };
-
-    Highcharts.prototype._populateData = function (type, model, config) {
-
-        switch (type.toLowerCase()) {
-            //add type process
-            case "heatmap":
-                break;
-            case "boxplot":
-
-                var tempData = [];
-                for (var i in model.rows) {
-                    //if (i >20) {break;}
-                    config.xAxis.categories.push(model.rows[i].join("_"));
-                    // config.xAxis.categories.push("test"+i);
-
-                    var ddata = [jStat(model.data[i]).min() + 0].concat(jStat(model.data[i]).quartiles().concat(jStat(model.data[i]).max()))
-                    //console.log("JSTAT",ddata)
-                    tempData.push(ddata);
-
-                }
-
-                config.series.push({data: tempData});
-
-                break;
-            case "pie2":
-                var tempData = [];
-                for (var i in model.rows) {
-                    if (i > 20) {
-                        break;
-                    }
-                    config.xAxis.categories.push(model.rows[i].join("_"));
-                    // config.xAxis.categories.push("test"+i);
-
-                    var ddata = jStat(model.data[i]).sum();
-                    //  console.log("JSTAT",ddata)
-                    tempData.push(ddata);
-                    config.series.push({data: tempData});
-
-
-                }
-                break;
-
-
-            default:
-
-                for (var ii in model.cols) {
-
-                    if (model.cols.hasOwnProperty(ii)) {
-                        i = model.cols[ii];
-
-                        config.xAxis.categories.push(i.title[this.lang]);
-
-                    }
-                }
-
-                for (var i in model.rows) {
-                    if (i > 20) {
-                        break;
-                    }
-                    //	 console.log("1 ",config.series)
-                    config.series.push({
-                        name: model.rows[i].join(" "),
-                        data: model.data[i]
-                    });
-                    //	 console.log("2 ",config.series)
-
-                }
-        }
-//        console.log("config", config.series)
-        return config;
-    };
-
-    Highcharts.prototype._getEventName = function (evt) {
+     Highcharts.prototype._getEventName = function (evt) {
 
         return this.id.concat(evt);
     };

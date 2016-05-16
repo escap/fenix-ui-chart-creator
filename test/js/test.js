@@ -27,7 +27,7 @@ define([
             onchange: function () {
                 var optGr = myToolbar.getConfigCOLROW(Model.metadata.dsd);
 
-                console.log(optGr.type)
+                console.log("optGr onchange",optGr)
 
                 myRenderer.update(optGr);
 
@@ -42,7 +42,7 @@ define([
             model : Model,
             el : "#result"
         }, optGr);
-
+console.log("config init",config)
         var myRenderer = new ChartCreator(config);
 
     };
