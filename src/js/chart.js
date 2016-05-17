@@ -204,6 +204,43 @@ define([
         this._unbindEventListeners();
     };
     // utils
+	
+	Chart.prototype.exportConf=function(FX,optGr)
+	{
+		
+	
+		var FXmod=this.fenixTool.convertFX(FX,optGr);
+		
+		
+			function getListDim(arr,opt,FXmod){
+						var showCode=opt.showCode;
+						var ret=[];
+						for (var i in arr){
+								console.log("this",arr,i,FXmod.dimensions[arr[i]])
+								ret.push(FXmod.dimensions[arr[i]].code)
+							}
+							return ret
+					}
+		
+		
+		var ret={
+			inputFormat:"fenixtool",
+			"aggregations":getListDim(optGr.aggregation,optGr,FXmod),
+			"x":getListDim(optGr.x,optGr,FXmod),
+			"series":getListDim(optGr.series,optGr,FXmod),
+			"hidden":getListDim(optGr.hidden,optGr,FXmod),
+			"y":optGr.y,
+			"aggregationFn":optGr.aggregationFn,
+			"valueOutputType":optGr.valueOutputType,
+			"formatter":optGr.formatter,
+			"decimals":optGr.decimals,
+			"showUnit":optGr.showUnit,
+			"showFlag":optGr.showFlag,
+			"showCode":optGr.showCode,
+			"type":optGr.type};
+		return ret;
+	}
+	
     Chart.prototype._callSelectorInstanceMethod = function (name, method, opts1, opts2) {
         var Instance = this.chart;
         if ($.isFunction(Instance[method])) { return Instance[method](opts1, opts2);} 

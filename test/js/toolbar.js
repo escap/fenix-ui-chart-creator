@@ -13,7 +13,7 @@ define([
         hidden = [];
         values = [];
         chGetValue = "classicToNumber";
-        chAggregator = {value:"sum",v1:"default"};
+        chAggregator = {value:"sum"};
         chFormater = "value";
         chNbDecimal = 2;
         chshowUnit = false;

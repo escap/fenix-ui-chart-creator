@@ -24,7 +24,10 @@ define([
             onchange: function () {
                 var optGr = myToolbar.getConfigCOLROW(Model.metadata.dsd);
                 //console.log("optGr onchange",optGr)
+				
                 myRenderer.update(optGr);
+				document.getElementById('toExport').innerHTML=myRenderer.exportConf( Model.metadata.dsd,optGr);
+
             }
         });
 
@@ -37,8 +40,10 @@ define([
             el : "#result"
         }, optGr);
 console.log("config init",config)
-        var myRenderer = new ChartCreator(config);
+	document.getElementById('toExport').innerHTML=JSON.stringify(optGr)
 
+        var myRenderer = new ChartCreator(config);
+myRenderer.exportConf(Model.metadata.dsd,config);
     };
 
     return new Test();
