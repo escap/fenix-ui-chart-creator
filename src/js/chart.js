@@ -9,13 +9,17 @@ define([
     'fx-chart/config/config',
     'fx-chart/config/config-default',
     'fx-common/pivotator/start',
+	  'fx-common/pivotator/fenixtool',
     'amplify'
-], function ($, require, _, log, ERR, EVT, C, CD, Pivotator) {
+], function ($, require, _, log, ERR, EVT, C, CD, Pivotator,fenixtool) {
  'use strict';
     function Chart(o) {
         log.info("FENIX Chart");
         log.info(o);
         $.extend(true, this, CD, C, {initial: o});
+		
+		//console.log("this.initial",this.initial)
+		
         this._parseInput(o);
         var valid = this._validateInput();
         if (valid === true) {
@@ -31,15 +35,11 @@ define([
 
 	  Chart.prototype.update = function (config) {
 		
-		
-		//console.log("UPDATE CHART.JS",config)
 		this._parseInputUpdate(config);
-		//console.log("param pivot 2", this.initial.model,  this.pivotatorConfig)
-	//	console.log(this.pivotator.pivot(this.initial.model,  this.pivotatorConfig))
-		//console.log("this chart model 1 ",this.chart.model)
-        this.chart.model = this.pivotator.pivot(this.initial.model,  this.pivotatorConfig);
-		//console.log("this chart model 2 ",this.chart.model)
-		//console.log("pivotator config",config)
+		var myPivotatorConfig=this.fenixTool.parseInut(this.initial.model.metadata.dsd, this.pivotatorConfig);
+		
+        this.chart.model = this.pivotator.pivot(this.initial.model, myPivotatorConfig);
+	
         this.chart.update(config);
     };
 
@@ -67,30 +67,7 @@ define([
     };
     // end API
     Chart.prototype._parseInput = function () {
-      /*
-		this.id = this.initial.id;
-        this.$el = $(this.initial.el);
-        this.type = this.initial.type;
-        this.model = this.initial.model;
-        var pc = {};
-        pc.aggregationFn = this.initial.aggregationFn;
-        pc.aggregations = this.initial.aggregations || [];
-        pc.hidden = this.initial.hidden || [];
-        pc.columns = this.initial.x;
-        pc.values = this.initial.y || ["value"];
-        pc.rows = this.initial.series;
-        pc.formatter = this.initial.formatter || "value";
-        pc.valueOutputType = this.initial.valueOutputType;
-        pc.showRowHeaders = this.initial.showRowHeaders || false;
-        pc.decimals = this.initial.decimals || 2;
-        pc.showCode = this.initial.showCode || false;
-        pc.showFlag = this.initial.showFlag || false;
-        pc.showUnit = this.initial.showUnit || false;
-        // add more pivotator config
-        this.pivotatorConfig = pc;
-        this.renderer = this.initial.renderer || C.renderer || CD.renderer;
-        this.lang = this.initial.lang || 'EN';
-	*/
+  
 		this._parseInputUpdate(this.initial)
     };
 
@@ -101,6 +78,7 @@ define([
         this.type = param.type;
         this.model = param.model;
         var pc = {};
+		pc.inputFormat=param.inputFormat || "raw";
         pc.aggregationFn = param.aggregationFn;
         pc.aggregations = param.aggregations || [];
         pc.hidden = param.hidden || [];
@@ -147,6 +125,7 @@ define([
         //pub/sub
         this.channels = {};
         this.pivotator = new Pivotator();
+		this.fenixTool=new fenixtool();
     };
 
     Chart.prototype._bindEventListeners = function () {
@@ -193,9 +172,12 @@ define([
     };
 
     Chart.prototype._renderChart = function () {
-		console.log("param pivot 1",this.model, this.pivotatorConfig);
-        var Renderer = this._getRenderer(this.renderer),
-            model = this.pivotator.pivot(this.model, this.pivotatorConfig);
+		//FIG
+		//console.log("param pivot 1",this.model, this.pivotatorConfig);
+        var Renderer = this._getRenderer(this.renderer);
+		var myPivotatorConfig=this.fenixTool.parseInut(this.model.metadata.dsd, this.pivotatorConfig);
+		
+        var    model = this.pivotator.pivot(this.model,myPivotatorConfig);
         var config = $.extend(true, {}, {
             pivotatorConfig: this.pivotatorConfig,
             el: this.$el,

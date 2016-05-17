@@ -4,7 +4,7 @@ define([
     'jquery',
     'fx-chart/start',
     'test/js/toolbar',
-    'test/models/dataFAOSTAT'
+    'test/models/data'
 ], function (log, $, ChartCreator, Toolbar, Model) {
 
     'use strict';
@@ -27,7 +27,7 @@ define([
             onchange: function () {
                 var optGr = myToolbar.getConfigCOLROW(Model.metadata.dsd);
 
-                console.log("optGr onchange",optGr)
+                //console.log("optGr onchange",optGr)
 
                 myRenderer.update(optGr);
 
