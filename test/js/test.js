@@ -12,11 +12,8 @@ define([
     function Test() { }
 
     Test.prototype.start = function () {
-
         log.trace("Test started");
-
         this._renderChart();
-
     };
 
     Test.prototype._renderChart = function () {
@@ -26,11 +23,8 @@ define([
         myToolbar.init("toolbar", Model.metadata.dsd, {
             onchange: function () {
                 var optGr = myToolbar.getConfigCOLROW(Model.metadata.dsd);
-
                 //console.log("optGr onchange",optGr)
-
                 myRenderer.update(optGr);
-
             }
         });
 
