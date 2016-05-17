@@ -207,6 +207,9 @@ define([
 	
 	Chart.prototype.exportConf=function(FX,optGr){
 		var FXmod=this.fenixTool.convertFX(FX,optGr);
+		
+		
+		
 		function getListDim(arr,opt,FXmod){
 						var showCode=opt.showCode;
 						var ret=[];

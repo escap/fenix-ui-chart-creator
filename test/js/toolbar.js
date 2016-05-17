@@ -54,7 +54,7 @@ define([
         }
 
 
-        getConfigCOLROW = function (FX) {
+        getConfigCOLROW = function (FX, value) {
             var ret = {aggregations: {}, x: {}, series: {}, hidden: {}, y: {}};
             $.each($("#" + id_container + "_AGG >li"), function (e, a) {
                 ret.aggregations[a.getAttribute('value')] = true
