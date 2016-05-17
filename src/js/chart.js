@@ -205,18 +205,12 @@ define([
     };
     // utils
 	
-	Chart.prototype.exportConf=function(FX,optGr)
-	{
-		
-	
+	Chart.prototype.exportConf=function(FX,optGr){
 		var FXmod=this.fenixTool.convertFX(FX,optGr);
-		
-		
-			function getListDim(arr,opt,FXmod){
+		function getListDim(arr,opt,FXmod){
 						var showCode=opt.showCode;
 						var ret=[];
 						for (var i in arr){
-								console.log("this",arr,i,FXmod.dimensions[arr[i]])
 								ret.push(FXmod.dimensions[arr[i]].code)
 							}
 							return ret
