@@ -23,8 +23,7 @@ define([
         myToolbar.init("toolbar", Model.metadata.dsd, {
             onchange: function () {
                 var optGr = myToolbar.getConfigCOLROW(Model.metadata.dsd);
-                //console.log("optGr onchange",optGr)
-				
+               
                 myRenderer.update(optGr);
 				document.getElementById('toExport').innerHTML=myRenderer.exportConf( Model.metadata.dsd,optGr);
 
@@ -39,7 +38,6 @@ define([
             model : Model,
             el : "#result"
         }, optGr);
-console.log("config init",config)
 	document.getElementById('toExport').innerHTML=JSON.stringify(optGr)
 
         var myRenderer = new ChartCreator(config);
