@@ -13,19 +13,30 @@
 
     <link rel="stylesheet" href="//fenixrepo.fao.org/cdn/js/bootstrap/3.3.4/css/bootstrap.min.css">
 
-    <link rel="stylesheet" href="css/test.css">
+    <!-- FENIX filter -->
+    <!-- dropdown selector -->
+    <link rel="stylesheet" href="//fenixrepo.fao.org/cdn/js/selectize/0.12.1/css/selectize.bootstrap3.css" />
+    <!-- tree selector -->
+    <link rel="stylesheet" href='//fenixrepo.fao.org/cdn/js/jstree/3.3.0/dist/themes/default/style.min.css'>
+    <!-- range selector -->
+    <link rel="stylesheet" href='//fenixrepo.fao.org/cdn/js/ion.rangeSlider/2.1.2/css/ion.rangeSlider.css'>
+    <link rel="stylesheet" href='//fenixrepo.fao.org/cdn/js/ion.rangeSlider/2.1.2/css/ion.rangeSlider.skinHTML5.css'>
+    <!-- time selector -->
+    <link rel="stylesheet" href='//fenixrepo.fao.org/cdn/js/bootstrap-datetimepicker/4.17.37/build/css/bootstrap-datetimepicker.min.css'>
+    <link rel="stylesheet" href='//fenixrepo.fao.org/cdn/js/bootstrap-daterangepicker/2.1.19/daterangepicker.css'>
+    <!-- end FENIX filter -->
 
+    <link rel="stylesheet" href="css/test.css">
 
 </head>
 <body>
 
 <div class="alert alert-warning" role="alert">Open console for logs</div>
-<textarea id=toExport cols=50 rows=6></textarea>
 
 <div class="container">
     <div class="col-xs-12">
 
-        <h1>FENIX Chart Creator: test</h1>
+        <h1>FENIX Chart Creator: <small>test</small></h1>
 
     </div>
 </div>
@@ -33,11 +44,27 @@
 <hr>
 
 <div class="container">
+
     <div class="col-xs-12">
 
-        <div id="toolbar"></div>
+        <h2>Configuration export</h2>
 
-        <div id="result"></div>
+        <code id="configuration-export"></code>
+
+    </div>
+</div>
+
+<hr>
+
+<div class="container">
+
+    <div class="col-xs-12">
+
+        <h2>Filter interaction</h2>
+
+        <div id="filter-interaction"></div>
+
+        <div id="chart-interaction"></div>
 
     </div>
 </div>

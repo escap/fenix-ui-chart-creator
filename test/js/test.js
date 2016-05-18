@@ -2,46 +2,87 @@
 define([
     'loglevel',
     'jquery',
+    'underscore',
     'fx-chart/start',
-    'test/js/toolbar',
-    'test/models/data'
-], function (log, $, ChartCreator, Toolbar, Model) {
+    'fx-filter/start',
+    'fx-common/pivotator/fenixtool',
+    'test/models/data',
+    'test/models/filter-interaction'
+], function (log, $, _, ChartCreator, Filter, FenixTool, Model, FilterModel) {
 
     'use strict';
 
-    function Test() { }
+    var s = {
+        CONFIGURATION_EXPORT: "#configuration-export",
+        FILTER_INTERACTION : "#filter-interaction",
+        CHART_INTERACTION : "#chart-interaction"
+    };
+
+    function Test() {
+        this.fenixTool = new FenixTool();
+    }
 
     Test.prototype.start = function () {
         log.trace("Test started");
-        this._renderChart();
+        this._testFilterInteraction();
     };
 
-    Test.prototype._renderChart = function () {
+    Test.prototype._testFilterInteraction = function () {
 
-        var myToolbar = new Toolbar();
+        //create filter configuration
+        var itemsFromFenixTool = this.fenixTool.toFilter(Model),
+        //FilterModel contains static filter selectors, e.g. show code, show unit
+            items = $.extend(true, {}, FilterModel, itemsFromFenixTool);
 
-        myToolbar.init("toolbar", Model.metadata.dsd, {
-            onchange: function () {
-                var optGr = myToolbar.getConfigCOLROW(Model.metadata.dsd);
-               
-                myRenderer.update(optGr);
-				document.getElementById('toExport').innerHTML=myRenderer.exportConf( Model.metadata.dsd,optGr);
+        log.trace("Filter configuration from FenixTool", items);
 
-            }
+        this.filter = new Filter({
+            el : s.FILTER_INTERACTION,
+            items: items
         });
 
-        myToolbar.display();
+        this.filter.on("ready", _.bind(function () {
 
-        var optGr = myToolbar.getConfigCOLROW(Model.metadata.dsd);
+            var config = this._getChartConfigFromFilter();
 
-        var config = $.extend(true, {}, {
-            model : Model,
-            el : "#result"
-        }, optGr);
-	document.getElementById('toExport').innerHTML=JSON.stringify(optGr)
+            log.trace("Init chart");
+            log.trace(config);
 
-        var myRenderer = new ChartCreator(config);
-myRenderer.exportConf(Model.metadata.dsd,config);
+            this.chart = new ChartCreator(config);
+        }, this));
+
+        this.filter.on("change", _.bind(function () {
+
+            var config = this._getChartConfigFromFilter();
+
+            log.trace("Update chart");
+            log.trace(config);
+
+            this.chart.update(config);
+        }, this));
+
+    };
+
+    Test.prototype._getChartConfigFromFilter = function () {
+
+        var values = this.filter.getValues(),
+            config = this.fenixTool.toChartConfig(values);
+
+        this._printChartConfiguration(config);
+
+        return config;
+
+    };
+
+    Test.prototype._printChartConfiguration = function () {
+
+        var values = this.filter.getValues(),
+            config = this.fenixTool.toChartConfig(values);
+
+        //Export configuration
+        $(s.CONFIGURATION_EXPORT).html(JSON.stringify(config));
+
+        return config;
     };
 
     return new Test();
