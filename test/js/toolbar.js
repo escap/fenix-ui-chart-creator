@@ -19,14 +19,15 @@ define([
         chshowUnit = false;
         chshowFlag = false;
         chshowCode = false;
+		chLang="EN";
         _onChange = null;
         myFunc = new myFunctions();
         var myfenixTool = new fenixTool();
 
         init = function (id, FX, opt) {
 
-            var lang = "EN";
-            if (opt.lang) {lang = opt.lang;}
+           chLang = "EN";
+            if (opt.lang) {chLang = opt.lang;}
             if (opt.decimals) {chNbDecimal = opt.decimals;}
             if (opt.showUnit) {chshowUnit = opt.showUnit;}
             if (opt.showFlag) {chshowFlag = opt.showFlag;}
@@ -80,6 +81,7 @@ define([
             ret.showUnit = chshowUnit;
             ret.showFlag = chshowFlag;
             ret.showCode = chshowCode;
+			 ret.lang = chLang;
             ret.type=document.getElementById('typeOfChart').value
             ret2 = myfenixTool.initFXDgraph(FX, ret);
 			//console.log("Ret before extend",ret,ret2)
@@ -158,11 +160,11 @@ define([
             Sortable.create(listCOLS, defaultOption); // That's all.
 
             /*options*/
-// Aggregation functions
+			// Aggregation functions
 
 
             /*options*/
-// Aggregation functions
+			// Aggregation functions
             var mesFunc="<fieldset class=\"options\"><label>functions</label>";
             var liste = myFunc.getListAggregator();
             for (var i in liste) {
