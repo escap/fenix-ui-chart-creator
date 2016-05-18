@@ -14,8 +14,8 @@ define([
 
     var s = {
         CONFIGURATION_EXPORT: "#configuration-export",
-        FILTER_INTERACTION : "#filter-interaction",
-        CHART_INTERACTION : "#chart-interaction"
+        FILTER_INTERACTION: "#filter-interaction",
+        CHART_INTERACTION: "#chart-interaction"
     };
 
     function Test() {
@@ -37,15 +37,23 @@ define([
         log.trace("Filter configuration from FenixTool", items);
 
         this.filter = new Filter({
-            el : s.FILTER_INTERACTION,
+            el: s.FILTER_INTERACTION,
             items: items
         });
 
         this.filter.on("ready", _.bind(function () {
 
             var config = this._getChartConfigFromFilter();
+
+            config = $.extend(true, {}, {
+                type: "line",
+                model: Model,
+                el: s.CHART_INTERACTION
+            }, config);
+
             log.trace("Init chart");
             log.trace(config);
+
             this.chart = new ChartCreator(config);
         }, this));
 
@@ -64,17 +72,8 @@ define([
     Test.prototype._getChartConfigFromFilter = function () {
 
         var values = this.filter.getValues(),
-		config = this.fenixTool.toChartConfig(values);
-	
-		
-		
-		
-  config = $.extend(true, {}, {
-	  aggregationFn:"sum",formatter:"value",decimals:2,type:"line",
-            model : Model,
-            el : "#chart-interaction"
-        }, config);
-		console.log(config)
+            config = this.fenixTool.toChartConfig(values);
+
         this._printChartConfiguration(config);
 
         return config;
