@@ -44,10 +44,8 @@ define([
         this.filter.on("ready", _.bind(function () {
 
             var config = this._getChartConfigFromFilter();
-
             log.trace("Init chart");
             log.trace(config);
-
             this.chart = new ChartCreator(config);
         }, this));
 
@@ -66,8 +64,17 @@ define([
     Test.prototype._getChartConfigFromFilter = function () {
 
         var values = this.filter.getValues(),
-            config = this.fenixTool.toChartConfig(values);
-
+		config = this.fenixTool.toChartConfig(values);
+	
+		
+		
+		
+  config = $.extend(true, {}, {
+	  aggregationFn:"sum",formatter:"value",decimals:2,type:"line",
+            model : Model,
+            el : "#chart-interaction"
+        }, config);
+		console.log(config)
         this._printChartConfiguration(config);
 
         return config;
