@@ -8,6 +8,7 @@ define([
     'fx-common/pivotator/fenixtool',
     'test/models/data',
     'test/models/filter-interaction'
+
 ], function (log, $, _, ChartCreator, Filter, FenixTool, Model, FilterModel) {
 
     'use strict';
@@ -44,7 +45,7 @@ define([
         this.filter.on("ready", _.bind(function () {
 
             var config = this._getChartConfigFromFilter();
-
+			console.log("config",config)
             config = $.extend(true, {}, {
                 type: "line",
                 model: Model,

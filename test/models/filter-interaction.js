@@ -11,13 +11,12 @@ define(function () {
             selector : {
                 id : 'dropdown',
                 source : [
-                    { value : "localstring", label : "Local String"},
-                    { value : "value", label : "Raw Value"}
+					{ value : "value", label : "Raw Value"}
                 ],
                 config : {
                     maxItems : 1
                 },
-                default : ['localstring']
+                default : ['value']
             },
 
             template : {
@@ -40,7 +39,39 @@ define(function () {
             template : {
                 title : "Show"
             }
+        },
+		
+		     typeOfChart : {
+
+            selector :{
+                id : 'dropdown',
+                source : [
+                    { value : "line", label : "Line"},
+                    { value : "column", label : "Columns"},
+					  { value : "column_stacked", label : "Stacked columns"},
+					  { value : "area", label : "Area"},
+					  { value : "area_stacked", label : "Stacked area"},
+					   { value : "pie", label : "Pie"},
+					    { value : "scatter", label : "Scatter"},					
+					  { value : "bubble", label : "Bubble"},					
+					  { value : "heatmap", label : "Heatmap"},					
+					  { value : "treemap", label : "Treemap"},					
+					  { value : "boxplot", label : "Boxplot"}					
+					
+                ],
+                config : {
+                    maxItems : 1
+                },
+                default : ['line']
+            },
+
+            template : {
+                title : "Type of chart"
+            }
         }
+		
+		
+		
     }
 
 });
