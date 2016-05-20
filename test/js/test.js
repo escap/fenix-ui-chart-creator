@@ -6,13 +6,13 @@ define([
     'fx-chart/start',
     'fx-filter/start',
     'fx-common/pivotator/fenixtool',
-    'test/models/data',
+    'text!test/models/UNECA_GDP_USD.json',
     'test/models/filter-interaction'
 
 ], function (log, $, _, ChartCreator, Filter, FenixTool, Model, FilterModel) {
 
     'use strict';
-
+Model=JSON.parse(Model);
     var s = {
         CONFIGURATION_EXPORT: "#configuration-export",
         FILTER_INTERACTION: "#filter-interaction",
