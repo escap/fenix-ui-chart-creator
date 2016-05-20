@@ -45,7 +45,7 @@ define([
         this.filter.on("ready", _.bind(function () {
 
             var config = this._getChartConfigFromFilter();
-			console.log("config",config)
+
             config = $.extend(true, {}, {
                 type: "line",
                 model: Model,
