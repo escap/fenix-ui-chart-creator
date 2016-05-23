@@ -6,13 +6,57 @@ define([
     'fx-chart/start',
     'fx-filter/start',
     'fx-common/pivotator/fenixtool',
-    'text!test/models/UNECA_Population.json',
+    'text!test/models/UNECA_Labour.json',
     'test/models/filter-interaction'
 
 ], function (log, $, _, ChartCreator, Filter, FenixTool, Model, FilterModel) {
 
     'use strict';
+	
+	
+	/*UNECA_Education
+UNECA_Population
+UNECA_Health
+UNECA_BalanceOfPayments
+UNECA_Debt
+UNECA_MiningProduction4
+UNECA_Infrastructure
+UNECA_AgricultureProduction3
+ILO_Labour
+
+Uneca_PopulationNew
+UNECA_Labour				????
+UNECA_MonetaryStatistics
+UNECA_Inflation
+
+
+UNECA_Poverty
+UNECA_FinancialFlows
+UNECA_Tourism
+UNECA_PublicFinance
+
+
+
+UNECA_GDP
+UNECA_GDP_NC
+UNECA_ExpenditureGDPCostant
+UNECA_ExpenditureGDPCurrent ???
+UNECA_GDP_USD*/
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 Model=JSON.parse(Model);
+console.log(Model);
     var s = {
         CONFIGURATION_EXPORT: "#configuration-export",
         FILTER_INTERACTION: "#filter-interaction",
@@ -54,7 +98,6 @@ Model=JSON.parse(Model);
 
             log.trace("Init chart");
             log.trace(config);
-
             this.chart = new ChartCreator(config);
         }, this));
 
