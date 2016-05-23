@@ -75,6 +75,9 @@ Model=JSON.parse(Model);
         var values = this.filter.getValues(),
             config = this.fenixTool.toChartConfig(values);
 
+        console.log(values)
+        console.log(config)
+
         this._printChartConfiguration(config);
 
         return config;
