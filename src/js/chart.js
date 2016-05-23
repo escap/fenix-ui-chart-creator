@@ -185,6 +185,7 @@ define([
             lang: this.lang,
             type: this.type
         });
+		console.log("config",config)
         this.chart = new Renderer(config);
         this._trigger("ready");
     };
