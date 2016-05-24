@@ -31,7 +31,6 @@ define([
             this._initVariables();
 
             this._bindEventListeners();
-
             this._renderHighcharts(this.pivotatorConfig);
 
             return this;

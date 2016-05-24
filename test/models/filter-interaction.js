@@ -6,72 +6,71 @@ define(function () {
 
     return {
 
-        format : {
+        format: {
 
-            selector : {
-                id : 'dropdown',
-                source : [
-					{ value : "value", label : "Raw Value"}
+            selector: {
+                id: 'dropdown',
+                source: [
+                    {value: "value", label: "Raw Value"}
                 ],
-                config : {
-                    maxItems : 1
+                config: {
+                    maxItems: 1
                 },
-                default : ['value']
+                default: ['value']
             },
 
-            template : {
-                title : "Format"
+            template: {
+                title: "Format"
             }
         },
 
-        show : {
+        show: {
 
-            selector : {
-                id : "input",
-                type : "checkbox",
-                source : [
-                    { value : "unit", label : "Unit"},
-                    { value : "flag", label : "Flag"},
-                    { value : "code", label : "Code"}
+            selector: {
+                id: "input",
+                type: "checkbox",
+                source: [
+                    {value: "unit", label: "Unit"},
+                    {value: "flag", label: "Flag"},
+                    {value: "code", label: "Code"}
                 ]
             },
 
-            template : {
-                title : "Show"
+            template: {
+                title: "Show"
             }
         },
-		
-		     typeOfChart : {
 
-            selector :{
-                id : 'dropdown',
-                source : [
-                    { value : "line", label : "Line"},
-                    { value : "column", label : "Columns"},
-					  { value : "column_stacked", label : "Stacked columns"},
-					  { value : "area", label : "Area"},
-					  { value : "area_stacked", label : "Stacked area"},
-					   { value : "pie", label : "Pie"},
-					    { value : "scatter", label : "Scatter"},					
-					  { value : "bubble", label : "Bubble"},					
-					  { value : "heatmap", label : "Heatmap"},					
-					  { value : "treemap", label : "Treemap"},					
-					  { value : "boxplot", label : "Boxplot"}					
-					
+        typeOfChart: {
+
+            selector: {
+                id: 'dropdown',
+                source: [
+                    {value: "line", label: "Line"},
+                    {value: "column", label: "Columns"},
+                    {value: "column_stacked", label: "Stacked columns"},
+                    {value: "area", label: "Area"},
+                    {value: "area_stacked", label: "Stacked area"},
+                    {value: "pie", label: "Pie"},
+                    {value: "scatter", label: "Scatter"},
+                    {value: "bubble", label: "Bubble"},
+                    {value: "heatmap", label: "Heatmap"},
+                    {value: "treemap", label: "Treemap"},
+                    {value: "boxplot", label: "Boxplot"}
+
                 ],
-                config : {
-                    maxItems : 1
+                config: {
+                    maxItems: 1
                 },
-                default : ['line']
+                default: ['line']
             },
 
-            template : {
-                title : "Type of chart"
+            template: {
+                title: "Type of chart"
             }
         }
-		
-		
-		
+
+
     }
 
 });
