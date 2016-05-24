@@ -46,7 +46,8 @@ define(function () {
             selector: {
                 id: 'dropdown',
                 source: [
-                    {value: "line", label: "Line"},
+                    {value: "line", label: "Line"},		
+					{value: "pyramide", label: "Pyramide"},
                     {value: "column", label: "Columns"},
                     {value: "column_stacked", label: "Stacked columns"},
                     {value: "area", label: "Area"},

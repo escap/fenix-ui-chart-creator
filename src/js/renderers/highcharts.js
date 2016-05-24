@@ -87,6 +87,37 @@ define([
         switch (type.toLowerCase()) {
             //add type process
             case "heatmap":
+                break; 
+				case "pyramide":             
+				var tempData = [];
+				console.log("model",model)
+var Male={
+                name: model.cols2[0].join("_"),
+                data: jStat(model.data).col(0).alter(  function( x ) {
+					//console.log('x',x);
+    return x * -1;
+})
+            };
+			var Female={
+                name: model.cols2[1].join("_"),
+                data: jStat(model.data).col(1)||[]
+            };
+				 for (var i in model.rows) {
+                    //if (i >20) {break;}
+                    config.xAxis[0].categories.push(model.rows[i].join("_"));
+                    
+					config.xAxis[1].categories.push(model.rows[i].join("_"));
+                    // config.xAxis.categories.push("test"+i);
+
+                /*    var ddata = [model.data[i][0],model.data[i][1]]
+                    //console.log("JSTAT",ddata)
+                    tempData.push(ddata);
+*/
+                }
+console.log(Male);
+                config.series.push(Male);
+                config.series.push(Female);
+
                 break;
             case "boxplot":
 
@@ -149,7 +180,7 @@ define([
 
                 }
         }
-//        console.log("config", config.series)
+       console.log("config", config)
         return config;
     };
 

@@ -74,6 +74,61 @@ define(function () {
             plotOptions: {column: {pointPadding: 0.2, borderWidth: 0}},
             series: []
         },
+		pyramide: 
+      {
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: ''
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: [{
+               categories:[],
+                reversed: false,
+                labels: {
+                    step: 1
+                }
+            }, { // mirror axis on right side
+
+               categories:[],              
+			  opposite: true,
+                reversed: false,
+              
+                linkedTo: 0,
+                labels: {
+                    step: 1
+                }
+            }],
+            yAxis: {
+                title: {
+                    text: null
+                },
+                labels: {
+                    formatter: function () {
+                        return Math.abs(this.value) ;
+                    }
+                }
+            },
+
+            plotOptions: {
+                series: {
+                    stacking: 'normal'
+                }
+            },
+
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.series.name + ', age ' + this.point.category + '</b><br/>' +
+                        'Population: ' + Highcharts.numberFormat(Math.abs(this.point.y), 0);
+                }
+            },
+
+         	"series":[],
+        
+        },
         area_stacked: {
             chart: {type: 'area'},
             title: {text: ''},
