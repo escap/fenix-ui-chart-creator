@@ -102,6 +102,10 @@ type="line"
 will create a line chart in the container with the ID=result with country label, element label in row and the year in columns, group by the item: the aggregation function used will be the sum for the columns "value"
 
 
+#update
+the update function allow the user to modify the config file and refresh the chart : model,el have don't need to be provided.
+example
+this.chart.update({type:"area"})
 
 
 
