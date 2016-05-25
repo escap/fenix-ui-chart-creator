@@ -89,16 +89,21 @@ define([
                 break; 
 				case "pyramide":             
 				var tempData = [];
-				console.log("model",model)
+			//	console.log("model",model)
+			
+			var nameM="";
+			if(model.cols2.length>2){nameM=model.cols2[0].join("_")}
 var Male={
-                name: model.cols2[0].join("_"),
+                name: nameM,
                 data: jStat(model.data).col(0).alter(  function( x ) {
 					//console.log('x',x);
     return x * -1;
 })
             };
+			var nameF="";
+			if(model.cols2.length>2){nameF=model.cols2[1].join("_")}
 			var Female={
-                name: model.cols2[1].join("_"),
+                name: nameF,
                 data: jStat(model.data).col(1)||[]
             };
 				 for (var i in model.rows) {
