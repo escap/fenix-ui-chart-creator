@@ -74,7 +74,6 @@ define([
         var defaultRenderOptions = $.extend(true, {}, templateStyle, chartConfig);
 
         this._populateData(this.type, model, defaultRenderOptions);
-//console.log("config fin",model,config,defaultRenderOptions)
 
         this.chart = this.el.highcharts(defaultRenderOptions);
 

@@ -12,51 +12,37 @@ define([
 ], function (log, $, _, ChartCreator, Filter, FenixTool, Model, FilterModel) {
 
     'use strict';
-	
-	
-	/*UNECA_Education
-UNECA_Population
-UNECA_Health
-UNECA_BalanceOfPayments
-UNECA_Debt
-UNECA_MiningProduction4
-UNECA_Infrastructure
-UNECA_AgricultureProduction3
-ILO_Labour
-
-Uneca_PopulationNew
-UNECA_Labour				????
-UNECA_MonetaryStatistics
-UNECA_Inflation
 
 
-UNECA_Poverty
-UNECA_FinancialFlows
-UNECA_Tourism
-UNECA_PublicFinance
+    /*UNECA_Education
+     UNECA_Population
+     UNECA_Health
+     UNECA_BalanceOfPayments
+     UNECA_Debt
+     UNECA_MiningProduction4
+     UNECA_Infrastructure
+     UNECA_AgricultureProduction3
+     ILO_Labour
+
+     Uneca_PopulationNew
+     UNECA_Labour				????
+     UNECA_MonetaryStatistics
+     UNECA_Inflation
+
+
+     UNECA_Poverty
+     UNECA_FinancialFlows
+     UNECA_Tourism
+     UNECA_PublicFinance
 
 
 
-UNECA_GDP
-UNECA_GDP_NC
-UNECA_ExpenditureGDPCostant
-UNECA_ExpenditureGDPCurrent ???
-UNECA_GDP_USD*/
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-Model=JSON.parse(Model);
-console.log(Model);
+     UNECA_GDP
+     UNECA_GDP_NC
+     UNECA_ExpenditureGDPCostant
+     UNECA_ExpenditureGDPCurrent ???
+     UNECA_GDP_USD*/
+
     var s = {
         CONFIGURATION_EXPORT: "#configuration-export",
         FILTER_INTERACTION: "#filter-interaction",
@@ -75,7 +61,7 @@ console.log(Model);
     Test.prototype._testFilterInteraction = function () {
 
         //create filter configuration
-        var itemsFromFenixTool = this.fenixTool.toFilter(Model),
+        var itemsFromFenixTool = this.fenixTool.toFilter(JSON.parse(Model)),
         //FilterModel contains static filter selectors, e.g. show code, show unit
             items = $.extend(true, {}, FilterModel, itemsFromFenixTool);
 
@@ -92,7 +78,7 @@ console.log(Model);
 
             config = $.extend(true, {}, {
                 type: "line",
-                model: Model,
+                model: JSON.parse(Model),
                 el: s.CHART_INTERACTION
             }, config);
 
@@ -117,9 +103,6 @@ console.log(Model);
 
         var values = this.filter.getValues(),
             config = this.fenixTool.toChartConfig(values);
-
-        console.log(values)
-        console.log(config)
 
         this._printChartConfiguration(config);
 
