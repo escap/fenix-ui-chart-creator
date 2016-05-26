@@ -59,17 +59,18 @@ define([
 
         //TODO add validation
         this.type = config.type ? config.type : this.type;
-//console.log("config hc",config,this.model)
         this._renderHighcharts(config);
 
     };
 
-	 Highcharts.prototype._renderHighcharts = function (config) {
+    Highcharts.prototype._renderHighcharts = function (config) {
         var model = this.model;
 
         var chartConfig = templates[this.type];
 
-        if (!config) {alert("Impossible to find chart configuration: " + this.type);}
+        if (!config) {
+            alert("Impossible to find chart configuration: " + this.type);
+        }
 
         var defaultRenderOptions = $.extend(true, {}, templateStyle, chartConfig);
 
@@ -81,44 +82,46 @@ define([
 
     };
 
-     Highcharts.prototype._populateData = function (type, model, config) {
+    Highcharts.prototype._populateData = function (type, model, config) {
 
         switch (type.toLowerCase()) {
             //add type process
             case "heatmap":
-                break; 
-				case "pyramide":             
-				var tempData = [];
-			//	console.log("model",model)
-			
-			var nameM="";
-			if(model.cols2.length>2){nameM=model.cols2[0].join("_")}
-var Male={
-                name: nameM,
-                data: jStat(model.data).col(0).alter(  function( x ) {
-					//console.log('x',x);
-    return x * -1;
-})
-            };
-			var nameF="";
-			if(model.cols2.length>2){nameF=model.cols2[1].join("_")}
-			var Female={
-                name: nameF,
-                data: jStat(model.data).col(1)||[]
-            };
-				 for (var i in model.rows) {
+                break;
+            case "pyramide":
+                var tempData = [];
+
+                var nameM = "";
+                if (model.cols2.length > 2) {
+                    nameM = model.cols2[0].join("_")
+                }
+                var Male = {
+                    name: nameM,
+                    data: jStat(model.data).col(0).alter(function (x) {
+                        //console.log('x',x);
+                        return x * -1;
+                    })
+                };
+                var nameF = "";
+                if (model.cols2.length > 2) {
+                    nameF = model.cols2[1].join("_")
+                }
+                var Female = {
+                    name: nameF,
+                    data: jStat(model.data).col(1) || []
+                };
+                for (var i in model.rows) {
                     //if (i >20) {break;}
                     config.xAxis[0].categories.push(model.rows[i].join("_"));
-                    
-					config.xAxis[1].categories.push(model.rows[i].join("_"));
+
+                    config.xAxis[1].categories.push(model.rows[i].join("_"));
                     // config.xAxis.categories.push("test"+i);
 
-                /*    var ddata = [model.data[i][0],model.data[i][1]]
-                    //console.log("JSTAT",ddata)
-                    tempData.push(ddata);
-*/
+                    /*    var ddata = [model.data[i][0],model.data[i][1]]
+                     //console.log("JSTAT",ddata)
+                     tempData.push(ddata);
+                     */
                 }
-console.log(Male);
                 config.series.push(Male);
                 config.series.push(Female);
 
@@ -132,7 +135,6 @@ console.log(Male);
                     // config.xAxis.categories.push("test"+i);
 
                     var ddata = [jStat(model.data[i]).min() + 0].concat(jStat(model.data[i]).quartiles().concat(jStat(model.data[i]).max()))
-                    //console.log("JSTAT",ddata)
                     tempData.push(ddata);
 
                 }
@@ -184,12 +186,10 @@ console.log(Male);
 
                 }
         }
-       console.log("config", config)
         return config;
     };
 
- 
-	
+
     Highcharts.prototype._trigger = function (channel) {
 
         if (!this.channels[channel]) {
@@ -230,7 +230,7 @@ console.log(Male);
 
     };
 
-     Highcharts.prototype._getEventName = function (evt) {
+    Highcharts.prototype._getEventName = function (evt) {
 
         return this.id.concat(evt);
     };
