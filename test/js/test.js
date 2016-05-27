@@ -61,7 +61,7 @@ define([
     Test.prototype._testFilterInteraction = function () {
 
         //create filter configuration
-        var itemsFromFenixTool = this.fenixTool.toFilter(JSON.parse(Model)),
+        var itemsFromFenixTool = this.fenixTool.toFilter(JSON.parse(Model) ,{rowLabel:"Series",columnsLabel: "X-Axis",valuesLabel: "Y-axis"}),
         //FilterModel contains static filter selectors, e.g. show code, show unit
             items = $.extend(true, {}, FilterModel, itemsFromFenixTool);
 
