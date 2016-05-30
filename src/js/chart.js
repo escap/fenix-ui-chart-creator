@@ -12,7 +12,9 @@ define([
     'fx-common/pivotator/fenixtool',
     'amplify'
 ], function ($, require, _, log, ERR, EVT, C, CD, Pivotator, fenixtool) {
+
     'use strict';
+
     function Chart(o) {
         log.info("FENIX Chart");
         log.info(o);
@@ -31,6 +33,11 @@ define([
         }
     }
 
+    // API
+    /**
+     * Update chart
+     * @return {Object} Chart instance
+     */
     Chart.prototype.update = function (config) {
 
         this._parseInputUpdate(config);
@@ -41,8 +48,6 @@ define([
         this.chart.update(config);
     };
 
-
-    // API
     /**
      * pub/sub
      * @return {Object} Chart instance
@@ -53,6 +58,20 @@ define([
         }
         this.channels[channel].push({context: this, callback: fn});
         return this;
+    };
+
+    /**
+     * Force redrawing
+     * @return {Object} filter instance
+     */
+    Chart.prototype.redraw = function () {
+
+        if (this.chart && $.isFunction(this.chart.redraw)){
+            this.chart.redraw();
+        } else {
+            log.warn("Abort redraw");
+        }
+
     };
 
     Chart.prototype._trigger = function (channel) {
@@ -66,12 +85,13 @@ define([
         }
         return this;
     };
+
     // end API
+
     Chart.prototype._parseInput = function () {
 
         this._parseInputUpdate(this.initial)
     };
-
 
     Chart.prototype._parseInputUpdate = function (param) {
         this.id = param.id;
@@ -98,7 +118,6 @@ define([
         this.renderer = param.renderer || C.renderer || CD.renderer;
         this.lang = param.lang || 'EN';
     };
-
 
     Chart.prototype._validateInput = function () {
         var valid = true, errors = [];
@@ -199,6 +218,7 @@ define([
     };
 
     //disposition
+
     Chart.prototype._unbindEventListeners = function () {
         //amplify.unsubscribe(this._getEventName(EVT.SELECTOR_READY), this._onSelectorReady);
     };
@@ -208,40 +228,6 @@ define([
         //unbind event listeners
         this._unbindEventListeners();
     };
-    // utils
-
-    Chart.prototype.exportConf = function (FX, optGr) {
-        var FXmod = this.fenixTool.convertFX(FX, optGr);
-
-
-        function getListDim(arr, opt, FXmod) {
-            var showCode = opt.showCode;
-            var ret = [];
-            for (var i in arr) {
-                ret.push(FXmod.dimensions[arr[i]].code)
-            }
-            return ret
-        }
-
-
-        var ret = {
-            inputFormat: "fenixtool",
-            "aggregations": getListDim(optGr.aggregation, optGr, FXmod),
-            "x": getListDim(optGr.x, optGr, FXmod),
-            "series": getListDim(optGr.series, optGr, FXmod),
-            "hidden": getListDim(optGr.hidden, optGr, FXmod),
-            "y": optGr.y,
-            "aggregationFn": optGr.aggregationFn,
-            "valueOutputType": optGr.valueOutputType,
-            "formatter": optGr.formatter,
-            "decimals": optGr.decimals,
-            "showUnit": optGr.showUnit,
-            "showFlag": optGr.showFlag,
-            "showCode": optGr.showCode,
-            "type": optGr.type
-        };
-        return ret;
-    }
 
     Chart.prototype._callSelectorInstanceMethod = function (name, method, opts1, opts2) {
         var Instance = this.chart;

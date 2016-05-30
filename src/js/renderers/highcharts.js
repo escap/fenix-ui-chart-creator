@@ -55,6 +55,20 @@ define([
         return this;
     };
 
+    /**
+     * Force redrawing
+     * @return {Object} filter instance
+     */
+    Highcharts.prototype.redraw = function () {
+
+        if (this.chart.length > 0){
+            this.chart.highcharts().reflow();
+        } else {
+            log.warn("Abort redraw");
+        }
+
+    };
+
     Highcharts.prototype.update = function (config) {
 
         //TODO add validation
