@@ -268,7 +268,7 @@ define(function () {
             borderWidth: 1,
             shadow: true,
             crosshairs: "mixed",
-            // shared: true
+            shared: false
         },
         series: [],
         noData: {

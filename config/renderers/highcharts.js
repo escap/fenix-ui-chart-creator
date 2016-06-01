@@ -16,7 +16,6 @@ define(function () {
                 pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
                 '<td style="padding:0"><b>{point.y:.1f} </b></td></tr>',
                 footerFormat: '</table>',
-                shared: true,
                 useHTML: true
             },
             plotOptions: {column: {pointPadding: 0.2, borderWidth: 0}},
@@ -33,7 +32,6 @@ define(function () {
                 pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
                 '<td style="padding:0"><b>{point.y:.1f} </b></td></tr>',
                 footerFormat: '</table>',
-                shared: true,
                 useHTML: true
             },
             plotOptions: {column: {pointPadding: 0.2, borderWidth: 0}},
@@ -50,7 +48,6 @@ define(function () {
                 pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
                 '<td style="padding:0"><b>{point.y:.1f} </b></td></tr>',
                 footerFormat: '</table>',
-                shared: true,
                 useHTML: true
             },
             plotOptions: {column: {stacking: 'normal',pointPadding: 0.2, borderWidth: 0}},
@@ -68,7 +65,6 @@ define(function () {
                 pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
                 '<td style="padding:0"><b>{point.y:.1f} </b></td></tr>',
                 footerFormat: '</table>',
-                shared: true,
                 useHTML: true
             },
             plotOptions: {column: {pointPadding: 0.2, borderWidth: 0}},
@@ -140,7 +136,6 @@ define(function () {
                 pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
                 '<td style="padding:0"><b>{point.y:.1f} </b></td></tr>',
                 footerFormat: '</table>',
-                shared: true,
                 useHTML: true
             },
             plotOptions: {area: {stacking: 'normal'}},
@@ -157,7 +152,6 @@ define(function () {
                 pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
                 '<td style="padding:0"><b>{point.y:.1f} </b></td></tr>',
                 footerFormat: '</table>',
-                shared: true,
                 useHTML: true
             },
            // plotOptions: {area: {stacking: 'normal'}},
@@ -174,7 +168,6 @@ define(function () {
                 pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
                 '<td style="padding:0"><b>{point.y:.1f} </b></td></tr>',
                 footerFormat: '</table>',
-                shared: true,
                 useHTML: true
             },
             plotOptions: {column: {pointPadding: 0.2, borderWidth: 0}},
