@@ -102,7 +102,7 @@ define([
             //add type process
             case "heatmap":
                 break;
-            case "pyramide":
+            case "pyramid":
                 var tempData = [];
 
                 var nameM = "";

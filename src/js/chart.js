@@ -19,7 +19,6 @@ define([
         log.info("FENIX Chart");
         log.info(o);
         $.extend(true, this, CD, C, {initial: o});
-
         this._parseInput(o);
         var valid = this._validateInput();
         if (valid === true) {
