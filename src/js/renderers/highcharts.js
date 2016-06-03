@@ -31,6 +31,7 @@ define([
             this._initVariables();
 
             this._bindEventListeners();
+
             this._renderHighcharts(this.pivotatorConfig);
 
             return this;
@@ -88,9 +89,9 @@ define([
 
         var defaultRenderOptions = $.extend(true, {}, templateStyle, chartConfig);
 
-        this._populateData(this.type, model, defaultRenderOptions);
+        var config = $.extend(true, this._populateData(this.type, model, defaultRenderOptions), this.config);
 
-        this.chart = this.el.highcharts(defaultRenderOptions);
+        this.chart = this.el.highcharts(config);
 
         this._trigger("ready");
 

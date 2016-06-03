@@ -40,9 +40,10 @@ define([
     Chart.prototype.update = function (config) {
 
         this._parseInputUpdate(config);
-        var myPivotatorConfig = this.fenixTool.parseInut(this.initial.model.metadata.dsd, this.pivotatorConfig);
 
-        this.chart.model = this.pivotator.pivot(this.initial.model, myPivotatorConfig);
+        var pivotatorConfig = this.fenixTool.parseInut(this.initial.model.metadata.dsd, this.pivotatorConfig);
+
+        this.chart.model = this.pivotator.pivot(this.initial.model, pivotatorConfig);
 
         this.chart.update(config);
     };
@@ -93,12 +94,14 @@ define([
     };
 
     Chart.prototype._parseInputUpdate = function (param) {
-        this.id = param.id;
+
+        var format = param.useDimensionLabelsIfExist === true ? "fenixtool" : "raw";
+
         this.$el = $(param.el);
         this.type = param.type;
         this.model = param.model;
         var pc = {};
-        pc.inputFormat = param.inputFormat || "raw";
+        pc.inputFormat = format;
         pc.aggregationFn = param.aggregationFn;
         pc.aggregations = param.aggregations || [];
         pc.hidden = param.hidden || [];
@@ -116,6 +119,7 @@ define([
         this.pivotatorConfig = pc;
         this.renderer = param.renderer || C.renderer || CD.renderer;
         this.lang = param.lang || 'EN';
+        this.config = param.config;
     };
 
     Chart.prototype._validateInput = function () {
@@ -201,7 +205,8 @@ define([
             el: this.$el,
             model: model,
             lang: this.lang,
-            type: this.type
+            type: this.type,
+            config : this.config
         });
 
         this.chart = new Renderer(config);

@@ -75,11 +75,14 @@ define([
         this.filter.on("ready", _.bind(function () {
 
             var config = this._getChartConfigFromFilter();
-
+            
             config = $.extend(true, {}, {
                 type: "line",
                 model: JSON.parse(Model),
-                el: s.CHART_INTERACTION
+                el: s.CHART_INTERACTION,
+                config : {
+                    tooltip :  { shared : true }
+                }
             }, config);
 
             log.trace("Init chart");
