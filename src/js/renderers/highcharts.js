@@ -6,7 +6,6 @@ define([
     'fx-chart/config/errors',
     'fx-chart/config/events',
     'fx-chart/config/config',
-    'fx-chart/config/config-default',
     'fx-common/pivotator/start',
     'fx-chart/config/renderers/highcharts',
     'fx-chart/config/renderers/highcharts_shared',
@@ -14,7 +13,7 @@ define([
     "highcharts_no_data",
     "highcharts_export",
     'amplify'
-], function ($, _, log, ERR, EVT, C, CD, Pivotator, templates, templateStyle) {
+], function ($, _, log, ERR, EVT, C, Pivotator, templates, templateStyle) {
 
     'use strict';
 
@@ -22,7 +21,7 @@ define([
         log.info("FENIX Highcharts");
         log.info(o);
 
-        $.extend(true, this, CD, C, o);
+        $.extend(true, this, C, o);
 
         var valid = this._validateInput();
 

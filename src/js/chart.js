@@ -7,18 +7,17 @@ define([
     'fx-chart/config/errors',
     'fx-chart/config/events',
     'fx-chart/config/config',
-    'fx-chart/config/config-default',
     'fx-common/pivotator/start',
     'fx-common/pivotator/fenixtool',
     'amplify'
-], function ($, require, _, log, ERR, EVT, C, CD, Pivotator, fenixtool) {
+], function ($, require, _, log, ERR, EVT, C, Pivotator, fenixtool) {
 
     'use strict';
 
     function Chart(o) {
         log.info("FENIX Chart");
         log.info(o);
-        $.extend(true, this, CD, C, {initial: o});
+        $.extend(true, this, C, {initial: o});
         this._parseInput(o);
         var valid = this._validateInput();
         if (valid === true) {
@@ -117,7 +116,7 @@ define([
         pc.showUnit = param.showUnit || false;
         // add more pivotator config
         this.pivotatorConfig = pc;
-        this.renderer = param.renderer || C.renderer || CD.renderer;
+        this.renderer = param.renderer || C.renderer;
         this.lang = param.lang || 'EN';
         this.config = param.config;
     };
@@ -161,7 +160,7 @@ define([
 
     Chart.prototype._getPluginPath = function (name) {
 
-        var registeredSelectors = $.extend(true, {}, this.plugin_registry),
+        var registeredSelectors = $.extend(true, {}, this.pluginRegistry),
             path;
 
         var conf = registeredSelectors[name];
