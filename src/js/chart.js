@@ -196,7 +196,7 @@ define([
     Chart.prototype._renderChart = function () {
 
         var Renderer = this._getRenderer(this.renderer);
-        var myPivotatorConfig = this.fenixTool.parseInut(this.model.metadata.dsd, this.pivotatorConfig);
+        var myPivotatorConfig = this.fenixTool.parseInput(this.model.metadata.dsd, this.pivotatorConfig);
 
         var model = this.pivotator.pivot(this.model, myPivotatorConfig);
         var config = $.extend(true, {}, {
