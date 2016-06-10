@@ -45,13 +45,14 @@ define([
 
     /**
      * pub/sub
-     * @return {Object} Highcharts instance
+     * @return {Object} component instance
      */
-    Highcharts.prototype.on = function (channel, fn) {
+    Highcharts.prototype.on = function (channel, fn, context) {
+        var _context = context || this;
         if (!this.channels[channel]) {
             this.channels[channel] = [];
         }
-        this.channels[channel].push({context: this, callback: fn});
+        this.channels[channel].push({context: _context, callback: fn});
         return this;
     };
 
