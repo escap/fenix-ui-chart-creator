@@ -77,10 +77,6 @@ require([
 				// Specify the paths of vendor libraries
 				paths: {
 
-					//nls: projectRoot + "i18n",
-					//config: projectRoot + "config",
-					//json: projectRoot + "json",
-
 					test: projectRoot + submoduleRoot + "test",
 
 					domReady: "{FENIX_CDN}/js/requirejs/plugins/domready/2.0.1/domReady",
