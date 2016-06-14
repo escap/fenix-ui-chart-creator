@@ -40,7 +40,7 @@ define([
 
         this._parseInputUpdate(config);
 
-        var pivotatorConfig = this.fenixTool.parseInut(this.initial.model.metadata.dsd, this.pivotatorConfig);
+        var pivotatorConfig = this.fenixTool.parseInput(this.initial.model.metadata.dsd, this.pivotatorConfig);
 
         this.chart.model = this.pivotator.pivot(this.initial.model, pivotatorConfig);
 
