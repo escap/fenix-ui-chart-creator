@@ -106,23 +106,20 @@ define([
         var dataArray = [];
 
         for (var k in model.rows) {
-            //console.log();
-            for (var j in config.xAxis.categories) {
+                var data = model.data[k];
 
-               // var dataObj = {};
-               // dataObj.y = model.data[k][j];
-               // dataObj.name = config.xAxis.categories[j];
-                dataArray.push(config.xAxis.categories[j]);
-            }
+                var processedArry = [];
+                for(var x in data){
+                     if(data[x] != null) {
+                         processedArry.push(data[x]);
+                     }
+                 }
 
             config.series.push({
                 name: model.rows[k].join(" "),
-                data: dataArray
+                data: processedArry
             });
         }
-
-       // console.log("========================== JVENN CONFIG ");
-       // console.log(config);
 
         return config;
     };
