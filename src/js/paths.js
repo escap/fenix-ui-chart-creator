@@ -4,6 +4,7 @@ define(function () {
     'use strict';
 
     var HIGHCHARTS_VERSION = "4.2.5";
+    var JVENN_VERSION = "1.8";
 
     var config = {
 
@@ -25,7 +26,8 @@ define(function () {
             highcharts_no_data: '{FENIX_CDN}/js/highcharts/' + HIGHCHARTS_VERSION + '/js/modules/no-data-to-display',
             'highcharts_export': '{FENIX_CDN}/js/highcharts/' + HIGHCHARTS_VERSION + '/js/modules/exporting',
             //'highcharts_export_csv': 'http://highslide-software.github.io/export-csv/export-csv'
-        },
+            jvenn: '{FENIX_CDN}/js/jvenn/' + JVENN_VERSION + '/src/jvenn.min'
+         },
 
         shim: {
             "highcharts": {
@@ -43,6 +45,9 @@ define(function () {
             },
             "highcharts_no_data": {
                 deps: ['highcharts']
+            },
+            "jvenn": {
+                deps: ["jquery"]
             },
             "amplify": {
                 deps: ["jquery"]

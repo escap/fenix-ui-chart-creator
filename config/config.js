@@ -13,6 +13,9 @@ define(function () {
         pluginRegistry: {
             'highcharts': {
                 path: selectorPath + 'highcharts'
+            },
+            'jvenn': {
+                path: selectorPath + 'jvenn'
             }
         }
 
