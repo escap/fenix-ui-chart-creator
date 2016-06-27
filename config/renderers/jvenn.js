@@ -10,5 +10,6 @@ define(function () {
            categories: []
        },
        series: [],
+       exporting: true
     };
 });
