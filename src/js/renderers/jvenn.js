@@ -82,8 +82,7 @@ define([
             alert("Impossible to find chart configuration: " + this.type);
         }
 
-        var config = $.extend(true, this._populateData(model, templates), this.config);
-
+        var config = $.extend(true, this._populateData(model, templates), config);
         this.chart = this.el.jvenn(config);
 
         this._trigger("ready");
