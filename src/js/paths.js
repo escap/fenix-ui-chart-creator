@@ -3,43 +3,54 @@ define(function () {
 
     'use strict';
 
+    var HIGHCHARTS_VERSION = "4.2.5";
+    var JVENN_VERSION = "1.8";
+
     var config = {
 
-        paths : {
-            //'fx-c-c': prefix,
-            'fx-c-c/start': './start',
-            'fx-c-c/html': '../html',
-            'fx-c-c/config': '../../config',
-            'fx-c-c/adapters':  './adapters',
-            'fx-c-c/templates': './templates',
-            'fx-c-c/creators': './creators',
+        paths: {
+
+            'fx-chart/start': './chart',
+            'fx-chart/html': '../html',
+            'fx-chart/config': '../../config',
+            'fx-chart/renderers': './renderers',
 
             // third party libs
             text: '{FENIX_CDN}/js/requirejs/plugins/text/2.0.12/text',
             jquery: '{FENIX_CDN}/js/jquery/2.1.1/jquery.min',
             underscore: '{FENIX_CDN}/js/underscore/1.7.0/underscore.min',
             amplify: '{FENIX_CDN}/js/amplify/1.1.2/amplify.min',
-            'handlebars': '{FENIX_CDN}/js/handlebars/2.0.0/handlebars',
-            'highcharts': '{FENIX_CDN}/js/highcharts/4.0.4/js/highcharts',
-
-            // highcharts plugins TODO: switch to CDN if they are going to be used
-            'highcharts-export': '{FENIX_CDN}/js/highcharts/4.0.4/js/modules/exporting',
-            'highcharts-export-csv': 'http://highslide-software.github.io/export-csv/export-csv'
-        },
+            handlebars: '{FENIX_CDN}/js/handlebars/2.0.0/handlebars',
+            highcharts: '{FENIX_CDN}/js/highcharts/' + HIGHCHARTS_VERSION + '/js/highcharts',
+            highcharts_more: '{FENIX_CDN}/js/highcharts/' + HIGHCHARTS_VERSION + '/js/highcharts-more',
+            highcharts_no_data: '{FENIX_CDN}/js/highcharts/' + HIGHCHARTS_VERSION + '/js/modules/no-data-to-display',
+            'highcharts_export': '{FENIX_CDN}/js/highcharts/' + HIGHCHARTS_VERSION + '/js/modules/exporting',
+            //'highcharts_export_csv': 'http://highslide-software.github.io/export-csv/export-csv'
+            jvenn: '{FENIX_CDN}/js/jvenn/' + JVENN_VERSION + '/src/jvenn.min'
+         },
 
         shim: {
             "highcharts": {
-                "exports": "Highcharts",
-                "deps": ["jquery"]
+                exports: "Highcharts",
+                deps: ["jquery"]
             },
-            "highcharts-export": {
-                "deps": ["highcharts"]
+            "highcharts_export": {
+                deps: ["highcharts"]
             },
-            "highcharts-export-csv": {
-                "deps": ["highcharts", "highcharts-export" ]
+            "highcharts_export_csv": {
+                deps: ["highcharts", "highcharts_export"]
             },
-             "amplify": {
-                "deps": ["jquery"]
+            "highcharts_more": {
+                deps: ['highcharts']
+            },
+            "highcharts_no_data": {
+                deps: ['highcharts']
+            },
+            "jvenn": {
+                deps: ["jquery"]
+            },
+            "amplify": {
+                deps: ["jquery"]
             }
         }
     };
