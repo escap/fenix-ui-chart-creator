@@ -40,14 +40,24 @@ with config is a json Object with these fields :
 <td> type of chart we want to display</td>
 </tr>
 <tr>
-<td>columns and rows</td>
+<td>series</td>
 <td>json array</td>
 <td>[]</td>
 
-<td>columns:["Country","Indicator_EN"],rows:["Year"]</td>
-<td>Define the operations of denormalization of FX : wich columns
-have to be display as rows and wich in columns</td>
+<td>x:["Country","Indicator_EN"]</td>
+<td>List the dimensions to put in x-axis of the graph</td>
 </tr>
+
+<tr>
+<td>rows</td>
+<td>json array</td>
+<td>[]</td>
+
+<td>series:["Year"]</td>
+<td>List the dimensions that will be inerpreted as series in the graph</td>
+</tr>
+
+
 <tr>
 <td>aggregations</td>
 <td>json array</td>
@@ -58,13 +68,13 @@ have to be display as rows and wich in columns</td>
 Grid</td>
 </tr>
 <tr>
-<td>values</td>
+<td>y</td>
 <td>json array</td>
 <td>[]</td>
 
-<td>values:["values","Flag","Units"]</td>
-<td> describe wich columns in the ressources will be aggregates
-and displayed in the values part of the grid</td>
+<td>y:["values"]</td>
+<td> describe wich dimensions in the ressources will be aggregates
+and displayed as Y-axis of the chart</td>
 </tr>
 <tr>
 <td>aggregationFn</td>
