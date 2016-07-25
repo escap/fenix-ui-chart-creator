@@ -37,7 +37,7 @@ with config is a json Object with these fields :
 <td>string</td>
 <td>-</td>
 
-<td>"line","column","column_stacked","area","pyramide","area_stacked","scatter","boxplot"</td>
+<td>"line","column", "column_stacked", "area", "pyramide", "area_stacked", "scatter","boxplot"</td>
 <td> type of chart we want to display</td>
 </tr>
 <tr>
