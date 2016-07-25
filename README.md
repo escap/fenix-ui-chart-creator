@@ -40,16 +40,16 @@ with config is a json Object with these fields :
 <td> type of chart we want to display</td>
 </tr>
 <tr>
-<td>series</td>
+<td>x</td>
 <td>json array</td>
 <td>[]</td>
 
-<td>x:["Country","Indicator_EN"]</td>
+<td>x:["Country","Indicator"]</td>
 <td>List the dimensions to put in x-axis of the graph</td>
 </tr>
 
 <tr>
-<td>rows</td>
+<td>series</td>
 <td>json array</td>
 <td>[]</td>
 
@@ -63,7 +63,7 @@ with config is a json Object with these fields :
 <td>json array</td>
 <td>[]</td>
 
-<td>aggregations:["IndicatorCode_EN","Year"]</td>
+<td>aggregations:["ElementCode"]</td>
 <td>FX columns we want to aggregate,they will not appears in the
 Grid</td>
 </tr>
@@ -94,9 +94,9 @@ application</td>
 <td>-</td>
 
 <td> "localstring" or "value"</td>
-<td> : identifier of the formater function for the value field
+<td>identifier of the formater function for the value field
 localstring result will be in this format : "1 250,12", value will
-return 1250,12 ; value is hightly recommanded for charting</td>
+return 1250,12 ; value is  recommanded for charting</td>
 </tr>
 <tr>
 <td>hidden</td>
