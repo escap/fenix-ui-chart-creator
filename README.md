@@ -1,5 +1,4 @@
 [![Stories in Ready](https://badge.waffle.io/FENIX-Platform/fenix-ui-olap.png?label=ready&title=Ready)](https://waffle.io/FENIX-Platform/fenix-ui-olap)
-fenix-ui-olap
 =============
 
 
@@ -7,59 +6,147 @@ fenix-ui-olap
 
 
 Requirejs import : 
+```javascript
 define(['fx-chart/start'], function (ChartCreator) {
 ...
-
+```
 General principe:
-From a ressource Fenix (FX in this document) and some extra-configurations provided, a pivotator based creator apply two mains operations : 
-	-denormalisation of the dataset
-	-aggregation
+From a ressource Fenix (FX in this document) and some extra-configurations provided, a pivotator-based creator will perform three mains operations : 
+	-denormalisation of the dataset(optional)
+	-aggregation (optional)
 	-renderisation of the result with an external library
 
 
 Constructor :
+```javascript
    this.chart = new ChartCreator(config);
+   ```
 with config is a json Object with these fields :
+<table>
+<tbody>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default Value</th>
+<th>Example</th>
+<th>Description</th>
+</tr>
+<tr>
+<td>type </td>
+<td>string</td>
+<td>-</td>
 
-type : type of chart we want to display
-	currently available : "line","column","column_stacked","area","pyramide","area_stacked","scatter","boxplot"
+<td>type:"column"</td>
+<td> type of chart we want to display
+currently available : 
+"line","column", "column_stacked", "area", "pyramide", "area_stacked", "scatter","boxplot"
+</td>
+</tr>
+<tr>
+<td>x</td>
+<td>json array</td>
+<td>[]</td>
+
+<td>x:["Country_EN","Indicator_EN"]</td>
+<td>List the dimensions to put in x-axis of the graph</td>
+</tr>
+
+<tr>
+<td>series</td>
+<td>json array</td>
+<td>[]</td>
+
+<td>series:["Year"]</td>
+<td>List the dimensions that will be inerpreted as series in the graph</td>
+</tr>
 
 
+<tr>
+<td>aggregations</td>
+<td>json array</td>
+<td>[]</td>
 
-columns and rows:
-	Define the operations of denormalization of FX : wich columns have to be display as rows and wich in columns
-	example columns:["Country","Indicator_EN"],rows:["Year"]
+<td>aggregations:["ElementCode_EN"]</td>
+<td>FX columns we want to aggregate,they will not appears in the
+Grid</td>
+</tr>
+<tr>
+<td>y</td>
+<td>json array</td>
+<td>[]</td>
 
+<td>y:["values"]</td>
+<td> describe wich FX columns will be aggregates and displayed as Y-axis of the chart</td>
+</tr>
+<tr>
+<td>aggregationFn</td>
+<td>json Object</td>
+<td>{}</td>
 
+<td> {value:"sum",Flag:"dif",Units:"dif"}</td>
+<td>This object is needed to identify which aggregation function
+have to be applied for each field on the "values" part of the dataset.
+The functions identifiers "sum" and dif in this example refer to a
+function of aggregation implemented in the functions part of the
+application and can be easily extended if needed</td>
+</tr>
+<tr>
+<td>formatter</td>
+<td>string</td>
+<td>-</td>
 
+<td> "localstring" or "value"</td>
+<td>identifier of the formater function for the value field
+localstring result will be in this format : "1 250,12", value will
+return 1250,12 ; value is  recommanded for charting</td>
+</tr>
+<tr>
+<td>hidden</td>
+<td> json array</td>
 
-aggregations: FX columns we want to aggregate 
-			exemple aggregations:["IndicatorCode_EN","Year"]
-			they will not appears in the Grid
+<td><br>
+</td>
+<td>hidden:["DomainCode"]
+</td><td>this FX columns will not appear in the name of the series or of the X-axis
+</td>
+</tr>
+<tr>
+<td>decimals</td>
+<td>integer</td>
+<td></td>
+<td>decimals:2</td>
+<td> number of decimal for the values</td>
 
-values: describe wich columns in the ressources will be aggregates and displayed in the values part of the grid
-
-
-aggregationFn: 
-			exemple : {value:"sum",um:"dif"}
-			This object is needed to identify which 					aggregation function have to be applied for each field on the "values" part of the dataset. The functions identifiers "sum" and dif in this example refer to a function of aggregation implemented in the functions part of the application
-
-formatter: "localstring" or "value" : iditifier of the formater function for the value field localstring result will be in this format : "1 250,12", value will return 1250,12  ; value is hightly recommanded for charting
-
-
-hidden: not yet implemented : now it is an equivalent of the "aggregations" parameter
-
-decimals: number of decimal for the values
-
-
-
-el: the ID of the dom container where the grid will be displayed
-
-model: The ressource FENIX to display
-
-showRowHeaders: boolean to show the row header in the output matrix of the pivotator (cf pivotator documention) ; false is hightly recommanded for charting
-
+</tr>
+ <tr><td>el</td>
+         <td>CSS3 Selector/JavaScript DOM element/jQuery DOM element</td>
+         <td> - </td>
+         <td>"#container"</td>
+         <td>Optional component container. if specified items's will be searched within it otherwise within the whole document.</td>
+  </tr>
+<tr>
+<td>model</td>
+<td><br>
+</td>
+<td><br>
+</td>
+<td><br>
+</td>
+<td> The ressource FENIX to display</td>
+</tr>
+<tr>
+<td>showRowHeaders</td>
+<td>boolean</td>
+<td>false
+</td>
+<td><br>
+</td>
+<td>boolean to show the row header in the output matrix of the pivotator component; false is recommanded for charting</td>
+</tr>
+</tbody>
+</table>
 Full example : 
+```javascript
 var FX={
   metadata:{
 	dsd:{
@@ -91,42 +178,22 @@ aggregations:["item_EN"],
 values:["value"],
 aggregationFn:{value:"sum"},
 formatter:"localstring",
-showRowHeaders:true,
+showRowHeaders:false,
 model:FX,
 el:"#result",
-type="line"
+type:"line"
 }
 
 
    this.chart = new ChartCreator(config);
+   ```
 will create a line chart in the container with the ID=result with country label, element label in row and the year in columns, group by the item: the aggregation function used will be the sum for the columns "value"
 
 
 #update
 the update function allow the user to modify the config file and refresh the chart : model,el have don't need to be provided.
-example
+example : 
+```javascript
 this.chart.update({type:"area"})
 
-
-
-# FENIX Chart creator
-/*to delete */
-aggregationFn = "sum" || "avg" || ...
-
-aggregations = 
-columns = 
-rows = 
-hidden = 
-values = 
-
-formatter = "value" || "localstring"
-showRowHeaders = false
-decimals = decimal digit;
-
-showCode = add code column;
-showFlag = add flag column;
-showUnit = add unit column;
-
-model = Model to render;
-el = chart container;
-/* end to delete */
+```
