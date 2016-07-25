@@ -84,7 +84,7 @@ application</td>
 <td>-</td>
 
 <td> "localstring" or "value"</td>
-<td> : iditifier of the formater function for the value field
+<td> : identifier of the formater function for the value field
 localstring result will be in this format : "1 250,12", value will
 return 1250,12 ; value is hightly recommanded for charting</td>
 </tr>
@@ -108,16 +108,12 @@ return 1250,12 ; value is hightly recommanded for charting</td>
 <td><br>
 </td>
 </tr>
-<tr>
-<td>el</td>
-<td><br>
-</td>
-<td><br>
-</td>
-<td><br>
-</td>
-<td> the ID of the dom container where the grid will be displayed</td>
-</tr>
+ <tr><td>el</td>
+         <td>CSS3 Selector/JavaScript DOM element/jQuery DOM element</td>
+         <td> - </td>
+         <td>"#container"</td>
+         <td>Optional component container. if specified items's will be searched within it otherwise within the whole document.</td>
+  </tr>
 <tr>
 <td>model</td>
 <td><br>
