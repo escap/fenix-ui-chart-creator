@@ -19,12 +19,17 @@ From a ressource Fenix (FX in this document) and some extra-configurations provi
 
 
 Constructor :
+```javascript
    this.chart = new ChartCreator(config);
+   ```
 with config is a json Object with these fields :
-
-type : type of chart we want to display
+<table>
+<tr><td>
+type </td><td>: type of chart we want to display
 	currently available : "line","column","column_stacked","area","pyramide","area_stacked","scatter","boxplot"
-
+</td>
+</tr>
+</table>
 
 
 columns and rows:
