@@ -44,7 +44,7 @@ with config is a json Object with these fields :
 <td>json array</td>
 <td>[]</td>
 
-<td>x:["Country","Indicator"]</td>
+<td>x:["Country_EN","Indicator_EN"]</td>
 <td>List the dimensions to put in x-axis of the graph</td>
 </tr>
 
@@ -63,7 +63,7 @@ with config is a json Object with these fields :
 <td>json array</td>
 <td>[]</td>
 
-<td>aggregations:["ElementCode"]</td>
+<td>aggregations:["ElementCode_EN"]</td>
 <td>FX columns we want to aggregate,they will not appears in the
 Grid</td>
 </tr>
@@ -104,19 +104,17 @@ return 1250,12 ; value is  recommanded for charting</td>
 
 <td><br>
 </td>
-<td><br>
-</td><td><br>
+<td>hidden:["DomainCode"]
+</td><td>this FX columns will not appear in the name of the series or of the X-axis
 </td>
 </tr>
 <tr>
 <td>decimals</td>
+<td>integer</td>
+<td></td>
+<td>decimals:2</td>
 <td> number of decimal for the values</td>
-<td><br>
-</td>
-<td><br>
-</td>
-<td><br>
-</td>
+
 </tr>
  <tr><td>el</td>
          <td>CSS3 Selector/JavaScript DOM element/jQuery DOM element</td>
