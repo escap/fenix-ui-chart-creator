@@ -7,10 +7,10 @@ fenix-ui-olap
 
 
 Requirejs import : 
-'''javascript
+```javascript
 define(['fx-chart/start'], function (ChartCreator) {
 ...
-
+```
 General principe:
 From a ressource Fenix (FX in this document) and some extra-configurations provided, a pivotator based creator apply two mains operations : 
 	-denormalisation of the dataset
