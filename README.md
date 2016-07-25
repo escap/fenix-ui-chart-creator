@@ -24,6 +24,13 @@ Constructor :
    ```
 with config is a json Object with these fields :
 <table>
+   <tr>
+         <th>Parameter</th>
+         <th>Type</th>
+         <th>Default Value</th>
+         <th>Example</th>
+         <th>Description</th>
+      </tr>
 <tr><td>
 type </td><td> type of chart we want to display
 	currently available : "line","column","column_stacked","area","pyramide","area_stacked","scatter","boxplot"
