@@ -66,32 +66,45 @@ they will not appears in the Grid
 aggregationFn</td>
 <td>json Object</td>
 <td>{}<td>
-<td> {value:"sum",Flag:"dif",Units:"dif"}</td><td>
-			This object is needed to identify which 					aggregation function have to be applied for each field on the "values" part of the dataset. The functions identifiers "sum" and dif in this example refer to a function of aggregation implemented in the functions part of the application
+<td> {value:"sum",Flag:"dif",Units:"dif"}</td>
+<td>This object is needed to identify which aggregation function have to be applied for each field on the "values" part of the dataset. The functions identifiers "sum" and dif in this example refer to a function of aggregation implemented in the functions part of the application
 </td></tr>
 <tr><td>
 formatter</td>
 <td>string</td>
 <td>-<td>
-<td> "localstring" or "value" : iditifier of the formater function for the value field localstring result will be in this format : "1 250,12", value will return 1250,12  ; value is hightly recommanded for charting
+<td> "localstring" or "value"</td>
+<td> : iditifier of the formater function for the value field localstring result will be in this format : "1 250,12", value will return 1250,12  ; value is hightly recommanded for charting
 </td></tr>
-<tr><td>
-
-hidden</td><td> not yet implemented : now it is an equivalent of the "aggregations" parameter
+<tr><td>hidden</td>
+<td> json array</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr><td>decimals</td><td> number of decimal for the values</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr><td>el</td>
+<td></td>
+<td></td>
+<td></td>
+<td> the ID of the dom container where the grid will be displayed
 </td></tr>
-<tr><td>
-decimals</td><td> number of decimal for the values
-
+<tr><td>model</td>
+<td></td>
+<td></td>
+<td></td>
+<td> The ressource FENIX to display
 </td></tr>
-<tr><td>
-
-el</td><td> the ID of the dom container where the grid will be displayed
-</td></tr>
-<tr><td>
-model</td><td> The ressource FENIX to display
-</td></tr>
-<tr><td>
-showRowHeaders</td><td>boolean to show the row header in the output matrix of the pivotator (cf pivotator documention) ; false is hightly recommanded for charting
+<tr><td>showRowHeaders</td>
+<td>boolean</td>
+<td></td>
+<td></td>
+<td>boolean to show the row header in the output matrix of the pivotator (cf pivotator documention) ; false is hightly recommanded for charting</td></tr>
 </table>
 Full example : 
 ```javascript
