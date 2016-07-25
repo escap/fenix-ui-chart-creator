@@ -38,52 +38,39 @@ with config is a json Object with these fields :
 <td> type of chart we want to display</td>
 </tr>
 
-<tr><td>
-
-columns and rows</td>
+<tr><td>columns and rows</td>
 <td>json array</td>
 <td>[]<td>
 <td>columns:["Country","Indicator_EN"],rows:["Year"]</td>
-<td>
-	Define the operations of denormalization of FX : wich columns have to be display as rows and wich in columns
- 
-</td></tr>
+<td>Define the operations of denormalization of FX : wich columns have to be display as rows and wich in columns</td></tr>
 <tr><td>aggregations</td>
 <td>json array</td>
 <td>[]<td>
 <td>aggregations:["IndicatorCode_EN","Year"]</td>
-<td>FX columns we want to aggregate,
-they will not appears in the Grid
-
-</td></tr>
+<td>FX columns we want to aggregate,they will not appears in the Grid</td></tr>
 <tr><td>values</td>
 <td>json array</td>
 <td>[]<td>
-<td>values:["values","Flag","Units"]
-<td> describe wich columns in the ressources will be aggregates and displayed in the values part of the grid
-</td></tr>
-<tr><td>
-aggregationFn</td>
+<td>values:["values","Flag","Units"]</td>
+<td> describe wich columns in the ressources will be aggregates and displayed in the values part of the grid</td></tr>
+<tr><td>aggregationFn</td>
 <td>json Object</td>
 <td>{}<td>
 <td> {value:"sum",Flag:"dif",Units:"dif"}</td>
-<td>This object is needed to identify which aggregation function have to be applied for each field on the "values" part of the dataset. The functions identifiers "sum" and dif in this example refer to a function of aggregation implemented in the functions part of the application
-</td></tr>
-<tr><td>
-formatter</td>
+<td>This object is needed to identify which aggregation function have to be applied for each field on the "values" part of the dataset. The functions identifiers "sum" and dif in this example refer to a function of aggregation implemented in the functions part of the application</td></tr>
+<tr><td>formatter</td>
 <td>string</td>
 <td>-<td>
 <td> "localstring" or "value"</td>
-<td> : iditifier of the formater function for the value field localstring result will be in this format : "1 250,12", value will return 1250,12  ; value is hightly recommanded for charting
-</td></tr>
+<td> : iditifier of the formater function for the value field localstring result will be in this format : "1 250,12", value will return 1250,12  ; value is hightly recommanded for charting</td></tr>
 <tr><td>hidden</td>
 <td> json array</td>
 <td></td>
 <td></td>
 <td></td>
 </tr>
-<tr><td>decimals</td><td> number of decimal for the values</td>
-<td></td>
+<tr><td>decimals</td>
+<td> number of decimal for the values</td>
 <td></td>
 <td></td>
 <td></td>
@@ -92,14 +79,12 @@ formatter</td>
 <td></td>
 <td></td>
 <td></td>
-<td> the ID of the dom container where the grid will be displayed
-</td></tr>
+<td> the ID of the dom container where the grid will be displayed</td></tr>
 <tr><td>model</td>
 <td></td>
 <td></td>
 <td></td>
-<td> The ressource FENIX to display
-</td></tr>
+<td> The ressource FENIX to display</td></tr>
 <tr><td>showRowHeaders</td>
 <td>boolean</td>
 <td></td>
