@@ -25,47 +25,57 @@ Constructor :
 with config is a json Object with these fields :
 <table>
 <tr><td>
-type </td><td>: type of chart we want to display
+type </td><td> type of chart we want to display
 	currently available : "line","column","column_stacked","area","pyramide","area_stacked","scatter","boxplot"
 </td>
 </tr>
-</table>
 
+<tr><td>
 
-columns and rows:
+columns <br> rows</td><td>
 	Define the operations of denormalization of FX : wich columns have to be display as rows and wich in columns
 	example columns:["Country","Indicator_EN"],rows:["Year"]
 
 
 
-
-aggregations: FX columns we want to aggregate 
+</td></tr>
+<tr><td>aggregations</td><td>FX columns we want to aggregate 
 			exemple aggregations:["IndicatorCode_EN","Year"]
 			they will not appears in the Grid
 
-values: describe wich columns in the ressources will be aggregates and displayed in the values part of the grid
+</td></tr>
+<tr><td>
+values</td><td> describe wich columns in the ressources will be aggregates and displayed in the values part of the grid
 
-
-aggregationFn: 
+</td></tr>
+<tr><td>
+aggregationFn</td><td>
 			exemple : {value:"sum",um:"dif"}
 			This object is needed to identify which 					aggregation function have to be applied for each field on the "values" part of the dataset. The functions identifiers "sum" and dif in this example refer to a function of aggregation implemented in the functions part of the application
+</td></tr>
+<tr><td>
+formatter</td><td> "localstring" or "value" : iditifier of the formater function for the value field localstring result will be in this format : "1 250,12", value will return 1250,12  ; value is hightly recommanded for charting
+</td></tr>
+<tr><td>
 
-formatter: "localstring" or "value" : iditifier of the formater function for the value field localstring result will be in this format : "1 250,12", value will return 1250,12  ; value is hightly recommanded for charting
+hidden</td><td> not yet implemented : now it is an equivalent of the "aggregations" parameter
+</td></tr>
+<tr><td>
+decimals</td><td> number of decimal for the values
 
+</td></tr>
+<tr><td>
 
-hidden: not yet implemented : now it is an equivalent of the "aggregations" parameter
-
-decimals: number of decimal for the values
-
-
-
-el: the ID of the dom container where the grid will be displayed
-
-model: The ressource FENIX to display
-
-showRowHeaders: boolean to show the row header in the output matrix of the pivotator (cf pivotator documention) ; false is hightly recommanded for charting
-
+el</td><td> the ID of the dom container where the grid will be displayed
+</td></tr>
+<tr><td>
+model</td><td> The ressource FENIX to display
+</td></tr>
+<tr><td>
+showRowHeaders</td><td>boolean to show the row header in the output matrix of the pivotator (cf pivotator documention) ; false is hightly recommanded for charting
+</table>
 Full example : 
+```javascript
 var FX={
   metadata:{
 	dsd:{
@@ -105,34 +115,14 @@ type="line"
 
 
    this.chart = new ChartCreator(config);
+   ```
 will create a line chart in the container with the ID=result with country label, element label in row and the year in columns, group by the item: the aggregation function used will be the sum for the columns "value"
 
 
 #update
 the update function allow the user to modify the config file and refresh the chart : model,el have don't need to be provided.
-example
+example : 
+```javascript
 this.chart.update({type:"area"})
 
-
-
-# FENIX Chart creator
-/*to delete */
-aggregationFn = "sum" || "avg" || ...
-
-aggregations = 
-columns = 
-rows = 
-hidden = 
-values = 
-
-formatter = "value" || "localstring"
-showRowHeaders = false
-decimals = decimal digit;
-
-showCode = add code column;
-showFlag = add flag column;
-showUnit = add unit column;
-
-model = Model to render;
-el = chart container;
-/* end to delete */
+```
