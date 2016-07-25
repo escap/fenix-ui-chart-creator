@@ -10,8 +10,7 @@ Requirejs import :
 define(['fx-chart/start'], function (ChartCreator) {
 ...
 ```
-General principe:
-From a ressource Fenix (FX in this document) and some extra-configurations provided, a pivotator-based creator will perform three mains operations : 
+From a  Fenix ressource (FX in this document) and some parameters provided to the initialization function, a pivotator-based creator will perform three mains operations : 
 	-denormalisation of the dataset(optional)
 	-aggregation (optional)
 	-renderisation of the result with an external library
@@ -115,7 +114,7 @@ return 1250,12 ; value is  recommanded for charting</td>
 <td>integer</td>
 <td></td>
 <td>decimals:2</td>
-<td> number of decimal for the values</td>
+<td> number of decimals in the values numbers</td>
 
 </tr>
  <tr><td>el</td>
@@ -134,15 +133,7 @@ return 1250,12 ; value is  recommanded for charting</td>
 </td>
 <td> The ressource FENIX to display</td>
 </tr>
-<tr>
-<td>showRowHeaders</td>
-<td>boolean</td>
-<td>false
-</td>
-<td><br>
-</td>
-<td>boolean to show the row header in the output matrix of the pivotator component; false is recommanded for charting</td>
-</tr>
+
 </tbody>
 </table>
 Full example : 
@@ -172,13 +163,12 @@ var FX={
   ["4","Algeria","5312","Area_harvested","366","Artichokes","2007","Ha","1813.00","","","003","1","007",""]]};
 
 var config={
-rows :["country_EN","element_EN","item_EN"],
- columns :["year"],
+series :["country_EN","element_EN","item_EN"],
+ x :["year"],
 aggregations:["item_EN"],
-values:["value"],
+y:["value"],
 aggregationFn:{value:"sum"},
 formatter:"localstring",
-showRowHeaders:false,
 model:FX,
 el:"#result",
 type:"line"
