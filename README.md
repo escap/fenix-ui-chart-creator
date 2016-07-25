@@ -11,9 +11,9 @@ define(['fx-chart/start'], function (ChartCreator) {
 ...
 ```
 General principe:
-From a ressource Fenix (FX in this document) and some extra-configurations provided, a pivotator based creator apply two mains operations : 
-	-denormalisation of the dataset
-	-aggregation
+From a ressource Fenix (FX in this document) and some extra-configurations provided, a pivotator-based creator will perform three mains operations : 
+	-denormalisation of the dataset(optional)
+	-aggregation (optional)
 	-renderisation of the result with an external library
 
 
@@ -36,8 +36,11 @@ with config is a json Object with these fields :
 <td>string</td>
 <td>-</td>
 
-<td>"line","column", "column_stacked", "area", "pyramide", "area_stacked", "scatter","boxplot"</td>
-<td> type of chart we want to display</td>
+<td>type:"column"</td>
+<td> type of chart we want to display
+currently available : 
+"line","column", "column_stacked", "area", "pyramide", "area_stacked", "scatter","boxplot"
+</td>
 </tr>
 <tr>
 <td>x</td>
@@ -73,8 +76,7 @@ Grid</td>
 <td>[]</td>
 
 <td>y:["values"]</td>
-<td> describe wich dimensions in the ressources will be aggregates
-and displayed as Y-axis of the chart</td>
+<td> describe wich FX columns will be aggregates and displayed as Y-axis of the chart</td>
 </tr>
 <tr>
 <td>aggregationFn</td>
@@ -86,7 +88,7 @@ and displayed as Y-axis of the chart</td>
 have to be applied for each field on the "values" part of the dataset.
 The functions identifiers "sum" and dif in this example refer to a
 function of aggregation implemented in the functions part of the
-application</td>
+application and can be easily extended if needed</td>
 </tr>
 <tr>
 <td>formatter</td>
@@ -135,13 +137,11 @@ return 1250,12 ; value is  recommanded for charting</td>
 <tr>
 <td>showRowHeaders</td>
 <td>boolean</td>
-<td><br>
+<td>false
 </td>
 <td><br>
 </td>
-<td>boolean to show the row header in the output matrix of the
-pivotator (cf pivotator documention) ; false is hightly recommanded for
-charting</td>
+<td>boolean to show the row header in the output matrix of the pivotator component; false is recommanded for charting</td>
 </tr>
 </tbody>
 </table>
@@ -178,10 +178,10 @@ aggregations:["item_EN"],
 values:["value"],
 aggregationFn:{value:"sum"},
 formatter:"localstring",
-showRowHeaders:true,
+showRowHeaders:false,
 model:FX,
 el:"#result",
-type="line"
+type:"line"
 }
 
 
