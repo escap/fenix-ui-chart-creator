@@ -7,6 +7,7 @@ fenix-ui-olap
 
 
 Requirejs import : 
+'''javascript
 define(['fx-chart/start'], function (ChartCreator) {
 ...
 
