@@ -10,7 +10,6 @@ Requirejs import :
 define(['fx-chart/start'], function (ChartCreator) {
 ...
 ```
-General principe:
 From a ressource Fenix (FX in this document) and some extra-configurations provided, a pivotator-based creator will perform three mains operations : 
 	-denormalisation of the dataset(optional)
 	-aggregation (optional)
