@@ -125,13 +125,13 @@ define(function () {
             floating: false, // IMPORTANTE - Permette alla plot area di stare sotto alla legenda - si guadagna molto spazio
 
             //margin: 100, //Margine dell'intero blocco legenda dall'area di PLOT (Solo quando non è floating)
-            //padding: 20, //Padding del box legenda (Ingrandisce il box)
+            padding: 50, //Padding del box legenda (Ingrandisce il box)
             backgroundColor: '#FFFFFF', //Colore di sfondo della legenda
             //layout: 'horizontal', //Tipologia di legenda
             align: 'center', //Allineamento orizzontale del box della legenda (left, center, right)
             verticalAlign: 'bottom', //allineamento verticale della legenda (top, middle, bottom)
             //width: 200, //Larghezza della legenda (Aggiunge Margini e padding)
-            //x: -8,//Offset della posizione della legenda rispetto all'allineamento (valori positivi > destra)
+            x: 15,//Offset della posizione della legenda rispetto all'allineamento (valori positivi > destra)
             //y: -8,//Offset della posizione della legenda rispetto all'allineamento (valori positivi > verso il basso)
             //maxHeight: 90, //IMPORTANTE - Indica l'altezza massima della legenda, se superata, mostra la paginazione (vedi sotto)
             //borderColor: '#666666', //Colore del bordo della legenda
@@ -149,7 +149,7 @@ define(function () {
                 cursor: 'pointer',
                 color: '#666666',
                 fontSize: '14px',
-                fontWeight: 300
+                fontWeight: 300,
             },
             itemHiddenStyle: { //Colore dell'elemento legenda quando è disattivato
                 color: '#eeeeee'
