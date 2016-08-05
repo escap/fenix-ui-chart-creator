@@ -198,15 +198,15 @@ define([
 
         var Renderer = this._getRenderer(this.renderer);
         var myPivotatorConfig = this.fenixTool.parseInput(this.model.metadata.dsd, this.pivotatorConfig);
-
+		//this.model.data=this.model.data.slice(0,642)
+//console.log("PivotM",this.model)
         var model = this.pivotator.pivot(this.model, myPivotatorConfig);
 		
-		 /* var model2 = this.pivotator.toPivotData(this.model, myPivotatorConfig);
-		  console.log(model2)*/
         var config = $.extend(true, {}, {
             pivotatorConfig: this.pivotatorConfig,
             el: this.$el,
             model: model,
+			
             lang: this.lang,
             type: this.type,
             config : this.config

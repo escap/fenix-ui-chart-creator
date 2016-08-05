@@ -82,7 +82,7 @@ define([
 
     Highcharts.prototype._renderHighcharts = function (config) {
         var model = this.model;
-
+		 
         var chartConfig = templates[this.type];
 
         if (!config) {
@@ -94,7 +94,7 @@ define([
         var config = $.extend(true, this._populateData(this.type, model, defaultRenderOptions), this.config);
 console.log(config)
 try{
-	config.series[0].data=	config.series[0].data.slice(0,1000);
+	//config.series[0].data=	config.series[0].data.slice(0,1000);
 	console.log("C before render",config)
         this.chart = this.el.highcharts(config);
 }
@@ -113,9 +113,7 @@ catch(er){console.log("error",er,config)}
                 var tempData = [];
 
                 var nameM = "";
-                if (model.cols2.length > 2) {
-                    nameM = model.cols2[0].join("_")
-                }
+                if (model.cols2.length > 2) {nameM = model.cols2[0].join("_");}
                 var Male = {
                     name: nameM,
                     data: jStat(model.data).col(0).alter(function (x) {
@@ -208,8 +206,7 @@ catch(er){console.log("error",er,config)}
 
                 break;
 
-case "treemap":
-console.log("Model",model);
+case "treemapold":
               config={
            series: [{
             type: 'treemap',
@@ -254,6 +251,60 @@ console.log("Model",model);
 		//console.log(config.series);
 
                 break;
+				
+				case "treemap":
+console.log("Model",model);
+
+ var model2 = {rows:this.pivotator.toTree(model.rows	, 1),cols:this.pivotator.toTree(model.cols2	, 1)};
+console.log("mod2",model2)
+              config={
+           series: [{
+            type: 'treemap',
+            layoutAlgorithm: 'squarified',
+            allowDrillToNode: true,
+            animationLimit: 1000,turboThreshold:0,
+            dataLabels: {enabled: false},
+            levelIsConstant: false,
+            levels: [{level: 1,dataLabels: {enabled: true},borderWidth: 3}],
+		   data: []
+        }]
+    };
+	
+	for(var j in model2.rows)
+	{
+	for(var i in model2.rows[j])
+	{
+		console.log(model2.rows[j][i])
+		var ii=model2.rows[j][i];
+		config.series[0].data.push({name:ii.id,id:ii.id,parent:ii.id.split("_").slice(0,ii.id.split("_").length-1).join("_")/*,value:jStat(model.data[i]).sum()*/})
+	}
+		}
+	
+	
+		for(var i in model.rows)
+		{
+		//if(i<10 )
+		{
+			var ii=model.rows[i];
+			//config.series[0].data.push({name:ii.join(" "),id:"id_"+i/*,value:jStat(model.data[i]).sum()*/})
+			
+			for(var j in model.cols2label)
+				{			var jj=model.cols2label[j];
+			if(model.data[i][j] && model.data[i][j]>=0)
+			config.series[0].data.push({name:jj.join(" "),id:"id_"+i+"_"+j,parent:ii.join("_"),value:model.data[i][j]})
+				}
+
+			
+			
+			
+		}
+		}
+		console.log(config.series);
+
+                break;
+				
+				
+				
             default:
 
                 for (var ii in model.cols) {
