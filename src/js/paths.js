@@ -21,9 +21,14 @@ define(function () {
             underscore: '{FENIX_CDN}/js/underscore/1.7.0/underscore.min',
             amplify: '{FENIX_CDN}/js/amplify/1.1.2/amplify.min',
             handlebars: '{FENIX_CDN}/js/handlebars/2.0.0/handlebars',
+			//https://code.highcharts.com/highcharts.js
             highcharts: '{FENIX_CDN}/js/highcharts/' + HIGHCHARTS_VERSION + '/js/highcharts',
-            highcharts_more: '{FENIX_CDN}/js/highcharts/' + HIGHCHARTS_VERSION + '/js/highcharts-more',
+
+           // highcharts2: 'https://code.highcharts.com/highcharts',
+                      
+		   highcharts_more: '{FENIX_CDN}/js/highcharts/' + HIGHCHARTS_VERSION + '/js/highcharts-more',
             highcharts_no_data: '{FENIX_CDN}/js/highcharts/' + HIGHCHARTS_VERSION + '/js/modules/no-data-to-display',
+			hightchart_treemap:'https://code.highcharts.com/modules/treemap',
             'highcharts_export': '{FENIX_CDN}/js/highcharts/' + HIGHCHARTS_VERSION + '/js/modules/exporting',
             //'highcharts_export_csv': 'http://highslide-software.github.io/export-csv/export-csv'
             jvenn: '{FENIX_CDN}/js/jvenn/' + JVENN_VERSION + '/src/jvenn.min'
@@ -32,7 +37,10 @@ define(function () {
         shim: {
             "highcharts": {
                 exports: "Highcharts",
-                deps: ["jquery"]
+                deps: ["jquery",'']
+            },"highcharts2": {
+                exports: "Highcharts",
+                deps: ["jquery",'']
             },
             "highcharts_export": {
                 deps: ["highcharts"]
@@ -45,9 +53,11 @@ define(function () {
             },
             "highcharts_no_data": {
                 deps: ['highcharts']
-            },
-            "jvenn": {
+            },"jvenn": {
                 deps: ["jquery"]
+            },
+            "hightchart_treemap": {
+                deps: ["highcharts"]
             },
             "amplify": {
                 deps: ["jquery"]

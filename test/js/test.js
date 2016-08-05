@@ -6,7 +6,7 @@ define([
     'fx-chart/start',
     'fx-filter/start',
     'fx-common/pivotator/fenixtool',
-    'text!test/models/UNECA_Population.json',
+    'text!test/models/UNECA_Inflation.json',
     'test/models/filter-interaction'
 
 ], function (log, $, _, ChartCreator, Filter, FenixTool, Model, FilterModel) {

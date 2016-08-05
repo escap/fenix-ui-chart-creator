@@ -10,7 +10,9 @@ define([
     'fx-chart/config/renderers/highcharts',
     'fx-chart/config/renderers/highcharts_shared',
     'highcharts_more',
-    "highcharts_no_data",
+    'hightchart_treemap',
+    
+	"highcharts_no_data",
     "highcharts_export",
     'amplify'
 ], function ($, _, log, ERR, EVT, C, Pivotator, templates, templateStyle) {
@@ -90,9 +92,13 @@ define([
         var defaultRenderOptions = $.extend(true, {}, templateStyle, chartConfig);
 
         var config = $.extend(true, this._populateData(this.type, model, defaultRenderOptions), this.config);
-
+console.log(config)
+try{
+	config.series[0].data=	config.series[0].data.slice(0,1000);
+	console.log("C before render",config)
         this.chart = this.el.highcharts(config);
-
+}
+catch(er){console.log("error",er,config)}
         this._trigger("ready");
 
     };
@@ -160,9 +166,7 @@ define([
             case "pie2":
                 var tempData = [];
                 for (var i in model.rows) {
-                    if (i > 20) {
-                        break;
-                    }
+                 //  if (i > 20) {break;}
                     config.xAxis.categories.push(model.rows[i].join("_"));
                     // config.xAxis.categories.push("test"+i);
 
@@ -204,7 +208,52 @@ define([
 
                 break;
 
+case "treemap":
+console.log("Model",model);
+              config={
+           series: [{
+            type: 'treemap',
+            layoutAlgorithm: 'squarified',
+            allowDrillToNode: true,
+            animationLimit: 1000,turboThreshold:0,
+            dataLabels: {
+                enabled: false
+            },
+            levelIsConstant: false,
+            levels: [{
+                level: 1,
+                dataLabels: {
+                    enabled: true
+                },
+                borderWidth: 3
+            }],
+		   data: []
+        }],
+        title: {
+            text: 'Highcharts Treemap'
+        }
+    };
+		for(var i in model.rows)
+		{
+		//if(i<500 )
+		{
+			var ii=model.rows[i];
+			config.series[0].data.push({name:ii.join(" "),id:"id_"+i/*,value:jStat(model.data[i]).sum()*/})
+			
+			for(var j in model.cols2label)
+				{			var jj=model.cols2label[j];
+			if(model.data[i][j] && model.data[i][j]>=0)
+			config.series[0].data.push({name:jj.join(" "),id:"id_"+i+"_"+j,parent:"id_"+i,value:model.data[i][j]})
+				}
 
+			
+			
+			
+		}
+		}
+		//console.log(config.series);
+
+                break;
             default:
 
                 for (var ii in model.cols) {

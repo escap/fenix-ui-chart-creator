@@ -200,6 +200,9 @@ define([
         var myPivotatorConfig = this.fenixTool.parseInput(this.model.metadata.dsd, this.pivotatorConfig);
 
         var model = this.pivotator.pivot(this.model, myPivotatorConfig);
+		
+		 /* var model2 = this.pivotator.toPivotData(this.model, myPivotatorConfig);
+		  console.log(model2)*/
         var config = $.extend(true, {}, {
             pivotatorConfig: this.pivotatorConfig,
             el: this.$el,

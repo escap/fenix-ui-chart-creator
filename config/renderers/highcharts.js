@@ -230,7 +230,10 @@ define(function () {
             }]
 
         },
-        treemap: {},
+        treemap: {
+       
+          series: []
+    },
         boxplot: {
 
         chart: {
