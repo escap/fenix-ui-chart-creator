@@ -92,10 +92,10 @@ define([
 		var defaultRenderOptions = $.extend(true, {}, templateStyle, chartConfig);
 
 		var config = $.extend(true, this._populateData(this.type, model, defaultRenderOptions), this.config);
-		console.log(config)
+		//console.log(config)
 		try{
 			//config.series[0].data=	config.series[0].data.slice(0,1000);
-			console.log("C before render",config)
+			//console.log("C before render",config)
 			this.chart = this.el.highcharts(config);
 		}
 		catch(er){console.log("error",er,config)}
@@ -108,7 +108,25 @@ define([
 		switch (type.toLowerCase()) {
 			//add type process
 		case "heatmap":
-			break;
+		var count=0;
+		console.log("model",model)
+		for(var i in model.rows){config.xAxis.categories.push(model.rows[i].join(" "))}
+		
+		for(var i in model.cols2){config.yAxis.categories.push(model.cols2[i].join(" "))}
+		for(var i in model.data){for(var j in model.data[i]){
+			
+			//if(count<150 /*&& model.data[i][j]*/)
+			{count++;config.series[0].data.push([parseFloat(i),parseFloat(j),model.data[i][j]]);}
+		}
+		}/*
+		config.series[0].data.push([0,0,2]);
+		config.series[0].data.push(		[0,1,3]	);
+		
+		config.series[0].data.push([1,0,5]);
+		config.series[0].data.push(		[1,1,4]	);
+console.log('et alrs la');
+	*/
+	break;
 			
 			case "scatter":
 			for(var j in model.cols2){
@@ -206,10 +224,7 @@ data: jStat(model.data).col(1) || []
 					dataArray.push(dataObj);
 				}
 
-				config.series.push({
-name: model.rows[k].join(" "),
-data: dataArray
-				});
+				config.series.push({name: model.rows[k].join(" "),data: dataArray});
 			}
 
 			break;
@@ -328,8 +343,8 @@ text: 'Highcharts Treemap'
                 '<tr><th>'+ model.cols2[2]+':</th><td>{point.z}</td></tr>',
             footerFormat: '</table>',
             followPointer: true
-        },
-			console.log("config",config)
+        };
+			//console.log("config",config)
 			/*
 			config.series=[{
             data: [
@@ -370,6 +385,7 @@ text: 'Highcharts Treemap'
 
 			}
 		}
+		console.log("config",config)
 		return config;
 	};
 
