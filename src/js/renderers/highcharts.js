@@ -109,7 +109,7 @@ define([
 			//add type process
 		case "heatmap":
 		var count=0;
-		console.log("model",model)
+		//console.log("model",model)
 		for(var i in model.rows){config.xAxis.categories.push(model.rows[i].join(" "))}
 		
 		for(var i in model.cols2){config.yAxis.categories.push(model.cols2[i].join(" "))}
@@ -385,7 +385,7 @@ text: 'Highcharts Treemap'
 
 			}
 		}
-		console.log("config",config)
+	//	console.log("config",config)
 		return config;
 	};
 
