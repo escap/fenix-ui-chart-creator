@@ -191,16 +191,18 @@ data: jStat(model.data).col(1) || []
 			var tempData = [];
 			for (var i in model.rows) {
 				  if (i > 20) {break;}
-				config.xAxis.categories.push(model.rows[i].join("_"));
+				//config.xAxis.categories.push(model.rows[i].join("_"));
 				// config.xAxis.categories.push("test"+i);
 
 				var ddata = jStat(model.data[i]).sum();
 				//console.log("JSTAT",ddata)
 				tempData.push(ddata);
-				config.series.push({data: tempData});
+			//	config.series.push({data: tempData,name:model.rows[i].join("_")});
+config.series[0].data.push({y: ddata,name:model.rows[i].join("<br>")});
 
 
 			}
+			//console.log("config",config)
 			break;
 
 		case "pieold":

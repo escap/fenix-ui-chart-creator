@@ -155,7 +155,7 @@ define(function () {
                 useHTML: true
             },
            // plotOptions: {area: {stacking: 'normal'}},
-            series: []
+            series: [{data:[]}]
         },
         scatter: {
         chart: {
