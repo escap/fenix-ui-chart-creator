@@ -187,15 +187,17 @@ data: jStat(model.data).col(1) || []
 			config.series.push({data: tempData});
 
 			break;
-		case "pie":
+		case "donut":
 			var tempData = [];
 			for (var i in model.rows) {
-				  if (i > 20) {break;}
+				 // if (i > 20) {break;}
 				//config.xAxis.categories.push(model.rows[i].join("_"));
 				// config.xAxis.categories.push("test"+i);
 
-				var ddata = jStat(model.data[i]).sum();
-				//console.log("JSTAT",ddata)
+//				var ddata = jStat(model.data[i]).sum();
+				var ddata = model.data[i][0];
+		
+	//console.log("JSTAT",ddata)
 				tempData.push(ddata);
 			//	config.series.push({data: tempData,name:model.rows[i].join("_")});
 config.series[0].data.push({y: ddata,name:model.rows[i].join("<br>")});
@@ -204,7 +206,26 @@ config.series[0].data.push({y: ddata,name:model.rows[i].join("<br>")});
 			}
 			//console.log("config",config)
 			break;
+case "pie":
+			var tempData = [];
+			for (var i in model.rows) {
+				  //if (i > 20) {break;}
+				//config.xAxis.categories.push(model.rows[i].join("_"));
+				// config.xAxis.categories.push("test"+i);
 
+//				var ddata = jStat(model.data[i]).sum();
+				var ddata = model.data[i][0];
+		
+	//console.log("JSTAT",ddata)
+				tempData.push(ddata);
+			//	config.series.push({data: tempData,name:model.rows[i].join("_")});
+		if(ddata>0)
+		config.series[0].data.push({y: ddata,name:model.rows[i].join("<br>")});
+
+
+			}
+			//console.log("config",config)
+			break;
 		case "pieold":
 			config.chart.type = 'pie'; // temp fix to enable pieold to work
 			for (var ii in model.cols) {

@@ -155,7 +155,23 @@ define(function () {
                 useHTML: true
             },
            // plotOptions: {area: {stacking: 'normal'}},
-            series: [{data:[]}]
+            series: [{data:[]	}]
+        }, 
+		donut: {
+            chart: {type: 'pie'},
+            title: {text: ''},
+            subtitle: {text: ''},
+            xAxis: {categories: [], crosshair: true},
+           //yAxis: {min: 0, title: {text: ''}},
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f} </b></td></tr>',
+                footerFormat: '</table>',
+                useHTML: true
+            },
+           // plotOptions: {area: {stacking: 'normal'}},
+            series: [{data:[]	}]
         },
         scatter: {
         chart: {
