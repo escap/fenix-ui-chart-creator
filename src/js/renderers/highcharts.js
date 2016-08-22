@@ -206,6 +206,7 @@ config.series[0].data.push({y: ddata,name:model.rows[i].join("<br>")});
 			break;
 
 		case "pieold":
+			config.chart.type = 'pie'; // temp fix to enable pieold to work
 			for (var ii in model.cols) {
 				if (model.cols.hasOwnProperty(ii)) {
 					i = model.cols[ii];
