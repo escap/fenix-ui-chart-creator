@@ -152,8 +152,8 @@ console.log('et alrs la');
 				nameF = model.cols2[1].join("_")
 			}
 			var Female = {
-name: nameF,
-data: jStat(model.data).col(1) || []
+			name: nameF,
+			data: jStat(model.data).col(1) || []
 			};
 			for (var i in model.rows) {
 				//if (i >20) {break;}
@@ -232,16 +232,27 @@ case "pie":
 				//config.xAxis.categories.push(model.rows[i].join("_"));
 				// config.xAxis.categories.push("test"+i);
 
-//				var ddata = jStat(model.data[i]).sum();
-				var ddata = model.data[i][0];
+				var ddata = jStat(model.data[i]).sum();
+//				var ddata = model.data[i][0];
 		
 	//console.log("JSTAT",ddata)
 				tempData.push(ddata);
 			//	config.series.push({data: tempData,name:model.rows[i].join("_")});
-		if(ddata>0)
-		config.series[0].data.push({y: ddata,name:model.rows[i].join("<br>")});
-
-
+		//if(ddata>0)
+		config.series[0].data.push({y: ddata,name:model.rows[i].join("<br>"),drilldown:model.rows[i].join("_")});
+		var drilldata=[];
+		
+		for(var j in model.cols2)
+			{if(model.data[i][j]>0)
+				drilldata.push([model.cols2[j].join(" "),model.data[i][j]]);
+				
+				}
+var drillD= {
+                name: model.rows[i].join("<br>"),
+                id: model.rows[i].join("_"),
+                data: drilldata
+            };
+			config.drilldown.series.push(drillD)
 			}
 			//console.log("config",config)
 			break;

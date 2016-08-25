@@ -145,7 +145,14 @@ define(function () {
             chart: {type: 'pie'},
             title: {text: ''},
             subtitle: {text: ''},
-            xAxis: {categories: [], crosshair: true},
+            xAxis: {categories: [], crosshair: true},   plotOptions: {
+            series: {
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.name}: {point.y:.1f}%'
+                }
+            }
+        },
            //yAxis: {min: 0, title: {text: ''}},
             tooltip: {
                 headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
@@ -156,6 +163,7 @@ define(function () {
             },
            // plotOptions: {area: {stacking: 'normal'}},
             series: [{data:[]	}]
+			,drilldown:{series:[]}
         }, 
 		donut: {
             chart: {type: 'pie'},
