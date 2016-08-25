@@ -161,7 +161,16 @@ define(function () {
             chart: {type: 'pie'},
             title: {text: ''},
             subtitle: {text: ''},
-            xAxis: {categories: [], crosshair: true},
+            xAxis: {categories: [], crosshair: true}, plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: false
+                    },
+                    showInLegend: true
+                }
+            },
            //yAxis: {min: 0, title: {text: ''}},
             tooltip: {
                 headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
@@ -171,7 +180,7 @@ define(function () {
                 useHTML: true
             },
            // plotOptions: {area: {stacking: 'normal'}},
-            series: [{data:[]	}]
+            series: []
         },
         scatter: {
         chart: {
@@ -234,7 +243,7 @@ define(function () {
         },*/
         series: []
     },
-        bubble: {},
+       
         heatmap: {
 
             chart: {
@@ -301,7 +310,7 @@ define(function () {
         },
 
         title: {
-            text: 'Highcharts Box Plot Example'
+            text: ''
         },
 
         legend: {
@@ -311,13 +320,13 @@ define(function () {
         xAxis: {
             categories: [/*'1', '2', '3', '4', '5'*/],
             title: {
-                text: 'Experiment No.'
+                text: ''
             }
         },
 
         yAxis: {
             title: {
-                text: 'Observations'
+                text: ''
             }
         },
 

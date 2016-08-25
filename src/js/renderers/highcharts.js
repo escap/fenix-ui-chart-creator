@@ -189,18 +189,37 @@ data: jStat(model.data).col(1) || []
 			break;
 		case "donut":
 			var tempData = [];
-			for (var i in model.rows) {
-				 // if (i > 20) {break;}
-				//config.xAxis.categories.push(model.rows[i].join("_"));
-				// config.xAxis.categories.push("test"+i);
-
-//				var ddata = jStat(model.data[i]).sum();
-				var ddata = model.data[i][0];
+			console.log(model)
+			var innerSize=Math.floor(100/model.cols2.length);
+			var innerBegin=0;
+			console.log("innerSize",innerSize)
+			for (var i in model.cols2) {
+				
+				var myData=[];
+				for(var j in model.rows)
+				{if(model.data[j][i]>0 )
+					myData.push({name:model.rows[j].join("-"),y:model.data[j][i]})
+			}
+				
+config.series.push({
+            name: model.cols2[i].join("-"),
+            data: myData,
+            size: (innerBegin+innerSize)+'%',
+			innerSize:innerBegin+'%',
+            dataLabels: {
+                formatter: function () {
+                    return this.y > 5 ? this.point.name : null;
+                },
+                color: '#ffffff',
+                distance: -30
+            }
+        })
+			innerBegin+=innerSize;	
 		
 	//console.log("JSTAT",ddata)
-				tempData.push(ddata);
+				
 			//	config.series.push({data: tempData,name:model.rows[i].join("_")});
-config.series[0].data.push({y: ddata,name:model.rows[i].join("<br>")});
+		//	config.series[0].data.push({y: ddata,name:model.rows[i].join("<br>")});
 
 
 			}
@@ -274,7 +293,7 @@ borderWidth: 3
 data: []
 				}],
 title: {
-text: 'Highcharts Treemap'
+text: ''
 				}
 			};
 			for(var i in model.rows)
