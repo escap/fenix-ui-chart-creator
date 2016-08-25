@@ -189,10 +189,10 @@ console.log('et alrs la');
 			break;
 		case "donut":
 			var tempData = [];
-			console.log(model)
+			//console.log(model)
 			var innerSize=Math.floor(100/model.cols2.length);
 			var innerBegin=0;
-			console.log("innerSize",innerSize)
+			//console.log("innerSize",innerSize)
 			for (var i in model.cols2) {
 				
 				var myData=[];
