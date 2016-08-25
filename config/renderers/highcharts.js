@@ -149,7 +149,7 @@ define(function () {
             series: {
                 dataLabels: {
                     enabled: true,
-                    format: '{point.name}: {point.y:.1f}%'
+                    format: '{point.name}: {point.y:.1f}'
                 }
             }
         },
