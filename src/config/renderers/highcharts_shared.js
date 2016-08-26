@@ -129,7 +129,7 @@ define(function () {
             floating: false, // IMPORTANTE - Permette alla plot area di stare sotto alla legenda - si guadagna molto spazio
 
             //margin: 100, //Margine dell'intero blocco legenda dall'area di PLOT (Solo quando non è floating)
-            //padding: 20, //Padding del box legenda (Ingrandisce il box)
+            padding: 50, //Padding del box legenda (Ingrandisce il box)
             backgroundColor: '#FFFFFF', //Colore di sfondo della legenda
             //layout: 'horizontal', //Tipologia di legenda
             align: 'left', //Allineamento orizzontale del box della legenda (left, center, right)
@@ -153,7 +153,7 @@ define(function () {
                 cursor: 'pointer',
                 color: '#666666',
                 fontSize: '14px',
-                fontWeight: 300
+                fontWeight: 300,
             },
             itemHiddenStyle: { //Colore dell'elemento legenda quando è disattivato
                 color: '#eeeeee'

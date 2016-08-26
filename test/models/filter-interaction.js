@@ -53,6 +53,7 @@ define(function () {
                     {value: "area", label: "Area"},
                     {value: "area_stacked", label: "Stacked area"},
                     {value: "pie", label: "Pie"},
+					{value: "donut", label: "Donut"},
                     {value: "scatter", label: "Scatter"},
                     {value: "bubble", label: "Bubble"},
                     {value: "heatmap", label: "Heatmap"},
