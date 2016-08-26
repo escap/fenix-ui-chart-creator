@@ -69,7 +69,7 @@ define([
      */
     Chart.prototype.redraw = function () {
 
-        if (this.chart && $.isFunction(this.chart.redraw)){
+        if (this.chart && $.isFunction(this.chart.redraw)) {
             this.chart.redraw();
         } else {
             log.warn("Abort redraw");
@@ -93,7 +93,7 @@ define([
 
     Chart.prototype._parseInput = function () {
 
-        this._parseInputUpdate(this.initial)
+        this._parseInputUpdate(this.initial);
     };
 
     Chart.prototype._parseInputUpdate = function (param) {
@@ -123,6 +123,9 @@ define([
         this.renderer = param.renderer || C.renderer;
         this.lang = param.lang || 'EN';
         this.config = param.config;
+        if (typeof param.createConfiguration === 'function') {
+            this.createConfiguration = param.createConfiguration;
+        }
     };
 
     Chart.prototype._validateInput = function () {
@@ -201,18 +204,17 @@ define([
 
         var Renderer = this._getRenderer(this.renderer);
         var myPivotatorConfig = this.fenixTool.parseInput(this.model.metadata.dsd, this.pivotatorConfig);
-		//this.model.data=this.model.data.slice(0,642)
-//console.log("PivotM",this.model)
+
         var model = this.pivotator.pivot(this.model, myPivotatorConfig);
-		
+
         var config = $.extend(true, {}, {
             pivotatorConfig: this.pivotatorConfig,
             el: this.$el,
             model: model,
-			
             lang: this.lang,
             type: this.type,
-            config : this.config
+            config: this.config,
+            createConfiguration : this.createConfiguration
         });
 
         this.chart = new Renderer(config);

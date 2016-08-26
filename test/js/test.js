@@ -87,7 +87,12 @@ define([
                 el: s.CHART_INTERACTION,
                 config : {
                     tooltip :  { shared : true }
-                }
+                },
+/*                createConfiguration : function (model, config) {
+                    console.log(model)
+                    console.log(config)
+                    return {};
+                }*/
             }, config);
 
             log.trace("Init chart");
