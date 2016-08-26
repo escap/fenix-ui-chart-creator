@@ -1,4 +1,7 @@
-/*global define*/
+if (typeof define !== 'function') {
+    var define = require('amdefine')(module);
+}
+
 define(function () {
 
     'use strict';
@@ -12,7 +15,7 @@ define(function () {
 
             'fx-chart/start': './chart',
             'fx-chart/html': '../html',
-            'fx-chart/config': '../../config',
+            'fx-chart/config': '../config',
             'fx-chart/renderers': './renderers',
 
             // third party libs
