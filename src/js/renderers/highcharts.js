@@ -247,7 +247,7 @@ case "pie":
 				drilldata.push([model.cols2[j].join(" "),model.data[i][j]]);
 				
 				}
-var drillD= {
+			var drillD= {
                 name: model.rows[i].join("<br>"),
                 id: model.rows[i].join("_"),
                 data: drilldata
@@ -285,26 +285,26 @@ var drillD= {
 
 		case "treemapold":
 			config={
-series: [{
-type: 'treemap',
-layoutAlgorithm: 'squarified',
-allowDrillToNode: true,
-animationLimit: 1000,turboThreshold:0,
-dataLabels: {
-enabled: false
-					},
-levelIsConstant: false,
-levels: [{
-level: 1,
-dataLabels: {
-enabled: true
-						},
-borderWidth: 3
-					}],
-data: []
-				}],
-title: {
-text: ''
+				series: [{
+				type: 'treemap',
+				layoutAlgorithm: 'squarified',
+				allowDrillToNode: true,
+				animationLimit: 1000,turboThreshold:0,
+				dataLabels: {
+				enabled: false
+									},
+				levelIsConstant: false,
+				levels: [{
+				level: 1,
+				dataLabels: {
+				enabled: true
+										},
+				borderWidth: 3
+									}],
+				data: []
+								}],
+				title: {
+				text: ''
 				}
 			};
 			for(var i in model.rows)
@@ -380,24 +380,25 @@ text: ''
 			break;
 			
 			case "bubble":
-			for (var i in model.rows)
-			{
-				if( model.data[i][0] && model.data[i][1]&& model.data[i][2])
-				config.series[0].data.push(
-				 { x: model.data[i][0], y: model.data[i][1], z:model.data[i][2], name:  model.rows[i].join(" "), country: '' }
-				)
-			}
-			
-			config.tooltip=   {
-            useHTML: true,
-            headerFormat: '<table>',
-            pointFormat: '<tr><th colspan="2"><h3>{point.name}</h3></th></tr>' +
-                '<tr><th>'+ model.cols2[0]+':</th><td>{point.x}</td></tr>' +
-                '<tr><th>'+ model.cols2[1]+':</th><td>{point.y}</td></tr>' +
-                '<tr><th>'+ model.cols2[2]+':</th><td>{point.z}</td></tr>',
-            footerFormat: '</table>',
-            followPointer: true
-        };
+
+				for (var i in model.rows)
+				{
+					if( model.data[i][0] && model.data[i][1]&& model.data[i][2])
+					config.series[0].data.push(
+					 { x: model.data[i][0], y: model.data[i][1], z:model.data[i][2], name:  model.rows[i].join(" "), country: '' }
+					)
+				}
+				
+				config.tooltip =   {
+		            useHTML: true,
+		            headerFormat: '<table>',
+		            pointFormat: '<tr><th colspan="2"><h3>{point.name}</h3></th></tr>' +
+		                '<tr><th>'+ model.cols2[0]+':</th><td>{point.x}</td></tr>' +
+		                '<tr><th>'+ model.cols2[1]+':</th><td>{point.y}</td></tr>' +
+		                '<tr><th>'+ model.cols2[2]+':</th><td>{point.z}</td></tr>',
+		            footerFormat: '</table>',
+		            followPointer: true
+		        };
 			//console.log("config",config)
 			/*
 			config.series=[{
@@ -420,7 +421,39 @@ text: ''
             ]
         }]*/	
 			break;
-			
+
+		case "bubblecircle":
+				
+			var obj = {};
+
+			for (var i in model.rows)
+			{
+				if( model.data[i][0] && model.data[i][1]&& model.data[i][2]) {
+					obj = {
+						x:    model.data[i][0],
+						y:    model.data[i][1],
+						z:    model.data[i][2],
+						name: model.rows[i].join(" "), 
+						country: ''
+					};
+
+					config.series[0].data.push(obj);
+				}
+				//console.log(obj);
+			}
+
+			config.tooltip =   {
+			    useHTML: true,
+			    headerFormat: '<table>',
+			    pointFormat: '<tr><th colspan="2"><h3>{point.name}</h3></th></tr>' +
+			        '<tr><th>'+ model.cols2[0]+':</th><td>{point.x}</td></tr>' +
+			        '<tr><th>'+ model.cols2[1]+':</th><td>{point.y}</td></tr>' +
+			        '<tr><th>'+ model.cols2[2]+':</th><td>{point.z}</td></tr>',
+			    footerFormat: '</table>',
+			    followPointer: true
+			};
+
+			break;
 		default:
 
 			for (var ii in model.cols) {

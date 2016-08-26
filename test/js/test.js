@@ -43,6 +43,11 @@ define([
      UNECA_ExpenditureGDPCurrent ???
      UNECA_GDP_USD*/
 
+    var defaultOptions = {
+        //chartType: 'line'
+        chartType: 'bubblecircle'
+    };
+
     var s = {
         CONFIGURATION_EXPORT: "#configuration-export",
         FILTER_INTERACTION: "#filter-interaction",
@@ -77,7 +82,7 @@ define([
             var config = this._getChartConfigFromFilter();
             
             config = $.extend(true, {}, {
-                type: "line",
+                type: defaultOptions.chartType,
                 model: JSON.parse(Model),
                 el: s.CHART_INTERACTION,
                 config : {
