@@ -65,6 +65,8 @@ define([
 
     Test.prototype._testFilterInteraction = function () {
 
+        var self = this;
+
         //create filter configuration
         var itemsFromFenixTool = this.fenixTool.toFilter(JSON.parse(Model) ,{rowLabel:"Series",columnsLabel: "X-Axis",valuesLabel: "Y-axis"}),
         //FilterModel contains static filter selectors, e.g. show code, show unit
@@ -88,11 +90,15 @@ define([
                 config : {
                     tooltip :  { shared : true }
                 },
-/*                createConfiguration : function (model, config) {
-                    console.log(model)
-                    console.log(config)
-                    return {};
-                }*/
+                createConfiguration : function (model, config) {
+                    
+                    console.log('createConfiguration',model, config);
+
+                    if(config.chart.type === 'bubblecircle')
+                        return self._getConfigBubbleCircle(model, config)
+
+                    return config;
+                }
             }, config);
 
             log.trace("Init chart");
@@ -130,6 +136,39 @@ define([
 
         //Export configuration
         $(s.CONFIGURATION_EXPORT).html(JSON.stringify(config));
+
+        return config;
+    };
+
+    Test.prototype._getConfigBubbleCircle = function(model, config) {
+        
+        var obj = {};
+
+        for (var i in model.rows) {
+            if (model.data[i][0] && model.data[i][1] && model.data[i][2]) {
+                obj = {
+                    x: model.data[i][0],
+                    y: model.data[i][1],
+                    z: model.data[i][2],
+                    name: model.rows[i].join(" "),
+                    country: ''
+                };
+
+                config.series[0].data.push(obj);
+            }
+            console.log('model row: ', obj);
+        }
+
+        config.tooltip = {
+            useHTML: true,
+            headerFormat: '<table>',
+            pointFormat: '<tr><th colspan="2"><h3>{point.name}</h3></th></tr>' +
+            '<tr><th>' + model.cols2[0] + ':</th><td>{point.x}</td></tr>' +
+            '<tr><th>' + model.cols2[1] + ':</th><td>{point.y}</td></tr>' +
+            '<tr><th>' + model.cols2[2] + ':</th><td>{point.z}</td></tr>',
+            footerFormat: '</table>',
+            followPointer: true
+        };
 
         return config;
     };
