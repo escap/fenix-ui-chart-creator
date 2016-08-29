@@ -473,13 +473,15 @@ define([
                 
                 var orderRow=[];
                 for(var i in model.data) {
-                    orderRow.push( (model.data[i][0]?model.data[i][0].toFixed(10):-1) +"_"+i);
+                    if(model.data[i][0]!== null && model.data[i][0]>=0)
+                    orderRow.push( (model.data[i][0]>=0?model.data[i][0].toFixed(10):-1) +"_"+i);
                 }
 
-                console.log("orderRow",orderRow);
+                //console.log("orderRow",orderRow);
 
                 orderRow.sort(function(a,b) {
-                    return a.split('_')[0] - b.split('_')[0];
+                   if(b.split('_')[0]<0){return -1}
+                    return b.split('_')[0] - a.split('_')[0];
                 });
 //console.log("orderRow",orderRow)
 
@@ -494,31 +496,57 @@ define([
                 var incrementalAngle = 2*Math.PI/countRow;
 
                 var currentAngle=0;
+                var initSize=0;
+                var myMinSize=jStat(model.data).col(0).max();
+
                 for (var i in orderRow)
-                {
+                { 
+
+                     var I=parseInt(v[1]);
                     var v=orderRow[i].split("_");
                     var Z = parseFloat(v[0]);
-                    var I=parseInt(v[1]);
-                    if(Z!==null && Z>=0) {
+                    if(Z<myMinSize){myMinSize=Z}
+                    if(i==0){initSize=Z;
 
-                        console.log("Z",Z)
-                        var X=Math.cos(currentAngle);
-                        var Y=Math.sin(currentAngle);
-                        obj = {
-                            x: X,
-                            y: Y,
-                            z: Z,                            
-                            name: model.rows[I].join(" " ),
-                            country: model.rows[I].join(" " )
-                        };
+                        //console.log("config.series",config.series)
+                    obj={x:0,y:0,z:Z, name: model.rows[I].join(" " ),
+                            country: model.rows[I].join(" " )};
+                             config.series[0].data.push(obj);
+                }
+                    else{
+                   
+                   
+                        if(Z!==null && Z>=0 ) {
 
-                        currentAngle+=incrementalAngle;
-                        
-                        config.series[0].data.push(obj);
+                            console.log("Z",Z)
+                            var X=(initSize/2 + Z/2)*Math.cos(currentAngle);
+                            var Y=(initSize/2 + Z/2)*Math.sin(currentAngle);
+                            obj = {
+                                x: X,
+                                y: Y,
+                                z: Z,                            
+                                name: model.rows[I].join(" " ),
+                                country: model.rows[I].join(" " )
+                            };
+
+                            currentAngle+=incrementalAngle;
+                            
+                            config.series[0].data.push(obj);
+                            //console.log('push',obj)
+                        }
                     }
                 }
-                //console.log('model row: ', obj);
+                console.log('test: ', jStat(model.data).col(0).max());
 
+var chivapiano=400/(3*jStat(model.data).col(0).max());
+console.log("orderRow",orderRow)
+
+
+myMinSize=myMinSize*(400/3)/jStat(model.data).col(0).max();
+console.log("myMinSize",myMinSize)
+ //chivapiano=10;
+
+                config.plotOptions.bubble={/*zMax:chivapiano,zMin:0*/minSize:myMinSize,maxSize:400/3 };
                 config.tooltip = {
                     useHTML: true,
                     headerFormat: '<table>',
@@ -528,6 +556,8 @@ define([
                     followPointer: true
                 };
 
+
+console.log("Final Config",config)
             break;
         default:
 
