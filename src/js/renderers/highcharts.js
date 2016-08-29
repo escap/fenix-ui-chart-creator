@@ -470,29 +470,46 @@ define([
 
                 var obj = {};
                 var countRow=0;
-                for(var i in model.rows)
+                
+                var orderRow=[];
+                for(var i in model.data) {
+                    orderRow.push( (model.data[i][0]?model.data[i][0].toFixed(10):-1) +"_"+i);
+                }
+
+                console.log("orderRow",orderRow);
+
+                orderRow.sort(function(a,b) {
+                    return a.split('_')[0] - b.split('_')[0];
+                });
+//console.log("orderRow",orderRow)
+
+                for(var i in orderRow)
                 {
-                    if(model.data[i][0]!==null && model.data[i][0]>=0)
+                    var v=orderRow[i].split("_");
+
+                    if(parseFloat(v[0])!==null && parseFloat(v[0])>=0)
                         countRow++;
                 }
 
                 var incrementalAngle = 2*Math.PI/countRow;
 
                 var currentAngle=0;
-                for (var i in model.rows)
+                for (var i in orderRow)
                 {
-
-                    var Z = model.data[i][0];
-
+                    var v=orderRow[i].split("_");
+                    var Z = parseFloat(v[0]);
+                    var I=parseInt(v[1]);
                     if(Z!==null && Z>=0) {
+
+                        console.log("Z",Z)
                         var X=Math.cos(currentAngle);
                         var Y=Math.sin(currentAngle);
                         obj = {
                             x: X,
                             y: Y,
                             z: Z,                            
-                            name: model.rows[i].join(" " ),
-                            country: model.rows[i].join(" " )
+                            name: model.rows[I].join(" " ),
+                            country: model.rows[I].join(" " )
                         };
 
                         currentAngle+=incrementalAngle;
