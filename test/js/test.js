@@ -84,20 +84,11 @@ define([
             var config = this._getChartConfigFromFilter();
             
             config = $.extend(true, {}, {
-                type: defaultOptions.chartType,
+                //type: defaultOptions.chartType,
                 model: JSON.parse(Model),
                 el: s.CHART_INTERACTION,
                 config : {
                     tooltip :  { shared : true }
-                },
-                createConfiguration : function (model, config) {
-                    
-                    console.log('createConfiguration',model, config);
-
-                    if(config.chart.type === 'bubblecircle')
-                        return self._getConfigBubbleCircle(model, config)
-
-                    return config;
                 }
             }, config);
 
@@ -143,9 +134,17 @@ define([
     Test.prototype._getConfigBubbleCircle = function(model, config) {
         
         var obj = {};
-
+var incrementalAngle=360/model.rows.length;
+var currentAngle=0;
         for (var i in model.rows) {
-            if (model.data[i][0] && model.data[i][1] && model.data[i][2]) {
+var Z=model.row[i][0];
+
+var X=Math.cos(currentAngle);
+var Y=Math.sin(currentAngle);
+obj={x:X,y:Y,name:model.rows[i].join(" " ),z:Z/*country:'?????'*/}
+
+
+          /*  if (model.data[i][0] && model.data[i][1] && model.data[i][2]) {
                 obj = {
                     x: model.data[i][0],
                     y: model.data[i][1],
@@ -154,8 +153,10 @@ define([
                     country: ''
                 };
 
-                config.series[0].data.push(obj);
-            }
+               
+            }*/
+
+             config.series[0].data.push(obj);
             console.log('model row: ', obj);
         }
 

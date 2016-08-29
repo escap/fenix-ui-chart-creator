@@ -427,6 +427,90 @@ bubble:{
 
         series: [{data:[]}]
 
+    },
+bubblecircle:{
+
+        chart: {
+            type: 'bubble',
+            plotBorderWidth: 1,
+            zoomType: 'xy'
+        },
+
+        legend: {
+            enabled: false
+        },
+
+        title: {
+            text: ''
+        },
+
+        subtitle: {
+            text: ''
+        },
+
+        xAxis: {
+            gridLineWidth: 1,
+            title: {
+                text: ''
+            },
+            labels: {
+                format: '{value} '
+            },
+            plotLines: [{
+                color: 'black',
+                dashStyle: 'dot',
+                width: 2,
+                value: 65,
+                label: {
+                    rotation: 0,
+                    y: 15,
+                    style: {
+                        fontStyle: 'italic'
+                    },
+                    text: ''
+                },
+                zIndex: 3
+            }]
+        },
+
+        yAxis: {
+            startOnTick: false,
+            endOnTick: false,
+            title: {
+                text: ''
+            },
+            labels: {
+                format: '{value}'
+            },
+            maxPadding: 0.2,
+            plotLines: [{
+                color: 'black',
+                dashStyle: 'dot',
+                width: 2,
+                value: 50,
+                label: {
+                    align: 'right',
+                    style: {fontStyle: 'italic'},
+                    text: '',
+                    x: -10
+                },
+                zIndex: 3
+            }]
+        },
+
+      
+
+        plotOptions: {
+            series: {
+                dataLabels: {
+                    enabled: false,
+                    format: '{point.name}'
+                }
+            }
+        },
+
+        series: [{data:[]}]
+
     }
     };
 });

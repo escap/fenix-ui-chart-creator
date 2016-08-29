@@ -55,7 +55,8 @@ define(function () {
                     {value: "pie", label: "Pie"},
 					{value: "donut", label: "Donut"},
                     {value: "scatter", label: "Scatter"},
-                    {value: "bubble", label: "Bubble"},
+                    {value: "bubble", label: "Bubble"}, 
+                    {value: "bubblecircle", label: "Bubble Circle"},
                     {value: "heatmap", label: "Heatmap"},
                     {value: "treemap", label: "Treemap"},
                     {value: "boxplot", label: "Boxplot"}
@@ -64,7 +65,7 @@ define(function () {
                 config: {
                     maxItems: 1
                 },
-                default: ['line']
+                default: ['bubblecircle']
             },
 
             template: {

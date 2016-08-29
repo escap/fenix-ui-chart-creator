@@ -467,56 +467,72 @@ define([
 
             case "bubblecircle":
 
-                var obj = {};
 
-                for (var i in model.rows) {
-                    if (model.data[i][0] && model.data[i][1] && model.data[i][2]) {
+                var obj = {};
+                var countRow=0;
+                for(var i in model.rows)
+                {
+                    if(model.data[i][0]!==null && model.data[i][0]>=0)
+                        countRow++;
+                }
+
+                var incrementalAngle = 2*Math.PI/countRow;
+
+                var currentAngle=0;
+                for (var i in model.rows)
+                {
+
+                    var Z = model.data[i][0];
+
+                    if(Z!==null && Z>=0) {
+                        var X=Math.cos(currentAngle);
+                        var Y=Math.sin(currentAngle);
                         obj = {
-                            x: model.data[i][0],
-                            y: model.data[i][1],
-                            z: model.data[i][2],
-                            name: model.rows[i].join(" "),
-                            country: ''
+                            x: X,
+                            y: Y,
+                            z: Z,                            
+                            name: model.rows[i].join(" " ),
+                            country: model.rows[i].join(" " )
                         };
 
+                        currentAngle+=incrementalAngle;
+                        
                         config.series[0].data.push(obj);
                     }
-                    //console.log(obj);
                 }
+                //console.log('model row: ', obj);
 
                 config.tooltip = {
                     useHTML: true,
                     headerFormat: '<table>',
-                    pointFormat: '<tr><th colspan="2"><h3>{point.name}</h3></th></tr>' +
-                    '<tr><th>' + model.cols2[0] + ':</th><td>{point.x}</td></tr>' +
-                    '<tr><th>' + model.cols2[1] + ':</th><td>{point.y}</td></tr>' +
-                    '<tr><th>' + model.cols2[2] + ':</th><td>{point.z}</td></tr>',
+                    pointFormat: '<tr><th colspan="2">{point.country}</th></tr>' +
+                    '<tr><th>' + model.cols2[0] + ':</th><td>{point.z}</td></tr>',
                     footerFormat: '</table>',
                     followPointer: true
                 };
 
-                break;
-            default:
+            break;
+        default:
 
-                for (var ii in model.cols) {
+            for (var ii in model.cols) {
 
-                    if (model.cols.hasOwnProperty(ii)) {
-                        i = model.cols[ii];
-                        config.xAxis.categories.push(i.title[this.lang]);
-                    }
+                if (model.cols.hasOwnProperty(ii)) {
+                    i = model.cols[ii];
+                    config.xAxis.categories.push(i.title[this.lang]);
                 }
+            }
 
-                for (var i in model.rows) {
+            for (var i in model.rows) {
 
-                    //	 console.log("1 ",config.series)
-                    config.series.push({name: model.rows[i].join(" "), data: model.data[i]});
-                    //	 console.log("2 ",config.series)
+                //	 console.log("1 ",config.series)
+                config.series.push({name: model.rows[i].join(" "), data: model.data[i]});
+                //	 console.log("2 ",config.series)
 
-                }
-        }
-        //	console.log("config",config)
-        return config;
-    };
+            }
+    }
+    //	console.log("config",config)
+    return config;
+};
 
 
     Highcharts.prototype._trigger = function (channel) {
