@@ -428,9 +428,35 @@ bubble:{
         series: [{data:[]}]
 
     },
+
+bubblecirclepixel:{
+
+ chart: {
+            backgroundColor: 'white',
+            events: {load:function(){
+
+var myData=this.userOptions.series[0].data;
+
+                var ren=this.renderer;
+
+                console.log("TEST DATA",myData)
+
+for(var i in myData)
+{ ren.circle(myData[i]["x"]*200+500,myData[i]["y"]*100+100,myData[i]["z"]*10).add();}
+              //  ren.circle(0,0,150).add();
+
+            }}
+
+
+        }
+    ,
+    series: [{data:[]}]
+    },
+
 bubblecircle:{
 
         chart: {
+            height:400,width:400,
             type: 'bubble',
             plotBorderWidth: 1,
             zoomType: 'xy'
@@ -440,36 +466,26 @@ bubblecircle:{
             enabled: false
         },
 
-        title: {
-            text: ''
-        },
+        title: {text: ''},
 
-        subtitle: {
-            text: ''
-        },
+        subtitle: {text: ''},
 
         xAxis: {
             gridLineWidth: 1,
-            title: {
-                text: ''
-            },
-            labels: {
-                format: '{value} '
-            },
+            title: {text: ''},
+            labels: {enabled:false,format: ''/*{value} '*/},
             plotLines: [{
                 color: 'black',
                 dashStyle: 'dot',
-                width: 2,
-                value: 65,
+               // width: 2,
+               // value: 65,
                 label: {
                     rotation: 0,
                     y: 15,
-                    style: {
-                        fontStyle: 'italic'
-                    },
+                    style: {fontStyle: 'italic'},
                     text: ''
                 },
-                zIndex: 3
+                zhicharIndex: 3
             }]
         },
 
@@ -479,7 +495,7 @@ bubblecircle:{
             title: {
                 text: ''
             },
-            labels: {
+            labels: {enabled:false,
                 format: '{value}'
             },
             maxPadding: 0.2,
@@ -509,7 +525,7 @@ bubblecircle:{
             }
         },
 
-        series: [{data:[]}]
+        series: [{data:[],sizeBy: 'width'}]
 
     }
     };
