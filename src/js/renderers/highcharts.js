@@ -467,7 +467,72 @@ define([
 
             case "bubblecircle":
 
+			var Pos=[[0,0],[1,0],[Math.sqrt(2)/2,Math.sqrt(2)/2],[0,1],[-Math.sqrt(2)/2,Math.sqrt(2)/2],[-1,0],[-Math.sqrt(2)/2,-Math.sqrt(2)/2],[0,-1],[Math.sqrt(2)/2,-Math.sqrt(2)/2]];
+			
+			 var obj = {};
+                var countRow=0;
+                
+                var orderRow=[];
+                for(var i in model.data) {
+                    if(model.data[i][0]!== null && model.data[i][0]>=0)
+                    orderRow.push( (model.data[i][0]>=0?model.data[i][0].toFixed(10):-1) +"_"+i);
+                }
+			
+			  orderRow.sort(function(a,b) {
+                   if(b.split('_')[0]<0){return -1}
+                    return b.split('_')[0] - a.split('_')[0];
+                });
+			
+			 for(var i in orderRow)
+                {
+				if(i<10)
+				{
+                    var v=orderRow[i].split("_");
 
+                    if(parseFloat(v[0])!==null && parseFloat(v[0])>=0)
+                        countRow++;
+                }
+				}
+			for (var i in orderRow)
+                { if(i<countRow-1){
+				var v=orderRow[i].split("_");
+                var Z = parseFloat(v[0]);
+				 var I=parseInt(v[1]);
+				 console.log(Pos,i)
+				obj={x:Pos[i][0],
+				y:Pos[i][1],
+				z:Z, name: model.rows[I].join("<br>" ),
+                            country: model.rows[I].join(" " )};
+                             config.series[0].data.push(obj);
+				}
+				}
+				
+				config.plotOptions=   { series: {
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.name}'
+                },
+				bubble:{maxSize:400/3.5}
+            }};
+				
+                config.tooltip = {
+                    useHTML: true,
+                    headerFormat: '<table>',
+                    pointFormat: '<tr><th colspan="2">{point.country}</th></tr>' +
+                    '<tr><th>' + model.cols2[0] + ':</th><td>{point.z}</td></tr>',
+                    footerFormat: '</table>',
+                    followPointer: true
+                };
+			/* config.series=[{
+                 data: [
+                 { x: 0.4, y: 0, z: 1, name: 'BE', country: 'Belgium' },
+                 { x: 0, y: 0, z: 2, name: 'DE', country: 'Germany' },
+				 { x: 0, y: 0.4, z: 1.5, name: 'DE', country: 'Germany' }
+                 
+                 ]
+                 }];          config.plotOptions.bubble={minSize:1*400/3/2,maxSize:400/3};
+*/
+/*
                 var obj = {};
                 var countRow=0;
                 
@@ -477,21 +542,22 @@ define([
                     orderRow.push( (model.data[i][0]>=0?model.data[i][0].toFixed(10):-1) +"_"+i);
                 }
 
-                //console.log("orderRow",orderRow);
 
                 orderRow.sort(function(a,b) {
                    if(b.split('_')[0]<0){return -1}
                     return b.split('_')[0] - a.split('_')[0];
                 });
-//console.log("orderRow",orderRow)
 
                 for(var i in orderRow)
                 {
+				//if(i<2)
+				{
                     var v=orderRow[i].split("_");
 
                     if(parseFloat(v[0])!==null && parseFloat(v[0])>=0)
                         countRow++;
                 }
+				}
 
                 var incrementalAngle = 2*Math.PI/countRow;
 
@@ -501,15 +567,18 @@ define([
 
                 for (var i in orderRow)
                 { 
+				//if(i<2)
+				{
 
                      var I=parseInt(v[1]);
                     var v=orderRow[i].split("_");
                     var Z = parseFloat(v[0]);
                     if(Z<myMinSize){myMinSize=Z}
-                    if(i==0){initSize=Z;
+                    if(i==0){
+					initSize=Z;
 
                         //console.log("config.series",config.series)
-                    obj={x:0,y:0,z:Z*2*Math.PI, name: model.rows[I].join(" " ),
+                    obj={x:0,y:0,z:Z, name: model.rows[I].join(" " ),
                             country: model.rows[I].join(" " )};
                              config.series[0].data.push(obj);
                 }
@@ -518,13 +587,18 @@ define([
                    
                         if(Z!==null && Z>=0 ) {
 
-                            console.log("Z",Z)
-                            var X=(initSize/2 + Z/2)*Math.cos(currentAngle);
-                            var Y=(initSize/2 + Z/2)*Math.sin(currentAngle);
+						//diameter
+						var Z2=Math.sqrt(4*Z*(400/6*400/6)/initSize);
+                            console.log("Z",Z,"Z2",Z2,"max",initSize,400/3);
+							console.log("PROP currenc cercle",(Z2/2)*(Z2*2)*Math.PI," grand cerlce",(initSize/2)*(initSize/2)*Math.PI,
+							initSize/Z,
+							(initSize/2)*(initSize/2)*Math.PI/((Z2/2)*(Z2*2)*Math.PI))
+                            var X=(initSize/2 + Z2/2)*Math.cos(currentAngle);
+                            var Y=(initSize/2 + Z2/2)*Math.sin(currentAngle);
                             obj = {
                                 x: X,
                                 y: Y,
-                                z: Z*2*Math.PI,                            
+                                z: Z,                            
                                 name: model.rows[I].join(" " ),
                                 country: model.rows[I].join(" " )
                             };
@@ -536,17 +610,17 @@ define([
                         }
                     }
                 }
+				}
                 console.log('test: ', jStat(model.data).col(0).max());
 
-var chivapiano=400/(3*jStat(model.data).col(0).max());
-console.log("orderRow",orderRow)
+
 
 
 myMinSize=myMinSize*(400/3)/jStat(model.data).col(0).max();
 console.log("myMinSize",myMinSize)
  //chivapiano=10;
 
-                config.plotOptions.bubble={/*zMax:chivapiano,zMin:0*/minSize:myMinSize,maxSize:400/3};
+                config.plotOptions.bubble={maxSize:400/3};
                 config.tooltip = {
                     useHTML: true,
                     headerFormat: '<table>',
@@ -556,8 +630,7 @@ console.log("myMinSize",myMinSize)
                     followPointer: true
                 };
 
-
-console.log("Final Config",config)
+*/
             break;
         default:
 
