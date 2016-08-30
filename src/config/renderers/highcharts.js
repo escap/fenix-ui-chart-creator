@@ -529,7 +529,8 @@ bubblecircle:{
             
             data:[],
             sizeBy: 'area'
-        }]
+        }],
+		drilldown:{series:[]}
 
     }
     };
