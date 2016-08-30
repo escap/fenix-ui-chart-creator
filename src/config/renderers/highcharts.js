@@ -473,7 +473,7 @@ bubblecircle:{
         xAxis: {
             gridLineWidth: 1,
             title: {text: ''},
-            labels: {enabled:false,format: ''/*{value} '*/},
+            labels: {enabled:true,format: ''/*{value} '*/},
             plotLines: [{
                 color: 'black',
                 dashStyle: 'dot',
@@ -525,7 +525,10 @@ bubblecircle:{
             }
         },
 
-        series: [{data:[],sizeBy: 'width'}]
+        series: [{
+            data:[],
+            sizeBy: 'area'
+        }]
 
     }
     };

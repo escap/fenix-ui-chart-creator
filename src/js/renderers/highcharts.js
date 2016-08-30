@@ -505,22 +505,27 @@ define([
                      var I=parseInt(v[1]);
                     var v=orderRow[i].split("_");
                     var Z = parseFloat(v[0]);
-                    if(Z<myMinSize){myMinSize=Z}
-                    if(i==0){initSize=Z;
-
-                        //console.log("config.series",config.series)
-                    obj={x:0,y:0,z:Z, name: model.rows[I].join(" " ),
-                            country: model.rows[I].join(" " )};
-                             config.series[0].data.push(obj);
-                }
-                    else{
-                   
-                   
-                        if(Z!==null && Z>=0 ) {
-
-                            console.log("Z",Z)
-                            var X=(initSize/2 + Z/2)*Math.cos(currentAngle);
-                            var Y=(initSize/2 + Z/2)*Math.sin(currentAngle);
+                    var Z2;
+                    
+                    if(Z<myMinSize){ myMinSize=Z }
+                    
+                    if(i==0)
+                    {
+                        initSize = 400/3;
+                        obj={
+                            x:0,y:0,z:Z, name: model.rows[I].join(" " ),
+                            country: model.rows[I].join(" " )
+                        };
+                        config.series[0].data.push(obj);
+                    }
+                    else
+                    {
+                        if(Z!==null && Z>=0 ){
+                            
+                            Z2 = Z*initSize/13.47;
+                        
+                            var X=(initSize+Z2 )/2*Math.cos(currentAngle);
+                            var Y=(initSize+Z2 )/2*Math.sin(currentAngle);
                             obj = {
                                 x: X,
                                 y: Y,
@@ -528,7 +533,8 @@ define([
                                 name: model.rows[I].join(" " ),
                                 country: model.rows[I].join(" " )
                             };
-
+                            if(i==1)
+                                console.log("Z vs Z2 ",Z,Z2,X)
                             currentAngle+=incrementalAngle;
                             
                             config.series[0].data.push(obj);
@@ -546,7 +552,8 @@ myMinSize=myMinSize*(400/3)/jStat(model.data).col(0).max();
 console.log("myMinSize",myMinSize)
  //chivapiano=10;
 
-                config.plotOptions.bubble={/*zMax:chivapiano,zMin:0*/minSize:myMinSize,maxSize:400/3 };
+                config.plotOptions.bubble={/*zMax:chivapiano,zMin:0minSize:myMinSize,*/
+                    maxSize:"33%" };
                 config.tooltip = {
                     useHTML: true,
                     headerFormat: '<table>',
