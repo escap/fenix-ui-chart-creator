@@ -413,7 +413,7 @@ define([
 
                     }
                 }
-                //console.log(config.series);
+                console.log(config.series);
 
                 break;
 
@@ -499,9 +499,11 @@ define([
                 var Z = parseFloat(v[0]);
 				 var I=parseInt(v[1]);
 				 console.log(Pos,i)
-				obj={x:Pos[i][0],
-				y:Pos[i][1],
-				z:Z, name: model.rows[I].join("<br>" ),
+				obj={
+                id:"test_"+i,
+                    x:Pos[i][0],
+				    y:Pos[i][1],
+				    z:Z, name: model.rows[I].join("<br>" ),
                             country: model.rows[I].join(" " )};
                              config.series[0].data.push(obj);
 				}
@@ -509,7 +511,7 @@ define([
 				
 				config.plotOptions=   { series: {
                 dataLabels: {
-                    enabled: true,
+                    enabled: false,
                     format: '{point.name}'
                 },
 				bubble:{maxSize:400/3.5}
@@ -523,6 +525,12 @@ define([
                     footerFormat: '</table>',
                     followPointer: true
                 };
+/*
+                config.series[0].data.push({x:0,y:0,z:5,parent:"test_0",name:"a",country:"a"});
+
+                config.series[0].data.push({x:1,y:0,z:7,parent:"test_0",name:"c",country:"c"});
+                config.series[0].data.push({x:0,y:1,z:3,parent:"test_0",name:"b",country:"b"});
+*/
 			/* config.series=[{
                  data: [
                  { x: 0.4, y: 0, z: 1, name: 'BE', country: 'Belgium' },
