@@ -216,6 +216,7 @@ define([
                 //console.log(model)
                 var innerSize = Math.floor(100 / model.cols2.length);
                 var innerBegin = 0;
+				if(model.cols2.length==1){innerBegin=30;innerSize=70}
                 //console.log("innerSize",innerSize)
                 for (var i in model.cols2) {
 
@@ -376,7 +377,8 @@ define([
                         dataLabels: {enabled: false},
                         levelIsConstant: false,
                         levels: [{level: 1, dataLabels: {enabled: true}, borderWidth: 3}],
-                        data: []
+                        data: [],
+						title:''
                     }]
                 };
 
@@ -467,58 +469,206 @@ define([
 
             case "bubblecircle":
 
+			
+			 
+			
+			 var obj = {};
+			 var countRow=0;
+                
+                var orderRow=[];
+                for(var i in model.data) {
+					var jstatValeur=jStat(model.data[i]).sum();
+					if(jstatValeur>=0){orderRow.push( jstatValeur/*.toFixed(10)*/ +"_"+i)}
+//						orderRow.push( (jstatValeur>=0?jstatValeur.toFixed(10):-1) +"_"+i);
+                }
+			  orderRow.sort(function(a,b) {if(b.split('_')[0]<0){return -1}return b.split('_')[0] - a.split('_')[0];});
 
+			                var incrementalAngle = 2*Math.PI/(orderRow.length-1);
+							var currentAngle=0;
+			
+			for (var i in orderRow){
+				var v=orderRow[i].split("_");
+				var Z = parseFloat(v[0]);
+				var I=parseInt(v[1]);
+				//console.log("befor I",i,countRow)
+				//if(i<countRow){
+					//console.log("creation de I	",v,I)		
+
+					if(i==0){
+					obj={x:0,
+					y:0,
+					z:Z, name: model.rows[I].join("<br>" ),
+					country: model.rows[I].join("<br>" ),
+					drilldown: model.rows[I].join("_" )};
+					}
+					else{
+					obj={x:Math.cos(currentAngle),
+					y:Math.sin(currentAngle),
+					z:Z, name: model.rows[I].join("<br>" ),
+					country: model.rows[I].join("<br>" ),
+					drilldown: model.rows[I].join("_" )};
+					currentAngle+=incrementalAngle;
+					}
+					
+					
+					config.series[0].data.push(obj);
+				//}
+								
+					var drillData=[];
+					var secondCount=0;
+					var currentAngle2=0;
+					 var orderRow2=0;
+                for(var j in model.data[I]) {if(model.data[I][j]>=0){orderRow2++;}}
+				var incrementalAngle2 = 2*Math.PI/(orderRow2);
+			//console.log("incrementalAngle2",incrementalAngle2)
+					
+				for(var j in model.data[I]){
+				//console.log("currentA ngle2",currentAngle2)
+							if(model.data[I][j]!== null && model.data[I][j]>=0){
+						
+							if(secondCount==0){
+							drillData.push(  { name: model.cols2[j].join("<br>"), 
+							country: model.cols2[j].join("<br>"), 
+							x: 0,
+							y: 0, 
+							z:model.data[I][j]});
+							//console.log(" b ",j);				
+							}
+							else
+								{
+								//console.log("currentAngle2",currentAngle2)
+								drillData.push(  { name: model.cols2[j].join("<br>"), 
+							country: model.cols2[j].join("<br>"), 
+							x: Math.cos(currentAngle2),
+							y: Math.sin(currentAngle2), 
+							z:model.data[I][j]});}
+							secondCount++;						
+							currentAngle2+=incrementalAngle2;
+						}
+					
+					}
+						config.drilldown.series.push(
+						{name:model.cols2[j].join("_" ),
+						id:model.rows[I].join("_" ),
+						data:drillData});		
+						}
+				//console.log("config",config)
+				config.plotOptions = {
+                    series: {
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.name}'
+                        },
+				        bubble: { maxSize:"33%" }
+                    }
+                };
+				
+                config.tooltip = {
+                    useHTML: true,
+                    headerFormat: '<table>',
+                    pointFormat: '<tr><th colspan="2">{point.country}</th></tr>' +
+                    '<tr><th>' +  ':</th><td>{point.z}</td></tr>',
+                    footerFormat: '</table>',
+                    followPointer: true
+                };
+			/* config.series=[{
+                 data: [
+                 { x: 0.4, y: 0, z: 1, name: 'BE', country: 'Belgium' },
+                 { x: 0, y: 0, z: 2, name: 'DE', country: 'Germany' },
+				 { x: 0, y: 0.4, z: 1.5, name: 'DE', country: 'Germany' }
+                 
+                 ]
+                 }];          config.plotOptions.bubble={minSize:1*400/3/2,maxSize:400/3};
+*/
+/*
                 var obj = {};
                 var countRow=0;
                 
                 var orderRow=[];
                 for(var i in model.data) {
-                    orderRow.push( (model.data[i][0]?model.data[i][0].toFixed(10):-1) +"_"+i);
+                    if(model.data[i][0]!== null && model.data[i][0]>=0)
+                    orderRow.push( (model.data[i][0]>=0?model.data[i][0].toFixed(10):-1) +"_"+i);
                 }
 
-                console.log("orderRow",orderRow);
 
                 orderRow.sort(function(a,b) {
-                    return a.split('_')[0] - b.split('_')[0];
+                   if(b.split('_')[0]<0){return -1}
+                    return b.split('_')[0] - a.split('_')[0];
                 });
-//console.log("orderRow",orderRow)
 
                 for(var i in orderRow)
                 {
+				//if(i<2)
+				{
                     var v=orderRow[i].split("_");
 
                     if(parseFloat(v[0])!==null && parseFloat(v[0])>=0)
                         countRow++;
                 }
+				}
 
                 var incrementalAngle = 2*Math.PI/countRow;
 
                 var currentAngle=0;
+                var initSize=0;
+                var myMinSize=jStat(model.data).col(0).max();
+
                 for (var i in orderRow)
-                {
+                { 
+				//if(i<2)
+				{
+
+                     var I=parseInt(v[1]);
                     var v=orderRow[i].split("_");
                     var Z = parseFloat(v[0]);
-                    var I=parseInt(v[1]);
-                    if(Z!==null && Z>=0) {
+                    if(Z<myMinSize){myMinSize=Z}
+                    if(i==0){
+					initSize=Z;
 
-                        console.log("Z",Z)
-                        var X=Math.cos(currentAngle);
-                        var Y=Math.sin(currentAngle);
-                        obj = {
-                            x: X,
-                            y: Y,
-                            z: Z,                            
-                            name: model.rows[I].join(" " ),
-                            country: model.rows[I].join(" " )
-                        };
+                        //console.log("config.series",config.series)
+                    obj={x:0,y:0,z:Z, name: model.rows[I].join(" " ),
+                            country: model.rows[I].join(" " )};
+                             config.series[0].data.push(obj);
+                }
+                    else{
+                   
+                   
+                        if(Z!==null && Z>=0 ) {
 
-                        currentAngle+=incrementalAngle;
-                        
-                        config.series[0].data.push(obj);
+						//diameter
+						var Z2=Math.sqrt(4*Z*(400/6*400/6)/initSize);
+                            console.log("Z",Z,"Z2",Z2,"max",initSize,400/3);
+							console.log("PROP currenc cercle",(Z2/2)*(Z2*2)*Math.PI," grand cerlce",(initSize/2)*(initSize/2)*Math.PI,
+							initSize/Z,
+							(initSize/2)*(initSize/2)*Math.PI/((Z2/2)*(Z2*2)*Math.PI))
+                            var X=(initSize/2 + Z2/2)*Math.cos(currentAngle);
+                            var Y=(initSize/2 + Z2/2)*Math.sin(currentAngle);
+                            obj = {
+                                x: X,
+                                y: Y,
+                                z: Z,                            
+                                name: model.rows[I].join(" " ),
+                                country: model.rows[I].join(" " )
+                            };
+
+                            currentAngle+=incrementalAngle;
+                            
+                            config.series[0].data.push(obj);
+                            //console.log('push',obj)
+                        }
                     }
                 }
-                //console.log('model row: ', obj);
+				}
+                console.log('test: ', jStat(model.data).col(0).max());
 
+
+
+
+myMinSize=myMinSize*(400/3)/jStat(model.data).col(0).max();
+console.log("myMinSize",myMinSize)
+ //chivapiano=10;
+
+                config.plotOptions.bubble={maxSize:400/3};
                 config.tooltip = {
                     useHTML: true,
                     headerFormat: '<table>',
@@ -528,6 +678,7 @@ define([
                     followPointer: true
                 };
 
+*/
             break;
         default:
 
