@@ -480,54 +480,57 @@ define([
                 
                 var orderRow=[];
                 for(var i in model.data) {
-                    if(model.data[i][0]!== null && model.data[i][0]>=0){
 					var jstatValeur=jStat(model.data[i]).sum();
 						orderRow.push( (jstatValeur>=0?jstatValeur.toFixed(10):-1) +"_"+i);
-					}
+					
                 }
 			
 			  orderRow.sort(function(a,b) {if(b.split('_')[0]<0){return -1}return b.split('_')[0] - a.split('_')[0];});
 			
+			
 			 for(var i in orderRow){
-				if(i<9)
-				{
+				if(i<9){
                     var v=orderRow[i].split("_");
-
-                    if(parseFloat(v[0])!==null && parseFloat(v[0])>=0)
-                        countRow++;
-                }
-				}
-			for (var i in orderRow)
-                { if(i<countRow-1){
-				var v=orderRow[i].split("_");
-                var Z = parseFloat(v[0]);
-				 var I=parseInt(v[1]);
-				 console.log(model.rows[I].join("<br>" ));
-				obj={x:Pos[i][0],
-				y:Pos[i][1],
-				z:Z, name: model.rows[I].join("<br>" ),
-                            country: model.rows[I].join("<br>" ),
-							drilldown: model.rows[I].join("_" )};
-                             config.series[0].data.push(obj);
-				}
-				
-				var drillData=[];
-				for(var j in model.data[I])
-				{
-					
-					if(j<9 && model.data[i][j]>=0){
-					console.log(" j ",j," model.cols2 ",model.cols2," model.cols2[j] ",model.cols2[j]);
-						drillData.push(  { name: model.cols2[j].join("<br>"), 
-						x: Pos[j][0],
-						y: Pos[j][1], z:model.data[i][j]});
-console.log(" b ",j);					
+                    if(parseFloat(v[0])!==null && parseFloat(v[0])>=0){countRow++;}
 					}
 				}
+			for (var i in orderRow){
+				var v=orderRow[i].split("_");
+				var Z = parseFloat(v[0]);
+				var I=parseInt(v[1]);
+				console.log("befor I",i,countRow)
+				if(i<countRow){
+					console.log("creation de I	",v,I)				 
+					obj={x:Pos[i][0],
+					y:Pos[i][1],
+					z:Z, name: model.rows[I].join("<br>" ),
+					country: model.rows[I].join("<br>" ),
+					drilldown: model.rows[I].join("_" )};
+					config.series[0].data.push(obj);
+				}
+								
+					var drillData=[];
+					var secondCount=0;
+					for(var j in model.data[I]){
+						if(secondCount<9 && model.data[I][j]!== null && model.data[I][j]>=0){
+						secondCount++;
+						drillData.push(  { name: model.cols2[j].join("<br>"), 
+						country: model.cols2[j].join("<br>"), 
+						x: Pos[secondCount][0],
+						y: Pos[secondCount][1], 
+						z:model.data[I][j]});
+						//console.log(" b ",j);				
+
+						config.drilldown.series.push(
+						{name:model.cols2[j].join("_" ),
+						id:model.rows[I].join("_" ),
+						data:drillData});				
+						}
+					}
 				
-				config.drilldown.series.push({name:model.rows[I].join("_" ),id:model.rows[I].join("_" ),data:drillData});
 				
 				}
-				
+				console.log("config",config)
 				config.plotOptions=   { series: {
                 dataLabels: {
                     enabled: false,
@@ -540,7 +543,7 @@ console.log(" b ",j);
                     useHTML: true,
                     headerFormat: '<table>',
                     pointFormat: '<tr><th colspan="2">{point.country}</th></tr>' +
-                    '<tr><th>' + model.cols2[0] + ':</th><td>{point.z}</td></tr>',
+                    '<tr><th>' +  ':</th><td>{point.z}</td></tr>',
                     footerFormat: '</table>',
                     followPointer: true
                 };
