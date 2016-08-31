@@ -531,13 +531,15 @@ define([
 				
 				}
 				console.log("config",config)
-				config.plotOptions=   { series: {
-                dataLabels: {
-                    enabled: false,
-                    format: '{point.name}'
-                },
-				bubble:{maxSize:400/3.5}
-            }};
+				config.plotOptions = {
+                    series: {
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.name}'
+                        },
+				        bubble: { maxSize:400/3.5 }
+                    }
+                };
 				
                 config.tooltip = {
                     useHTML: true,
