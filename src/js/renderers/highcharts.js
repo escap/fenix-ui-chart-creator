@@ -216,6 +216,7 @@ define([
                 //console.log(model)
                 var innerSize = Math.floor(100 / model.cols2.length);
                 var innerBegin = 0;
+				if(model.cols2.length==1){innerBegin=30;innerSize=70}
                 //console.log("innerSize",innerSize)
                 for (var i in model.cols2) {
 
@@ -376,7 +377,8 @@ define([
                         dataLabels: {enabled: false},
                         levelIsConstant: false,
                         levels: [{level: 1, dataLabels: {enabled: true}, borderWidth: 3}],
-                        data: []
+                        data: [],
+						title:''
                     }]
                 };
 
@@ -467,77 +469,97 @@ define([
 
             case "bubblecircle":
 
-			var Pos=[[0,0],[1,0],
-			[Math.sqrt(2)/2,Math.sqrt(2)/2],
-			[0,1],
-			[-Math.sqrt(2)/2,Math.sqrt(2)/2]
-			,[-1,0],
-			[-Math.sqrt(2)/2,-Math.sqrt(2)/2],
-			[0,-1],[
-			Math.sqrt(2)/2,-Math.sqrt(2)/2]];
+			
+			 
+			
 			 var obj = {};
-                var countRow=0;
+			 var countRow=0;
                 
                 var orderRow=[];
                 for(var i in model.data) {
 					var jstatValeur=jStat(model.data[i]).sum();
-						orderRow.push( (jstatValeur>=0?jstatValeur.toFixed(10):-1) +"_"+i);
-					
+					if(jstatValeur>=0){orderRow.push( jstatValeur/*.toFixed(10)*/ +"_"+i)}
+//						orderRow.push( (jstatValeur>=0?jstatValeur.toFixed(10):-1) +"_"+i);
                 }
-			
 			  orderRow.sort(function(a,b) {if(b.split('_')[0]<0){return -1}return b.split('_')[0] - a.split('_')[0];});
+
+			                var incrementalAngle = 2*Math.PI/(orderRow.length-1);
+							var currentAngle=0;
 			
-			
-			 for(var i in orderRow){
-				if(i<9){
-                    var v=orderRow[i].split("_");
-                    if(parseFloat(v[0])!==null && parseFloat(v[0])>=0){countRow++;}
-					}
-				}
 			for (var i in orderRow){
 				var v=orderRow[i].split("_");
 				var Z = parseFloat(v[0]);
 				var I=parseInt(v[1]);
-				console.log("befor I",i,countRow)
-				if(i<countRow){
-					console.log("creation de I	",v,I)				 
-					obj={x:Pos[i][0],
-					y:Pos[i][1],
+				//console.log("befor I",i,countRow)
+				//if(i<countRow){
+					//console.log("creation de I	",v,I)		
+
+					if(i==0){
+					obj={x:0,
+					y:0,
 					z:Z, name: model.rows[I].join("<br>" ),
 					country: model.rows[I].join("<br>" ),
 					drilldown: model.rows[I].join("_" )};
+					}
+					else{
+					obj={x:Math.cos(currentAngle),
+					y:Math.sin(currentAngle),
+					z:Z, name: model.rows[I].join("<br>" ),
+					country: model.rows[I].join("<br>" ),
+					drilldown: model.rows[I].join("_" )};
+					currentAngle+=incrementalAngle;
+					}
+					
+					
 					config.series[0].data.push(obj);
-				}
+				//}
 								
 					var drillData=[];
 					var secondCount=0;
-					for(var j in model.data[I]){
-						if(secondCount<9 && model.data[I][j]!== null && model.data[I][j]>=0){
-						secondCount++;
-						drillData.push(  { name: model.cols2[j].join("<br>"), 
-						country: model.cols2[j].join("<br>"), 
-						x: Pos[secondCount][0],
-						y: Pos[secondCount][1], 
-						z:model.data[I][j]});
-						//console.log(" b ",j);				
-
+					var currentAngle2=0;
+					 var orderRow2=0;
+                for(var j in model.data[I]) {if(model.data[I][j]>=0){orderRow2++;}}
+				var incrementalAngle2 = 2*Math.PI/(orderRow2);
+			//console.log("incrementalAngle2",incrementalAngle2)
+					
+				for(var j in model.data[I]){
+				//console.log("currentA ngle2",currentAngle2)
+							if(model.data[I][j]!== null && model.data[I][j]>=0){
+						
+							if(secondCount==0){
+							drillData.push(  { name: model.cols2[j].join("<br>"), 
+							country: model.cols2[j].join("<br>"), 
+							x: 0,
+							y: 0, 
+							z:model.data[I][j]});
+							//console.log(" b ",j);				
+							}
+							else
+								{
+								//console.log("currentAngle2",currentAngle2)
+								drillData.push(  { name: model.cols2[j].join("<br>"), 
+							country: model.cols2[j].join("<br>"), 
+							x: Math.cos(currentAngle2),
+							y: Math.sin(currentAngle2), 
+							z:model.data[I][j]});}
+							secondCount++;						
+							currentAngle2+=incrementalAngle2;
+						}
+					
+					}
 						config.drilldown.series.push(
 						{name:model.cols2[j].join("_" ),
 						id:model.rows[I].join("_" ),
-						data:drillData});				
+						data:drillData});		
 						}
-					}
-				
-				
-				}
-				console.log("config",config)
+				//console.log("config",config)
 				config.plotOptions = {
                     series: {
                         dataLabels: {
                             enabled: true,
                             format: '{point.name}'
                         },
-				        bubble: { maxSize:400/3.5 }
+				        bubble: { maxSize:"33%" }
                     }
                 };
 				

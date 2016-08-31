@@ -176,9 +176,7 @@ define(function () {
                 pie: {
                     allowPointSelect: true,
                     cursor: 'pointer',
-                    dataLabels: {
-                        enabled: false
-                    },
+                    dataLabels: {enabled: false},
                     showInLegend: true
                 }
             },
@@ -357,11 +355,11 @@ bubble:{
         },
 
         title: {
-            text: 'Sugar and fat intake per country'
+            text: ''
         },
 
         subtitle: {
-            text: 'Source: <a href="http://www.euromonitor.com/">Euromonitor</a> and <a href="https://data.oecd.org/">OECD</a>'
+            text: ''
         },
 
         xAxis: {
@@ -439,7 +437,7 @@ var myData=this.userOptions.series[0].data;
 
                 var ren=this.renderer;
 
-                console.log("TEST DATA",myData)
+                
 
 for(var i in myData)
 { ren.circle(myData[i]["x"]*200+500,myData[i]["y"]*100+100,myData[i]["z"]*10).add();}
