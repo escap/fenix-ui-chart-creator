@@ -57,6 +57,7 @@ define(function () {
                     {value: "scatter", label: "Scatter"},
                     {value: "bubble", label: "Bubble"}, 
                     {value: "bubblecircle", label: "Bubble Circle"},
+					{value: "bubblecircleP", label: "Bubble Circle Polar"},
                     {value: "heatmap", label: "Heatmap"},
                     {value: "treemap", label: "Treemap"},
                     {value: "boxplot", label: "Boxplot"}
@@ -65,7 +66,7 @@ define(function () {
                 config: {
                     maxItems: 1
                 },
-                default: ['bubblecircle']
+                default: ['bubblecircleP']
             },
 
             template: {

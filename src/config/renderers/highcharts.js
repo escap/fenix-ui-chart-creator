@@ -365,26 +365,16 @@ bubble:{
             zoomType: 'xy'
         },
 
-        legend: {
-            enabled: false
-        },
+        legend: {enabled: false},
 
-        title: {
-            text: ''
-        },
+        title: {text: ''},
 
-        subtitle: {
-            text: ''
-        },
+        subtitle: {text: ''},
 
         xAxis: {
             gridLineWidth: 1,
-            title: {
-                text: ''
-            },
-            labels: {
-                format: '{value} '
-            },
+            title: {text: ''},
+            labels: {format: '{value} '},
             plotLines: [{
                 color: 'black',
                 dashStyle: 'dot',
@@ -393,9 +383,7 @@ bubble:{
                 label: {
                     rotation: 0,
                     y: 15,
-                    style: {
-                        fontStyle: 'italic'
-                    },
+                    style: {fontStyle: 'italic'},
                     text: ''
                 },
                 zIndex: 3
@@ -405,12 +393,8 @@ bubble:{
         yAxis: {
             startOnTick: false,
             endOnTick: false,
-            title: {
-                text: ''
-            },
-            labels: {
-                format: '{value}'
-            },
+            title: {text: ''},
+            labels: {format: '{value}'},
             maxPadding: 0.2,
             plotLines: [{
                 color: 'black',
@@ -426,20 +410,8 @@ bubble:{
                 zIndex: 3
             }]
         },
-
-      
-
-        plotOptions: {
-            series: {
-                dataLabels: {
-                    enabled: true,
-                    format: '{point.name}'
-                }
-            }
-        },
-
+		plotOptions: {series: {dataLabels: {enabled: true,format: '{point.name}'}}},
         series: [{data:[]}]
-
     },
 
 bubblecirclepixel:{
@@ -447,9 +419,7 @@ bubblecirclepixel:{
  chart: {
             backgroundColor: 'white',
             events: {load:function(){
-
-var myData=this.userOptions.series[0].data;
-
+				var myData=this.userOptions.series[0].data;
                 var ren=this.renderer;
 
                 
@@ -465,7 +435,64 @@ for(var i in myData)
     ,
     series: [{data:[]}]
     },
+bubblecircleP:{
 
+        chart: {
+            type: 'bubble',
+			polar:true,
+            plotBorderWidth: 1,
+            zoomType: 'xy'
+        },
+
+        legend: {enabled: false},
+
+        title: {text: ''},
+
+        subtitle: {text: ''},
+
+        xAxis: {
+            gridLineWidth: 1,
+            title: {text: ''},
+            labels: {format: '{value} '},
+            plotLines: [{
+                color: 'black',
+                dashStyle: 'dot',
+                width: 2,
+                value: 65,
+                label: {
+                    rotation: 0,
+                    y: 15,
+                    style: {fontStyle: 'italic'},
+                    text: ''
+                },
+                zIndex: 3
+            }]
+        },
+
+        yAxis: {
+            startOnTick: false,
+            endOnTick: false,
+            title: {text: ''},
+            labels: {format: '{value}'},
+            maxPadding: 0.2,
+            plotLines: [{
+                color: 'black',
+                dashStyle: 'dot',
+                width: 2,
+                value: 50,
+                label: {
+                    align: 'right',
+                    style: {fontStyle: 'italic'},
+                    text: '',
+                    x: -10
+                },
+                zIndex: 3
+            }]
+        },
+		plotOptions: {series: {dataLabels: {enabled: true,format: '{point.name}'}}},
+        series: [{data:[]},{data:[]},{data:[]},{data:[]}],
+		drilldown:{series:[]}
+    },
 bubblecircle:{
 
         chart: {
