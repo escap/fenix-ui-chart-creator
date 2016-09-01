@@ -114,7 +114,7 @@ define([
     };
 
     Highcharts.prototype._populateData = function (type, model, config) {
-
+console.log(type)
         switch (type.toLowerCase()) {
             //add type process
             case "heatmap":
@@ -130,21 +130,12 @@ define([
                 for (var i in model.data) {
                     for (var j in model.data[i]) {
 
-                        //if(count<150 /*&& model.data[i][j]*/)
-                        {
                             count++;
                             config.series[0].data.push([parseFloat(i), parseFloat(j), model.data[i][j]]);
-                        }
+                        
                     }
                 }
-                /*
-                 config.series[0].data.push([0,0,2]);
-                 config.series[0].data.push(		[0,1,3]	);
-
-                 config.series[0].data.push([1,0,5]);
-                 config.series[0].data.push(		[1,1,4]	);
-                 console.log('et alrs la');
-                 */
+               
                 break;
 
             case "scatter":
@@ -199,31 +190,22 @@ define([
 
                 var tempData = [];
                 for (var i in model.rows) {
-                    //if (i >20) {break;}
                     config.xAxis.categories.push(model.rows[i].join("_"));
-                    // config.xAxis.categories.push("test"+i);
-
                     var ddata = [jStat(model.data[i]).min() + 0].concat(jStat(model.data[i]).quartiles().concat(jStat(model.data[i]).max()))
                     tempData.push(ddata);
-
                 }
-
                 config.series.push({data: tempData});
 
                 break;
             case "donut":
                 var tempData = [];
-                //console.log(model)
                 var innerSize = Math.floor(100 / model.cols2.length);
                 var innerBegin = 0;
 				if(model.cols2.length==1){innerBegin=30;innerSize=70}
-                //console.log("innerSize",innerSize)
                 for (var i in model.cols2) {
-
                     var myData = [];
                     for (var j in model.rows) {
-                        if (model.data[j][i] > 0)
-                            myData.push({name: model.rows[j].join("-"), y: model.data[j][i]})
+                        if (model.data[j][i] > 0){myData.push({name: model.rows[j].join("-"), y: model.data[j][i]});}
                     }
 
                     config.series.push({
@@ -283,91 +265,14 @@ define([
                     };
                     config.drilldown.series.push(drillD)
                 }
-                //console.log("config",config)
                 break;
-            case "pieold":
-                config.chart.type = 'pie'; // temp fix to enable pieold to work
-                for (var ii in model.cols) {
-                    if (model.cols.hasOwnProperty(ii)) {
-                        i = model.cols[ii];
+           
 
-                        config.xAxis.categories.push(i.title[this.lang]);
-
-                    }
-                }
-
-                var dataArray = [];
-
-                for (var k in model.rows) {
-                    for (var j in config.xAxis.categories) {
-
-                        var dataObj = {};
-                        dataObj.y = model.data[k][j];
-                        dataObj.name = config.xAxis.categories[j];
-                        dataArray.push(dataObj);
-                    }
-
-                    config.series.push({name: model.rows[k].join(" "), data: dataArray});
-                }
-
-                break;
-
-            case "treemapold":
-                config = {
-                    series: [{
-                        type: 'treemap',
-                        layoutAlgorithm: 'squarified',
-                        allowDrillToNode: true,
-                        animationLimit: 1000, turboThreshold: 0,
-                        dataLabels: {
-                            enabled: false
-                        },
-                        levelIsConstant: false,
-                        levels: [{
-                            level: 1,
-                            dataLabels: {
-                                enabled: true
-                            },
-                            borderWidth: 3
-                        }],
-                        data: []
-                    }],
-                    title: {
-                        text: ''
-                    }
-                };
-                for (var i in model.rows) {
-                    //if(i<500 )
-                    {
-                        var ii = model.rows[i];
-                        config.series[0].data.push({
-                            name: ii.join(" "),
-                            id: "id_" + i/*,value:jStat(model.data[i]).sum()*/
-                        })
-
-                        for (var j in model.cols2label) {
-                            var jj = model.cols2label[j];
-                            if (model.data[i][j] && model.data[i][j] >= 0)
-                                config.series[0].data.push({
-                                    name: jj.join(" "),
-                                    id: "id_" + i + "_" + j,
-                                    parent: "id_" + i,
-                                    value: model.data[i][j]
-                                })
-                        }
-
-
-                    }
-                }
-                //console.log(config.series);
-
-                break;
+          
 
             case "treemap":
-                //console.log("Model",model);
 
                 var model2 = {rows: this.pivotator.toTree(model.rows, 1), cols: this.pivotator.toTree(model.cols2, 1)};
-                //console.log("mod2",model2)
                 config = {
                     series: [{
                         type: 'treemap',
@@ -466,7 +371,59 @@ define([
                  ]
                  }]*/
                 break;
+case "bubblecirclep":
 
+
+var I=0;
+var II=[0,0,0,0];
+for(var i in model.data)
+{
+var jstatValeur=jStat(model.data[i]).sum();
+//console.log(jstatValeur,i)
+if(jstatValeur>=0 ){
+	
+	var layer=0;
+	if(I>15){layer=3}
+	else if(I>7){layer=2}
+	else if(I>0){layer=1}
+	I++;
+	
+	config.series[layer].data.push({y:layer,x:II[layer]/(layer*layer+1),z:jstatValeur,name:model.rows[i].join("<br>"),country:model.rows[i].join("<br>"),
+	drilldown: model.rows[i].join("_" )});
+	II[layer]++;
+	var DrillData=[];
+	for(var j in model.data[i])
+			{
+			var realData=model.data[i][j];
+			if(realData !== null && realData>=0){
+			//console.log("realData",realData)
+			DrillData.push(
+				 { name: model.cols2[j].join("<br>"), 
+							country: model.cols2[j].join("<br>"), 
+							x: parseInt(j),
+							y: 1, 
+							z:realData}
+			)}
+			}
+				config.drilldown.series.push(
+						{name:model.cols2[j].join("_" ),
+						id:model.rows[i].join("_" ),
+						data:DrillData});	
+	
+	}
+}
+config.tooltip = {
+                    useHTML: true,
+                    headerFormat: '<table>',
+                    pointFormat: '<tr><th colspan="2"><h3>{point.name}</h3></th></tr>' +
+                    '<tr><th>{point.x}/{point.y}:</th><td>{point.z}</td></tr>',
+                    footerFormat: '</table>',
+                    followPointer: true
+                };
+
+break;
+				
+				
             case "bubblecircle":
 
 			
@@ -571,114 +528,7 @@ define([
                     footerFormat: '</table>',
                     followPointer: true
                 };
-			/* config.series=[{
-                 data: [
-                 { x: 0.4, y: 0, z: 1, name: 'BE', country: 'Belgium' },
-                 { x: 0, y: 0, z: 2, name: 'DE', country: 'Germany' },
-				 { x: 0, y: 0.4, z: 1.5, name: 'DE', country: 'Germany' }
-                 
-                 ]
-                 }];          config.plotOptions.bubble={minSize:1*400/3/2,maxSize:400/3};
-*/
-/*
-                var obj = {};
-                var countRow=0;
-                
-                var orderRow=[];
-                for(var i in model.data) {
-                    if(model.data[i][0]!== null && model.data[i][0]>=0)
-                    orderRow.push( (model.data[i][0]>=0?model.data[i][0].toFixed(10):-1) +"_"+i);
-                }
-
-
-                orderRow.sort(function(a,b) {
-                   if(b.split('_')[0]<0){return -1}
-                    return b.split('_')[0] - a.split('_')[0];
-                });
-
-                for(var i in orderRow)
-                {
-				//if(i<2)
-				{
-                    var v=orderRow[i].split("_");
-
-                    if(parseFloat(v[0])!==null && parseFloat(v[0])>=0)
-                        countRow++;
-                }
-				}
-
-                var incrementalAngle = 2*Math.PI/countRow;
-
-                var currentAngle=0;
-                var initSize=0;
-                var myMinSize=jStat(model.data).col(0).max();
-
-                for (var i in orderRow)
-                { 
-				//if(i<2)
-				{
-
-                     var I=parseInt(v[1]);
-                    var v=orderRow[i].split("_");
-                    var Z = parseFloat(v[0]);
-                    if(Z<myMinSize){myMinSize=Z}
-                    if(i==0){
-					initSize=Z;
-
-                        //console.log("config.series",config.series)
-                    obj={x:0,y:0,z:Z, name: model.rows[I].join(" " ),
-                            country: model.rows[I].join(" " )};
-                             config.series[0].data.push(obj);
-                }
-                    else{
-                   
-                   
-                        if(Z!==null && Z>=0 ) {
-
-						//diameter
-						var Z2=Math.sqrt(4*Z*(400/6*400/6)/initSize);
-                            console.log("Z",Z,"Z2",Z2,"max",initSize,400/3);
-							console.log("PROP currenc cercle",(Z2/2)*(Z2*2)*Math.PI," grand cerlce",(initSize/2)*(initSize/2)*Math.PI,
-							initSize/Z,
-							(initSize/2)*(initSize/2)*Math.PI/((Z2/2)*(Z2*2)*Math.PI))
-                            var X=(initSize/2 + Z2/2)*Math.cos(currentAngle);
-                            var Y=(initSize/2 + Z2/2)*Math.sin(currentAngle);
-                            obj = {
-                                x: X,
-                                y: Y,
-                                z: Z,                            
-                                name: model.rows[I].join(" " ),
-                                country: model.rows[I].join(" " )
-                            };
-
-                            currentAngle+=incrementalAngle;
-                            
-                            config.series[0].data.push(obj);
-                            //console.log('push',obj)
-                        }
-                    }
-                }
-				}
-                console.log('test: ', jStat(model.data).col(0).max());
-
-
-
-
-myMinSize=myMinSize*(400/3)/jStat(model.data).col(0).max();
-console.log("myMinSize",myMinSize)
- //chivapiano=10;
-
-                config.plotOptions.bubble={maxSize:400/3};
-                config.tooltip = {
-                    useHTML: true,
-                    headerFormat: '<table>',
-                    pointFormat: '<tr><th colspan="2">{point.country}</th></tr>' +
-                    '<tr><th>' + model.cols2[0] + ':</th><td>{point.z}</td></tr>',
-                    footerFormat: '</table>',
-                    followPointer: true
-                };
-
-*/
+		
             break;
         default:
 
