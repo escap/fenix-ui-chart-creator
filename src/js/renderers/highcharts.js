@@ -114,7 +114,6 @@ define([
     };
 
     Highcharts.prototype._populateData = function (type, model, config) {
-console.log(type)
         switch (type.toLowerCase()) {
             //add type process
             case "heatmap":
