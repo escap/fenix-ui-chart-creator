@@ -36,8 +36,7 @@ module.exports = {
         loaders: [
             {test: /\.hbs$/, loader: "handlebars-loader"},
             {test: /\.json$/, loader: "json-loader"},
-            {test: /bootstrap.+\.(jsx|js)$/, loader: 'imports?jQuery=jquery,$=jquery'},
-            {test: /highcharts.+\.(jsx|js)$/, loader: 'imports?jQuery=jquery,$=jquery'}
+            {test: /bootstrap.+\.(jsx|js)$/, loader: 'imports?jQuery=jquery,$=jquery'}
         ]
     },
 
