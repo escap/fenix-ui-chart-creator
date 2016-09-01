@@ -6,22 +6,23 @@ define([
     'jquery',
     'underscore',
     'loglevel',
-    'fx-chart/config/errors',
-    'fx-chart/config/events',
-    'fx-chart/config/config',
-    'fx-common/pivotator/start',
-    'fx-chart/config/renderers/highcharts',
-    'fx-chart/config/renderers/highcharts_shared',
-    'highcharts_more',
-    'hightchart_treemap',
-    "highcharts_no_data",
-    "highcharts_export",
-    'amplify'
-], function ($, _, log, ERR, EVT, C, Pivotator, templates, templateStyle) {
+    '../../config/errors',
+    '../../config/events',
+    '../../config/config',
+    'fenix-ui-pivotator',
+    '../../config/renderers/highcharts',
+    '../../config/renderers/highcharts_shared',
+    'highcharts',
+    'highcharts-more',
+    'highcharts-treemap',
+    "highcharts-no-data-to-display",
+    "highcharts-exporting",
+    'amplify-pubsub'
+], function ($, _, log, ERR, EVT, C, Pivotator, templates, templateStyle, Highcharts) {
 
     'use strict';
 
-    function Highcharts(o) {
+    function HC(o) {
         log.info("FENIX Highcharts");
         log.info(o);
 
@@ -51,7 +52,7 @@ define([
      * pub/sub
      * @return {Object} component instance
      */
-    Highcharts.prototype.on = function (channel, fn, context) {
+    HC.prototype.on = function (channel, fn, context) {
         var _context = context || this;
         if (!this.channels[channel]) {
             this.channels[channel] = [];
@@ -64,7 +65,7 @@ define([
      * Force redrawing
      * @return {Object} filter instance
      */
-    Highcharts.prototype.redraw = function () {
+    HC.prototype.redraw = function () {
 
         if (this.chart.length > 0) {
             this.chart.highcharts().reflow();
@@ -74,7 +75,7 @@ define([
 
     };
 
-    Highcharts.prototype.update = function (config) {
+    HC.prototype.update = function (config) {
 
         //TODO add validation
         this.type = config.type ? config.type : this.type;
@@ -82,7 +83,7 @@ define([
         this._renderHighcharts(config);
     };
 
-    Highcharts.prototype._renderHighcharts = function (config) {
+    HC.prototype._renderHighcharts = function (config) {
         var model = this.model;
 
         var chartConfig = templates[this.type];
@@ -104,7 +105,7 @@ define([
         var highchartsConfig = $.extend(true, highchartsConfig, this.config);
 
         try {
-            this.chart = this.el.highcharts(highchartsConfig);
+            this.chart = Highcharts.chart(this.el[0], highchartsConfig);
         }
         catch (er) {
             console.log("error", er, config)
@@ -113,7 +114,7 @@ define([
 
     };
 
-    Highcharts.prototype._populateData = function (type, model, config) {
+    HC.prototype._populateData = function (type, model, config) {
 
         switch (type.toLowerCase()) {
             //add type process
@@ -501,7 +502,6 @@ define([
                     var I=parseInt(v[1]);
                     if(Z!==null && Z>=0) {
 
-                        console.log("Z",Z)
                         var X=Math.cos(currentAngle);
                         var Y=Math.sin(currentAngle);
                         obj = {
@@ -552,7 +552,7 @@ define([
 };
 
 
-    Highcharts.prototype._trigger = function (channel) {
+    HC.prototype._trigger = function (channel) {
 
         if (!this.channels[channel]) {
             return false;
@@ -568,7 +568,7 @@ define([
 
     // end API
 
-    Highcharts.prototype._validateInput = function () {
+    HC.prototype._validateInput = function () {
 
         var valid = true,
             errors = [];
@@ -577,7 +577,7 @@ define([
 
     };
 
-    Highcharts.prototype._initVariables = function () {
+    HC.prototype._initVariables = function () {
 
         //pub/sub
         this.channels = {};
@@ -586,25 +586,25 @@ define([
 
     };
 
-    Highcharts.prototype._bindEventListeners = function () {
+    HC.prototype._bindEventListeners = function () {
 
         //amplify.subscribe(this._getEventName(EVT.SELECTOR_READY), this, this._onSelectorReady);
 
     };
 
-    Highcharts.prototype._getEventName = function (evt) {
+    HC.prototype._getEventName = function (evt) {
 
         return this.id.concat(evt);
     };
 
     //disposition
-    Highcharts.prototype._unbindEventListeners = function () {
+    HC.prototype._unbindEventListeners = function () {
 
         //amplify.unsubscribe(this._getEventName(EVT.SELECTOR_READY), this._onSelectorReady);
 
     };
 
-    Highcharts.prototype.dispose = function () {
+    HC.prototype.dispose = function () {
 
         //this.chart.dispose(); change in highchart destroy
 
@@ -615,5 +615,5 @@ define([
 
     // utils
 
-    return Highcharts;
+    return HC;
 });

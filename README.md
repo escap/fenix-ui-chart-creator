@@ -7,10 +7,10 @@
 
 Requirejs import : 
 ```javascript
-define(['fx-chart/start'], function (ChartCreator) {
+define(['fenix-ui-chart-creator'], function (ChartCreator) {
 ...
 ```
-From a  Fenix ressource (FX in this document) and some parameters provided to the initialization function, a pivotator-based creator will perform three mains operations : 
+From a  Fenix resource (FX in this document) and some parameters provided to the initialization function, a pivotator-based creator will perform three mains operations : 
 	-denormalisation of the dataset(optional)
 	-aggregation (optional)
 	-renderisation of the result with an external library

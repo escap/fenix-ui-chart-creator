@@ -60,12 +60,11 @@ define(function () {
                     {value: "heatmap", label: "Heatmap"},
                     {value: "treemap", label: "Treemap"},
                     {value: "boxplot", label: "Boxplot"}
-
                 ],
                 config: {
                     maxItems: 1
                 },
-                default: ['bubblecircle']
+                default: ['line']
             },
 
             template: {

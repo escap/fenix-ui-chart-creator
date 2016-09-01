@@ -1,23 +1,21 @@
-if (typeof define !== 'function') {
-    var define = require('amdefine')(module);
-}
-
+/*global require, define*/
 define([
     'jquery',
-    'require',
     'underscore',
     'loglevel',
-    'fx-chart/config/errors',
-    'fx-chart/config/events',
-    'fx-chart/config/config',
-    'fx-common/pivotator/start',
-    'fx-common/pivotator/fenixtool',
-    'amplify'
-], function ($, require, _, log, ERR, EVT, C, Pivotator, fenixtool) {
+    '../config/errors',
+    '../config/events',
+    '../config/config',
+    'fenix-ui-pivotator',
+    'fenix-ui-pivotator-utils'
+], function ($, _, log, ERR, EVT, C, Pivotator, fenixtool) {
 
     'use strict';
 
+    var selectorPath = "./renderers/";
+
     function Chart(o) {
+
         log.info("FENIX Chart");
         log.info(o);
         $.extend(true, this, C, {initial: o});
@@ -26,11 +24,11 @@ define([
         if (valid === true) {
             this._initVariables();
             this._bindEventListeners();
-            this._preloadPluginScript();
+            this._renderChart();
             return this;
         } else {
             log.error("Impossible to create Chart");
-            log.error(valid)
+            log.error(valid);
         }
     }
 
@@ -132,7 +130,7 @@ define([
         var valid = true, errors = [];
         //set Chart id
         if (!this.id) {
-            window.fx_chart_id >= 0 ? window.fx_chart_id++ : window.fx_chart_id = 0;
+            window.fx_chart_id = window.fx_chart_id >= 0 ? window.fx_chart_id++ : 0;
             this.id = String(window.fx_chart_id);
             log.warn("Impossible to find Chart id. Set auto id to: " + this.id);
         }
@@ -182,22 +180,8 @@ define([
             log.error('Impossible to find path configuration for "' + name + ' plugin".');
         }
 
-        return path;
+        return selectorPath + path;
 
-    };
-
-    Chart.prototype._preloadPluginScript = function () {
-        var paths = [];
-        paths.push(this._getPluginPath(this.renderer));
-        log.info("Chart path to load");
-        log.info(paths);
-        //Async load of plugin js source
-        require(paths, _.bind(this._preloadPluginScriptSuccess, this));
-    };
-
-    Chart.prototype._preloadPluginScriptSuccess = function () {
-        log.info('Plugin script loaded successfully');
-        this._renderChart();
     };
 
     Chart.prototype._renderChart = function () {
@@ -214,7 +198,7 @@ define([
             lang: this.lang,
             type: this.type,
             config: this.config,
-            createConfiguration : this.createConfiguration
+            createConfiguration: this.createConfiguration
         });
 
         this.chart = new Renderer(config);

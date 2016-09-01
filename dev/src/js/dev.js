@@ -3,50 +3,14 @@ define([
     'loglevel',
     'jquery',
     'underscore',
-    'fx-chart/start',
-    'fx-filter/start',
-    'fx-common/pivotator/fenixtool',
-    'text!test/models/UNECA_Inflation2.json',
-    'test/models/filter-interaction'
-
+    '../../../src/js/index',
+    'fenix-ui-filter',
+    'fenix-ui-pivotator-utils',
+    'dev/src/models/UNECA_Inflation2.json',
+    'dev/src/models/filter-interaction'
 ], function (log, $, _, ChartCreator, Filter, FenixTool, Model, FilterModel) {
 
     'use strict';
-
-
-    /*UNECA_Education
-     UNECA_Population
-     UNECA_Health
-     UNECA_BalanceOfPayments
-     UNECA_Debt
-     UNECA_MiningProduction4
-     UNECA_Infrastructure
-     UNECA_AgricultureProduction3
-     ILO_Labour
-
-     Uneca_PopulationNew
-     UNECA_Labour				????
-     UNECA_MonetaryStatistics
-     UNECA_Inflation
-
-
-     UNECA_Poverty
-     UNECA_FinancialFlows
-     UNECA_Tourism
-     UNECA_PublicFinance
-
-
-
-     UNECA_GDP
-     UNECA_GDP_NC
-     UNECA_ExpenditureGDPCostant
-     UNECA_ExpenditureGDPCurrent ???
-     UNECA_GDP_USD*/
-
-    var defaultOptions = {
-        //chartType: 'line'
-        chartType: 'bubblecircle'
-    };
 
     var s = {
         CONFIGURATION_EXPORT: "#configuration-export",
@@ -54,22 +18,28 @@ define([
         CHART_INTERACTION: "#chart-interaction"
     };
 
-    function Test() {
+    function Dev() {
+
+        console.clear();
+
+        log.setLevel('silent');
+
         this.fenixTool = new FenixTool();
+
+        this.start();
     }
 
-    Test.prototype.start = function () {
+    Dev.prototype.start = function () {
+
         log.trace("Test started");
+
         this._testFilterInteraction();
     };
 
-    Test.prototype._testFilterInteraction = function () {
+    Dev.prototype._testFilterInteraction = function () {
 
-        var self = this;
 
-        //create filter configuration
-        var itemsFromFenixTool = this.fenixTool.toFilter(JSON.parse(Model) ,{rowLabel:"Series",columnsLabel: "X-Axis",valuesLabel: "Y-axis"}),
-        //FilterModel contains static filter selectors, e.g. show code, show unit
+        var itemsFromFenixTool = this.fenixTool.toFilter(Model ,{rowLabel:"Series",columnsLabel: "X-Axis",valuesLabel: "Y-axis"}),
             items = $.extend(true, {}, FilterModel, itemsFromFenixTool);
 
         log.trace("Filter configuration from FenixTool", items);
@@ -82,10 +52,9 @@ define([
         this.filter.on("ready", _.bind(function () {
 
             var config = this._getChartConfigFromFilter();
-            
+
             config = $.extend(true, {}, {
-                //type: defaultOptions.chartType,
-                model: JSON.parse(Model),
+                model: Model,
                 el: s.CHART_INTERACTION,
                 config : {
                     tooltip :  { shared : true }
@@ -109,7 +78,7 @@ define([
 
     };
 
-    Test.prototype._getChartConfigFromFilter = function () {
+    Dev.prototype._getChartConfigFromFilter = function () {
 
         var values = this.filter.getValues(),
             config = this.fenixTool.toChartConfig(values);
@@ -120,7 +89,7 @@ define([
 
     };
 
-    Test.prototype._printChartConfiguration = function () {
+    Dev.prototype._printChartConfiguration = function () {
 
         var values = this.filter.getValues(),
             config = this.fenixTool.toChartConfig(values);
@@ -131,17 +100,17 @@ define([
         return config;
     };
 
-    Test.prototype._getConfigBubbleCircle = function(model, config) {
-        
-        var obj = {};
-var incrementalAngle=360/model.rows.length;
-var currentAngle=0;
-        for (var i in model.rows) {
-var Z=model.row[i][0];
+    Dev.prototype._getConfigBubbleCircle = function(model, config) {
 
-var X=Math.cos(currentAngle);
-var Y=Math.sin(currentAngle);
-obj={x:X,y:Y,name:model.rows[i].join(" " ),z:Z/*country:'?????'*/}
+        var obj = {};
+        var incrementalAngle=360/model.rows.length;
+        var currentAngle=0;
+        for (var i in model.rows) {
+            var Z=model.row[i][0];
+
+            var X=Math.cos(currentAngle);
+            var Y=Math.sin(currentAngle);
+            obj={x:X,y:Y,name:model.rows[i].join(" " ),z:Z/*country:'?????'*/}
 
 
           /*  if (model.data[i][0] && model.data[i][1] && model.data[i][2]) {
@@ -153,10 +122,10 @@ obj={x:X,y:Y,name:model.rows[i].join(" " ),z:Z/*country:'?????'*/}
                     country: ''
                 };
 
-               
+
             }*/
 
-             config.series[0].data.push(obj);
+            config.series[0].data.push(obj);
             console.log('model row: ', obj);
         }
 
@@ -174,5 +143,5 @@ obj={x:X,y:Y,name:model.rows[i].join(" " ),z:Z/*country:'?????'*/}
         return config;
     };
 
-    return new Test();
+    return new Dev();
 });

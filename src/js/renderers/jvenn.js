@@ -6,13 +6,13 @@ define([
     'jquery',
     'underscore',
     'loglevel',
-    'fx-chart/config/errors',
-    'fx-chart/config/events',
-    'fx-chart/config/config',
-    'fx-common/pivotator/start',
-    'fx-chart/config/renderers/jvenn',
+    '../../config/errors',
+    '../../config/events',
+    '../../config/config',
+    'fenix-ui-pivotator',
+    '../../config/renderers/jvenn',
     'jvenn',
-    'amplify'
+    'amplify-pubsub'
 ], function ($, _, log, ERR, EVT, C, Pivotator, templates) {
 
     'use strict';
