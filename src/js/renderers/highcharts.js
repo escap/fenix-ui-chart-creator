@@ -122,6 +122,7 @@ default :
     };
 
     Highcharts.prototype._populateData = function (type, model, config) {
+        console.log("model output of the pivotator",model)
         switch (type.toLowerCase()) {
             //add type process
 			
@@ -134,12 +135,22 @@ default :
 				var series=model.rows[i].join(" ");
 				var myData=[];
 				for(var j in model.cols2)
-					{myData.push([model.cols2[j],model.data[i][j]])}
+					{
+
+                        var month=parseInt(model.cols2[j][0].substring(4,6))-1;
+                       var myStandartData=new Date(model.cols2[j][0].substring(0,4),month.toString(),model.cols2[j][0].substring(6,8));
+
+                        myData.push([myStandartData,model.data[i][j]])
+                    }
 				seriesOptions.push(
 				{name:series,data:myData}
 				);
-				config.series=seriesOptions;
+
+
+
 				}
+                console.log("higchart input",seriesOptions)
+                config.series=seriesOptions;
 			
 			break
 			
