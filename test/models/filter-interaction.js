@@ -61,7 +61,8 @@ define(function () {
                     {value: "heatmap", label: "Heatmap"},
                     {value: "treemap", label: "Treemap"},
                     {value: "boxplot", label: "Boxplot"},
-					{value: "highstock", label: "Highstock"}
+					{value: "highstock_candlestick", label: "highstock_candlestick"},
+                    {value: "highstock_series", label: "highstock_series"}
 
 					
 
@@ -69,7 +70,7 @@ define(function () {
                 config: {
                     maxItems: 1
                 },
-                default: ['highstock']
+                default: ['highstock_series']
             },
 
             template: {

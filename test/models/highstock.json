@@ -28,7 +28,8 @@
           "EN" : "Day"
         },
         "key" : true,
-        "id" : "day","subject": "time"
+        "id" : "day",
+        "subject": "time"
       }, {
         "dataType" : "text",
         "title" : {
