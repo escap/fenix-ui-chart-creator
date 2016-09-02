@@ -125,7 +125,7 @@ default :
     };
 
     Highcharts.prototype._populateData = function (type, model, config) {
-        console.log("model output of the pivotator",model,type)
+        //console.log("model output of the pivotator",model,type)
 
         var typeExtend=type.toLowerCase().split("_");
         switch (typeExtend[0]) {
@@ -159,7 +159,7 @@ default :
 
 
 				}
-                console.log("higchart input",seriesOptions)
+              //  console.log("higchart input",seriesOptions)
                 config.series=seriesOptions;
 			
 			break
