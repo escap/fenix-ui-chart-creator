@@ -69,7 +69,7 @@ define(function () {
                 config: {
                     maxItems: 1
                 },
-                default: ['line']
+                default: ['highstock']
             },
 
             template: {
