@@ -104,7 +104,15 @@ define([
         var highchartsConfig = $.extend(true, highchartsConfig, this.config);
 
         try {
-            this.chart = this.el.highcharts(highchartsConfig);
+		switch(this.type.toLowerCase()){
+		case "highstock":
+		this.chart = this.el.highcharts('StockChart',highchartsConfig);
+ 
+		break;
+default :
+ this.chart = this.el.highcharts(highchartsConfig);
+ 
+ }
         }
         catch (er) {
             console.log("error", er, config)
@@ -116,6 +124,25 @@ define([
     Highcharts.prototype._populateData = function (type, model, config) {
         switch (type.toLowerCase()) {
             //add type process
+			
+			
+			case "highstock":
+			
+			 var seriesOptions = []; 
+			for(var i in model.rows)
+				{
+				var series=model.rows[i].join(" ");
+				var myData=[];
+				for(var j in model.cols2)
+					{myData.push([model.cols2[j],model.data[i][j]])}
+				seriesOptions.push(
+				{name:series,data:myData}
+				);
+				config.series=seriesOptions;
+				}
+			
+			break
+			
             case "heatmap":
                 var count = 0;
                 //console.log("model",model)

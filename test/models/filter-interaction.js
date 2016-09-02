@@ -60,13 +60,16 @@ define(function () {
 					{value: "bubblecircleP", label: "Bubble Circle Polar"},
                     {value: "heatmap", label: "Heatmap"},
                     {value: "treemap", label: "Treemap"},
-                    {value: "boxplot", label: "Boxplot"}
+                    {value: "boxplot", label: "Boxplot"},
+					{value: "highstock", label: "Highstock"}
+
+					
 
                 ],
                 config: {
                     maxItems: 1
                 },
-                default: ['bubblecircleP']
+                default: ['line']
             },
 
             template: {

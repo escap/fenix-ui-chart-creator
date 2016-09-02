@@ -24,10 +24,15 @@ define(function () {
             underscore: '{FENIX_CDN}/js/underscore/1.7.0/underscore.min',
             amplify: '{FENIX_CDN}/js/amplify/1.1.2/amplify.min',
             handlebars: '{FENIX_CDN}/js/handlebars/2.0.0/handlebars',
-			//https://code.highcharts.com/highcharts.js
-            highcharts: '{FENIX_CDN}/js/highcharts/' + HIGHCHARTS_VERSION + '/js/highcharts',
-
-           // highcharts2: 'https://code.highcharts.com/highcharts',
+			
+			//highcharts: '{FENIX_CDN}/js/highcharts/' + HIGHCHARTS_VERSION + '/js/highcharts',
+			
+			
+			highcharts:"https://code.highcharts.com/stock/highstock",
+           
+			//highstock:"https://code.highcharts.com/stock/highstock",
+           
+		   
                       
 		   highcharts_more: '{FENIX_CDN}/js/highcharts/' + HIGHCHARTS_VERSION + '/js/highcharts-more',
             highcharts_no_data: '{FENIX_CDN}/js/highcharts/' + HIGHCHARTS_VERSION + '/js/modules/no-data-to-display',
