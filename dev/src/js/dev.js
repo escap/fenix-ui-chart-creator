@@ -22,7 +22,7 @@ define([
 
         console.clear();
 
-        log.setLevel('silent');
+        log.setLevel('trace');
 
         this.fenixTool = new FenixTool();
 

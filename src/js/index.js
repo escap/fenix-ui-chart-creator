@@ -210,7 +210,7 @@ define([
     };
 
     Chart.prototype._getRenderer = function (name) {
-        return require(this._getPluginPath(name));
+        return require(this._getPluginPath(name) + ".js");
     };
 
     //disposition
