@@ -60,9 +60,7 @@ define(function () {
 					{value: "bubblecircleP", label: "Bubble Circle Polar"},
                     {value: "heatmap", label: "Heatmap"},
                     {value: "treemap", label: "Treemap"},
-                    {value: "boxplot", label: "Boxplot"},
-					{value: "highstock_candlestick", label: "highstock_candlestick"},
-                    {value: "highstock_series", label: "highstock_series"}
+                    {value: "boxplot", label: "Boxplot"}
 
 					
 
@@ -70,7 +68,7 @@ define(function () {
                 config: {
                     maxItems: 1
                 },
-                default: ['highstock_series']
+                default: ['line']
             },
 
             template: {
