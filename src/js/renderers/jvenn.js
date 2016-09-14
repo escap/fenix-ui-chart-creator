@@ -81,16 +81,14 @@ define([
     JVenn.prototype._renderJVenn = function (config) {
         var model = this.model;
 
-        if (!config) {
-            alert("Impossible to find chart configuration: " + this.type);
-        }
+        var config = $.extend(true, this._populateData(model, templates), this.config);
 
-        var config = $.extend(true, this._populateData(model, templates), config);
         this.chart = this.el.jvenn(config);
 
         this._trigger("ready");
 
     };
+
 
     JVenn.prototype._populateData = function (model, config) {
 
@@ -163,7 +161,40 @@ define([
 
     JVenn.prototype._bindEventListeners = function () {
 
-        //amplify.subscribe(this._getEventName(EVT.SELECTOR_READY), this, this._onSelectorReady);
+        var self = this;
+
+        this.config.fnClickCallback = function() {
+            /*var value = "";
+            if (this.listnames.length == 1) {
+                value += "Elements only in ";
+            } else {
+                value += "Common elements in ";
+            }
+            for (name in this.listnames) {
+                value += this.listnames[name] + " ";
+            }
+            value += ":\n";
+            for (val in this.list) {
+                value += this.list[val] + "\n";
+            }
+            $("#names").val(value);*/
+
+            var obj = {
+             list: this.list,
+             listnames: this.listnames
+            }
+
+            console.log("================= JVENN CHART CLICK ==============");
+            console.log(self.id);
+            console.log(self.controller);
+            console.log(obj);
+            self.controller._trigger('click', obj);
+
+            //console.log(self._getEventName(EVT.CHART_CLICK));
+
+           // amplify.publish(self._getEventName(EVT.CHART_CLICK), {id: self.id, values: obj});
+
+          };
 
     };
 
