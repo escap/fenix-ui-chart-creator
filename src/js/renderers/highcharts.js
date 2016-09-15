@@ -265,9 +265,34 @@ define([
                     config.drilldown.series.push(drillD)
                 }
                 break;
-           
 
-          
+
+            case "pieold":
+                config.chart.type = 'pie'; // temp fix to enable pieold to work
+                for (var ii in model.cols) {
+                    if (model.cols.hasOwnProperty(ii)) {
+                        i = model.cols[ii];
+
+                        config.xAxis.categories.push(i.title[this.lang]);
+
+                    }
+                }
+
+                var dataArray = [];
+
+                for (var k in model.rows) {
+                    for (var j in config.xAxis.categories) {
+
+                        var dataObj = {};
+                        dataObj.y = model.data[k][j];
+                        dataObj.name = config.xAxis.categories[j];
+                        dataArray.push(dataObj);
+                    }
+
+                    config.series.push({name: model.rows[k].join(" "),data: dataArray});
+                }
+
+                break;
 
             case "treemap":
 
