@@ -95,7 +95,7 @@ function getOutput() {
             break;
         case "develop" :
             output = {
-                path: Path.join(__dirname, devFolderPath, distFolderPath),
+                path: Path.join(__dirname, devFolderPath),
                 //publicPath: "/dev/",
                 filename: "index.js"
             };

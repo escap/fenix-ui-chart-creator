@@ -1,4 +1,4 @@
-/*global requirejs, define*/
+/*global requirejs, define, console*/
 define([
     'loglevel',
     'jquery',
@@ -31,7 +31,7 @@ define([
 
     Dev.prototype.start = function () {
 
-        log.trace("Test started");
+        log.info("Test started");
 
         this._testFilterInteraction();
     };
@@ -39,10 +39,14 @@ define([
     Dev.prototype._testFilterInteraction = function () {
 
 
-        var itemsFromFenixTool = this.fenixTool.toFilter(Model ,{rowLabel:"Series",columnsLabel: "X-Axis",valuesLabel: "Y-axis"}),
+        var itemsFromFenixTool = this.fenixTool.toFilter(Model, {
+                rowLabel: "Series",
+                columnsLabel: "X-Axis",
+                valuesLabel: "Y-axis"
+            }),
             items = $.extend(true, {}, FilterModel, itemsFromFenixTool);
 
-        log.trace("Filter configuration from FenixTool", items);
+        log.info("Filter configuration from FenixTool", items);
 
         this.filter = new Filter({
             el: s.FILTER_INTERACTION,
@@ -56,13 +60,13 @@ define([
             config = $.extend(true, {}, {
                 model: Model,
                 el: s.CHART_INTERACTION,
-                config : {
-                    tooltip :  { shared : true }
+                config: {
+                    tooltip: {shared: true}
                 }
             }, config);
 
-            log.trace("Init chart");
-            log.trace(config);
+            log.info("Init chart");
+            log.info(config);
             this.chart = new ChartCreator(config);
         }, this));
 
@@ -70,8 +74,8 @@ define([
 
             var config = this._getChartConfigFromFilter();
 
-            log.trace("Update chart");
-            log.trace(config);
+            log.info("Update chart");
+            log.info(config);
 
             this.chart.update(config);
         }, this));
@@ -100,30 +104,30 @@ define([
         return config;
     };
 
-    Dev.prototype._getConfigBubbleCircle = function(model, config) {
+    Dev.prototype._getConfigBubbleCircle = function (model, config) {
 
         var obj = {};
-        var incrementalAngle=360/model.rows.length;
-        var currentAngle=0;
+        var incrementalAngle = 360 / model.rows.length;
+        var currentAngle = 0;
         for (var i in model.rows) {
-            var Z=model.row[i][0];
+            var Z = model.row[i][0];
 
-            var X=Math.cos(currentAngle);
-            var Y=Math.sin(currentAngle);
-            obj={x:X,y:Y,name:model.rows[i].join(" " ),z:Z/*country:'?????'*/}
-
-
-          /*  if (model.data[i][0] && model.data[i][1] && model.data[i][2]) {
-                obj = {
-                    x: model.data[i][0],
-                    y: model.data[i][1],
-                    z: model.data[i][2],
-                    name: model.rows[i].join(" "),
-                    country: ''
-                };
+            var X = Math.cos(currentAngle);
+            var Y = Math.sin(currentAngle);
+            obj = {x: X, y: Y, name: model.rows[i].join(" "), z: Z/*country:'?????'*/}
 
 
-            }*/
+            /*  if (model.data[i][0] && model.data[i][1] && model.data[i][2]) {
+             obj = {
+             x: model.data[i][0],
+             y: model.data[i][1],
+             z: model.data[i][2],
+             name: model.rows[i].join(" "),
+             country: ''
+             };
+
+
+             }*/
 
             config.series[0].data.push(obj);
             console.log('model row: ', obj);
