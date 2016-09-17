@@ -1,6 +1,6 @@
 {
   "name": "fenix-ui-chart-creator",
-  "version": "3.0.0-beta.0",
+  "version": "3.0.0-beta.2",
   "description": "FENIX Chart Creator",
   "main": "dist/fenix-ui-chart-creator.min.js",
   "scripts": {
@@ -25,6 +25,8 @@
   "homepage": "https://github.com/FENIX-Platform/fenix-ui-chart-creator#readme",
   "dependencies": {
     "amplify-pubsub": "^0.0.1",
+    "bootstrap-loader": "^2.0.0-exports.1",
+    "fenix-ui-filter": "^3.0.0-beta.7",
     "fenix-ui-pivotator": "^1.0.0-beta.4",
     "fenix-ui-pivotator-utils": "^1.0.0-beta.1",
     "highcharts": "^4.2.6",
@@ -38,10 +40,16 @@
     "underscore": "^1.8.3"
   },
   "devDependencies": {
+    "bootstrap-loader": "^2.0.0-beta.11",
+    "bootstrap-sass": "^3.3.7",
     "chai": "^3.5.0",
     "clean-webpack-plugin": "^0.1.10",
-    "fenix-ui-filter": "^3.0.0-beta.6",
-    "handlebars": "^4.0.5",
+    "css-loader": "^0.25.0",
+    "extract-text-webpack-plugin": "^1.0.1",
+    "fenix-ui-filter": "^3.0.0-beta.7",
+    "file-loader": "^0.9.0",
+    "html-webpack-plugin": "^2.22.0",
+    "image-webpack-loader": "^2.0.0",
     "jshint": "^2.9.3",
     "jshint-loader": "^0.8.3",
     "json-loader": "^0.5.4",
@@ -53,6 +61,11 @@
     "karma-mocha": "^1.1.1",
     "karma-webpack": "^1.8.0",
     "mocha": "^3.0.2",
+    "node-sass": "^3.10.0",
+    "resolve-url-loader": "^1.6.0",
+    "sass-loader": "^4.0.2",
+    "style-loader": "^0.13.1",
+    "url-loader": "^0.5.7",
     "webpack": "^1.13.2",
     "webpack-dev-server": "^1.15.1"
   }
