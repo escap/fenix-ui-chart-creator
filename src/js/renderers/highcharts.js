@@ -573,9 +573,6 @@ break;
             }
     }
 
-        console.log("===========  HIGHCHARTS ------------- config")
-        console.log(JSON.stringify(config))
-
     //	console.log("config",config)
     return config;
 };
