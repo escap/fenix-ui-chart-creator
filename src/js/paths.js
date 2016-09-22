@@ -36,9 +36,9 @@ define(function () {
 			hightchart_drilldown:"https://code.highcharts.com/modules/drilldown",
             'highcharts_export': '{FENIX_CDN}/js/highcharts/' + HIGHCHARTS_VERSION + '/js/modules/exporting',
             //'highcharts_export_csv': 'http://highslide-software.github.io/export-csv/export-csv'
-            jvenn: '{FENIX_CDN}/js/jvenn/' + JVENN_VERSION + '/src/jvenn',
+            jvenn: '{FENIX_CDN}/js/jvenn/' + JVENN_VERSION + '/src/jvenn.min'
            // jvenn: './jvenn',
-            canvas2svg: './canvas2svg'
+           // canvas2svg: './canvas2svg'
          },
 
         shim: {
@@ -61,8 +61,8 @@ define(function () {
             "highcharts_no_data": {
                 deps: ['highcharts']
             },"jvenn": {
-                deps: ["jquery", "canvas2svg"],
-               // deps: ["jquery"]
+             //   deps: ["jquery", "canvas2svg"],
+                deps: ["jquery"]
             },
 
             "hightchart_treemap": {
