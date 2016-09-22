@@ -13,7 +13,7 @@ define([
     'fx-common/pivotator/start',
     'fx-common/pivotator/fenixtool',
     'amplify'
-], function ($, require, _, log, ERR, EVT, C, Pivotator, fenixtool) {
+], function ($, require, _, log, ERR, EVT, C, Pivotator, fenixtool, amplify) {
 
     'use strict';
 
@@ -29,6 +29,7 @@ define([
             this._preloadPluginScript();
             return this;
         } else {
+            alert(3)
             log.error("Impossible to create Chart");
             log.error(valid)
         }
@@ -123,6 +124,8 @@ define([
         this.renderer = param.renderer || C.renderer;
         this.lang = param.lang || 'EN';
         this.config = param.config;
+        this.id = param.id;
+        this.controller = param.controller;
         if (typeof param.createConfiguration === 'function') {
             this.createConfiguration = param.createConfiguration;
         }
@@ -159,7 +162,11 @@ define([
 
     Chart.prototype._bindEventListeners = function () {
 
+        amplify.subscribe(this._getEventName(EVT.CHART_CLICK), this, this._onChartClick);
         //amplify.subscribe(this._getEventName(EVT.SELECTOR_READY), this, this._onSelectorReady);
+
+
+
 
     };
 
@@ -213,12 +220,21 @@ define([
             model: model,
             lang: this.lang,
             type: this.type,
+            id: this.id,
             config: this.config,
-            createConfiguration : this.createConfiguration
+            createConfiguration : this.createConfiguration,
+            controller: this
         });
 
         this.chart = new Renderer(config);
         this._trigger("ready");
+
+        this.chart.on("click", function (){
+            alert("here")
+            //_.bind(this._onItemClick, this)
+        });
+
+
     };
 
     Chart.prototype._getEventName = function (evt) {
@@ -232,13 +248,27 @@ define([
     //disposition
 
     Chart.prototype._unbindEventListeners = function () {
+        amplify.unsubscribe(this._getEventName(EVT.CHART_CLICK), this._onChartClick);
         //amplify.unsubscribe(this._getEventName(EVT.SELECTOR_READY), this._onSelectorReady);
     };
 
-    Chart.prototype.dispose = function () {
-        this.chart.dispose();
-        //unbind event listeners
-        this._unbindEventListeners();
+    Chart.prototype._onChartClick = function (values) {
+
+        //if (this.ready === true) {
+            console.log('ON CLICK .........');
+            this._trigger('click', values);
+        console.log('ON CLICK DONE .........');
+       // }
+    };
+
+    Chart.prototype._callSelectorInstanceMethod = function (name, method, opts1, opts2) {
+        var Instance = this.chart;
+        if ($.isFunction(Instance[method])) {
+            return Instance[method](opts1, opts2);
+        }
+        else {
+            log.error(name + " selector does not implement the mandatory " + method + "() fn");
+        }
     };
 
     Chart.prototype._callSelectorInstanceMethod = function (name, method, opts1, opts2) {
