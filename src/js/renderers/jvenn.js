@@ -178,12 +178,14 @@ define([
              list: this.list,
              listnames: this.listnames,
              series:  self.baseConfig.series,
-             selected: this
-            }
+             selected: this,
+             id:   self.id
+            };
 
+            console.log(obj)
             self.controller._trigger('click', obj);
 
-            amplify.publish(self._getEventName(EVT.CHART_CLICK), {id: self.id, values: obj});
+            //amplify.publish(self._getEventName(EVT.CHART_CLICK), {id: self.id, values: obj});
 
           };
 

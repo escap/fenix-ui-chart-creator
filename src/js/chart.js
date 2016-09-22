@@ -29,7 +29,6 @@ define([
             this._preloadPluginScript();
             return this;
         } else {
-            alert(3)
             log.error("Impossible to create Chart");
             log.error(valid)
         }
@@ -229,12 +228,6 @@ define([
         this.chart = new Renderer(config);
         this._trigger("ready");
 
-        this.chart.on("click", function (){
-            alert("here")
-            //_.bind(this._onItemClick, this)
-        });
-
-
     };
 
     Chart.prototype._getEventName = function (evt) {
@@ -252,23 +245,10 @@ define([
         //amplify.unsubscribe(this._getEventName(EVT.SELECTOR_READY), this._onSelectorReady);
     };
 
-    Chart.prototype._onChartClick = function (values) {
-
-        //if (this.ready === true) {
-            console.log('ON CLICK .........');
-            this._trigger('click', values);
-        console.log('ON CLICK DONE .........');
-       // }
-    };
-
-    Chart.prototype._callSelectorInstanceMethod = function (name, method, opts1, opts2) {
-        var Instance = this.chart;
-        if ($.isFunction(Instance[method])) {
-            return Instance[method](opts1, opts2);
-        }
-        else {
-            log.error(name + " selector does not implement the mandatory " + method + "() fn");
-        }
+    Chart.prototype.dispose = function () {
+        this.chart.dispose();
+        //unbind event listeners
+        this._unbindEventListeners();
     };
 
     Chart.prototype._callSelectorInstanceMethod = function (name, method, opts1, opts2) {
