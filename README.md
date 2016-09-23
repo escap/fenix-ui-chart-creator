@@ -171,7 +171,8 @@ var config = {
     formatter: "value",
     model: FX,
     el: "#result",
-    type: "line"
+    type: "line",
+    config : { /* plugin configuration. e.g. highchartsJS configuaraion */}
 }
 
 
