@@ -182,7 +182,7 @@ define([
              id:   self.id
             };
 
-            console.log(obj)
+           // console.log(obj)
             self.controller._trigger('click', obj);
 
             //amplify.publish(self._getEventName(EVT.CHART_CLICK), {id: self.id, values: obj});
