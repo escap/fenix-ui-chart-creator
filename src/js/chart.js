@@ -20,7 +20,13 @@ define([
     function Chart(o) {
         log.info("FENIX Chart");
         log.info(o);
+        console.log("=============================== CHART 1 ");
+        console.log(o);
+
         $.extend(true, this, C, {initial: o});
+        console.log("=============================== 2 ");
+        console.log(o);
+
         this._parseInput(o);
         var valid = this._validateInput();
         if (valid === true) {
@@ -78,9 +84,18 @@ define([
     };
 
     Chart.prototype._trigger = function (channel) {
+
+        console.log("================= CHART _trigger ==============");
+        console.log(this.channels);
+
         if (!this.channels[channel]) {
             return false;
         }
+
+
+        console.log("================= CHART _trigger 2 ==============");
+        console.log(this.channels);
+
         var args = Array.prototype.slice.call(arguments, 1);
         for (var i = 0, l = this.channels[channel].length; i < l; i++) {
             var subscription = this.channels[channel][i];
@@ -123,6 +138,7 @@ define([
         this.renderer = param.renderer || C.renderer;
         this.lang = param.lang || 'EN';
         this.config = param.config;
+        this.id = param.id;
         if (typeof param.createConfiguration === 'function') {
             this.createConfiguration = param.createConfiguration;
         }
@@ -213,8 +229,10 @@ define([
             model: model,
             lang: this.lang,
             type: this.type,
+            id: this.id,
             config: this.config,
-            createConfiguration : this.createConfiguration
+            createConfiguration : this.createConfiguration,
+            controller: this
         });
 
         this.chart = new Renderer(config);
