@@ -13,6 +13,7 @@ define(function () {
            categories: []
        },
        series: [],
-       exporting: true
+       exporting: true,
+       fontSize: '11px'
     };
 });

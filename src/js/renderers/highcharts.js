@@ -13,7 +13,7 @@ define([
     'fx-chart/config/renderers/highcharts',
     'fx-chart/config/renderers/highcharts_shared',
     'highcharts_more',
-    'hightchart_treemap',
+    //'hightchart_treemap',
     "highcharts_no_data",
     "highcharts_export",
     'amplify'
@@ -103,12 +103,12 @@ define([
 
         var highchartsConfig = $.extend(true, highchartsConfig, this.config);
 
-        try {
+       // try {
             this.chart = this.el.highcharts(highchartsConfig);
-        }
-        catch (er) {
-            console.log("error", er, config)
-        }
+        //}
+       // catch (er) {
+         //   console.log("error", er, config)
+        //}
         this._trigger("ready");
 
     };
@@ -572,6 +572,7 @@ break;
 
             }
     }
+
     //	console.log("config",config)
     return config;
 };

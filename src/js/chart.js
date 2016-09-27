@@ -1,7 +1,3 @@
-if (typeof define !== 'function') {
-    var define = require('amdefine')(module);
-}
-
 define([
     'jquery',
     'require',
@@ -13,16 +9,13 @@ define([
     'fx-common/pivotator/start',
     'fx-common/pivotator/fenixtool',
     'amplify'
-], function ($, require, _, log, ERR, EVT, C, Pivotator, fenixtool) {
+], function ($, require, _, log, ERR, EVT, C, Pivotator, fenixtool, amplify) {
 
     'use strict';
 
     function Chart(o) {
         log.info("FENIX Chart");
         log.info(o);
-        console.log("=============================== CHART 1 ");
-        console.log(o);
-
         $.extend(true, this, C, {initial: o});
         console.log("=============================== 2 ");
         console.log(o);
@@ -139,6 +132,7 @@ define([
         this.lang = param.lang || 'EN';
         this.config = param.config;
         this.id = param.id;
+        this.controller = param.controller;
         if (typeof param.createConfiguration === 'function') {
             this.createConfiguration = param.createConfiguration;
         }
@@ -175,7 +169,11 @@ define([
 
     Chart.prototype._bindEventListeners = function () {
 
+        amplify.subscribe(this._getEventName(EVT.CHART_CLICK), this, this._onChartClick);
         //amplify.subscribe(this._getEventName(EVT.SELECTOR_READY), this, this._onSelectorReady);
+
+
+
 
     };
 
@@ -237,6 +235,7 @@ define([
 
         this.chart = new Renderer(config);
         this._trigger("ready");
+
     };
 
     Chart.prototype._getEventName = function (evt) {
@@ -250,6 +249,7 @@ define([
     //disposition
 
     Chart.prototype._unbindEventListeners = function () {
+        amplify.unsubscribe(this._getEventName(EVT.CHART_CLICK), this._onChartClick);
         //amplify.unsubscribe(this._getEventName(EVT.SELECTOR_READY), this._onSelectorReady);
     };
 

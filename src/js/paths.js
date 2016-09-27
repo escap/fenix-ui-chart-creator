@@ -37,6 +37,8 @@ define(function () {
             'highcharts_export': '{FENIX_CDN}/js/highcharts/' + HIGHCHARTS_VERSION + '/js/modules/exporting',
             //'highcharts_export_csv': 'http://highslide-software.github.io/export-csv/export-csv'
             jvenn: '{FENIX_CDN}/js/jvenn/' + JVENN_VERSION + '/src/jvenn.min'
+           // jvenn: './jvenn',
+           // canvas2svg: './canvas2svg'
          },
 
         shim: {
@@ -59,12 +61,14 @@ define(function () {
             "highcharts_no_data": {
                 deps: ['highcharts']
             },"jvenn": {
+             //   deps: ["jquery", "canvas2svg"],
                 deps: ["jquery"]
             },
+
             "hightchart_treemap": {
                 deps: ["highcharts","hightchart_heatmap","hightchart_drilldown"]
             },
-			"hightchart_heatmap":{deps: ["highcharts"]},"hightchart_drilldown":{deps: ["highcharts"]},
+            "hightchart_heatmap":{deps: ["highcharts"]},"hightchart_drilldown":{deps: ["highcharts"]},
             "amplify": {
                 deps: ["jquery"]
             }
