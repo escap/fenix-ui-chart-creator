@@ -62,11 +62,13 @@ define(function () {
                     {value: "treemap", label: "Treemap"},
                     {value: "boxplot", label: "Boxplot"}
 
+					
+
                 ],
                 config: {
                     maxItems: 1
                 },
-                default: ['bubblecircleP']
+                default: ['line']
             },
 
             template: {

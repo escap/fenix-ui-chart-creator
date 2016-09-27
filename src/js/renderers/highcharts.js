@@ -103,19 +103,67 @@ define([
 
         var highchartsConfig = $.extend(true, highchartsConfig, this.config);
 
-       // try {
-            this.chart = this.el.highcharts(highchartsConfig);
-        //}
-       // catch (er) {
-         //   console.log("error", er, config)
-        //}
+        try {
+
+            var typeExtend=this.type.split("_");
+
+		switch(typeExtend[0]){
+		case "highstock":
+		this.chart = this.el.highcharts('StockChart',highchartsConfig);
+ 
+		break;
+default :
+ this.chart = this.el.highcharts(highchartsConfig);
+ 
+ }
+        }
+        catch (er) {
+            console.log("error", er, config)
+        }
         this._trigger("ready");
 
     };
 
     Highcharts.prototype._populateData = function (type, model, config) {
-        switch (type.toLowerCase()) {
+        //console.log("model output of the pivotator",model,type)
+
+        var typeExtend=type.toLowerCase().split("_");
+        switch (typeExtend[0]) {
             //add type process
+			
+			
+			case "highstock":
+
+			 var seriesOptions = []; 
+			for(var i in model.rows)
+				{
+				var series=model.rows[i].join(" ");
+				var myData=[];
+				for(var j in model.cols2)
+					{
+
+                        var month=parseInt(model.cols2[j][0].substring(4,6))-1;
+
+                        /*for(var i in a){for(var j in a[i].data){var b=a[i].data[j];if(b[0]==null)console.log(b)}}*/
+
+                       var myStandartData=new Date(model.cols2[j][0].substring(0,4),month.toString(),model.cols2[j][0].substring(6,8));
+
+
+
+                        myData.push([myStandartData.getTime(),model.data[i][j]])
+                    }
+				seriesOptions.push(
+				{name:series,data:myData}
+				);
+
+
+
+				}
+              //  console.log("higchart input",seriesOptions)
+                config.series=seriesOptions;
+			
+			break
+			
             case "heatmap":
                 var count = 0;
                 //console.log("model",model)
