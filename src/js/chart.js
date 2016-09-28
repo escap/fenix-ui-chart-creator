@@ -9,7 +9,7 @@ define([
     'fx-common/pivotator/start',
     'fx-common/pivotator/fenixtool',
     'amplify'
-], function ($, require, _, log, ERR, EVT, C, Pivotator, fenixtool, amplify) {
+], function ($, require, _, log, ERR, EVT, C, Pivotator, fenixtool) {
 
     'use strict';
 
@@ -17,8 +17,6 @@ define([
         log.info("FENIX Chart");
         log.info(o);
         $.extend(true, this, C, {initial: o});
-        console.log("=============================== 2 ");
-        console.log(o);
 
         this._parseInput(o);
         var valid = this._validateInput();
@@ -78,16 +76,9 @@ define([
 
     Chart.prototype._trigger = function (channel) {
 
-        console.log("================= CHART _trigger ==============");
-        console.log(this.channels);
-
         if (!this.channels[channel]) {
             return false;
         }
-
-
-        console.log("================= CHART _trigger 2 ==============");
-        console.log(this.channels);
 
         var args = Array.prototype.slice.call(arguments, 1);
         for (var i = 0, l = this.channels[channel].length; i < l; i++) {
