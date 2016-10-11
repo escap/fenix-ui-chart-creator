@@ -25,7 +25,6 @@
   "homepage": "https://github.com/FENIX-Platform/fenix-ui-chart-creator#readme",
   "dependencies": {
     "amplify-pubsub": "^0.0.1",
-    "bootstrap-loader": "^2.0.0-exports.1",
     "fenix-ui-filter": "^3.0.0-beta.7",
     "fenix-ui-pivotator": "^1.0.0-beta.4",
     "fenix-ui-pivotator-utils": "^1.0.0-beta.1",
