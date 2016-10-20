@@ -16,7 +16,6 @@ define([
     'highcharts-more',
     'highcharts-treemap',
     "highcharts-no-data-to-display",
-    "highcharts-exporting",
     'amplify-pubsub'
 ], function ($, _, log, ERR, EVT, C, Pivotator, templates, templateStyle, Highcharts) {
 
@@ -25,6 +24,9 @@ define([
     function HC(o) {
         log.info("FENIX Highcharts");
         log.info(o);
+
+        // Load Exporting Module after Highcharts loaded
+        require('highcharts/modules/exporting')(Highcharts);
 
         $.extend(true, this, C, o);
 
@@ -91,6 +93,8 @@ define([
         if (!config) {
             alert("Impossible to find chart configuration: " + this.type);
         }
+
+
 
         var defaultRenderOptions = $.extend(true, {}, templateStyle, chartConfig);
 
