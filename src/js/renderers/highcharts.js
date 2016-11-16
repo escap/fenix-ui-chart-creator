@@ -12,12 +12,13 @@ define([
     'fenix-ui-pivotator',
     '../../config/renderers/highcharts',
     '../../config/renderers/highcharts_shared',
+    '../../nls/labels',
     'highcharts',
     'highcharts-more',
     'highcharts-treemap',
     "highcharts-no-data-to-display",
     'amplify-pubsub'
-], function ($, _, log, ERR, EVT, C, Pivotator, templates, templateStyle, Highcharts) {
+], function ($, _, log, ERR, EVT, C, Pivotator, templates, templateStyle, i18n, Highcharts) {
 
     'use strict';
 
@@ -587,6 +588,18 @@ define([
         this.channels = {};
 
         this.pivotator = new Pivotator();
+
+        //i18n
+        Highcharts.setOptions({
+            lang: {
+                downloadJPEG: i18n[this.lang.toLowerCase()]['downloadJPEG'],
+                downloadPDF: i18n[this.lang.toLowerCase()]['downloadPDF'],
+                downloadPNG: i18n[this.lang.toLowerCase()]['downloadPNG'],
+                downloadSVG: i18n[this.lang.toLowerCase()]['downloadSVG'],
+                printChart: i18n[this.lang.toLowerCase()]['printChart']
+            }
+        });
+
 
     };
 

@@ -52,7 +52,7 @@ define([
 
         this.filter = new Filter({
             el: s.FILTER_INTERACTION,
-            items: items
+            selectors: items
         });
 
         this.filter.on("ready", _.bind(function () {
@@ -64,7 +64,8 @@ define([
                 el: s.CHART_INTERACTION,
                 config: {
                     tooltip: {shared: true}
-                }
+                },
+                lang: 'FR'
             }, config);
 
             log.info("Init chart");
@@ -154,7 +155,7 @@ define([
     Dev.prototype._importThirdPartyCss = function () {
 
         //Bootstrap
-        require("bootstrap-loader");
+        require('bootstrap/dist/css/bootstrap.css');
         //dropdown selector
         require("../../../node_modules/selectize/dist/css/selectize.bootstrap3.css");
         //tree selector
