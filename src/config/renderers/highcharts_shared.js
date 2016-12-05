@@ -65,11 +65,11 @@ define(function () {
             }
         },
         colors: [ //Colori delle charts
-            '#56adc3',
             '#5691c3',
+            '#DF3328',
+            '#56adc3',
             '#5663c3',
             '#d2ccbf',
-            '#DF3328',
             '#F1E300',
             '#F7AE3C',
             '#DF3328',
